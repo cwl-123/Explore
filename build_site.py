@@ -99,6 +99,15 @@ REGISTRY = [
     ),
     # —— 市场专题 ——
     dict(
+        title="A股这轮下跌怎么看 · 2026年10月体检",
+        path="hs300-strategy-lab/ashare_drop.html",
+        category="topics",
+        tags=["A股", "回撤", "估值", "情景分析"],
+        summary="跌在哪（科技 -32% vs 红利 +6%）、贵不贵（分位 70%）、是不是底、高仓位怎么办，"
+                "附历史类比与四种情景概率。",
+        date="2026-10",
+    ),
+    dict(
         title="沪深300 现在怎么看 · 数据判读",
         path="hs300-strategy-lab/hs300_view.html",
         category="topics",
