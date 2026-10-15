@@ -99,6 +99,15 @@ REGISTRY = [
     ),
     # —— 市场专题 ——
     dict(
+        title="存储股崩盘：三星/海力士还值得投资吗？",
+        path="memory-crash-2026/index.html",
+        category="topics",
+        tags=["存储周期", "三星", "海力士", "回撤"],
+        summary="AI 存储超级周期见顶后的板块性崩盘：韩股 vs 美股 vs A股存储链对比，"
+                "用 10 年周期数据判断短调还是长熊。",
+        date="2026-10",
+    ),
+    dict(
         title="费城半导体 (SOX) 成分股、走势与估值",
         path="sox-semiconductor.html",
         category="topics",
