@@ -99,6 +99,15 @@ REGISTRY = [
     ),
     # —— 市场专题 ——
     dict(
+        title="费城半导体 (SOX) 成分股、走势与估值",
+        path="sox-semiconductor.html",
+        category="topics",
+        tags=["费城半导体", "SOX", "成分股", "估值"],
+        summary="SOX 30 只成分股全景：近 2 年走势判读、板块内部高估/低估分层（估值温度），"
+                "以及未来走势取决于什么（AI 资本开支 / 存储周期 / 设备订单 / 出口管制 / 成熟制程复苏 / 利率与集中度）。",
+        date="2026-10",
+    ),
+    dict(
         title="A股这轮下跌怎么看 · 2026年10月体检",
         path="hs300-strategy-lab/ashare_drop.html",
         category="topics",

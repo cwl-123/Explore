@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>费城半导体 (SOX) 成分股、走势与估值</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1c2430; --muted:#6b7686; --line:#e6e9ee;
+    --red:#d94a4a; --amber:#e0a300; --green:#2c9e63; --blue:#2f6fed; --blue-soft:#eef3fe;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px;}
+  header.top{margin-bottom:22px;}
+  header.top h1{font-size:26px;margin:0 0 6px;letter-spacing:.3px;}
+  header.top .sub{color:var(--muted);font-size:13px;}
+  .pill{display:inline-block;font-size:12px;padding:2px 10px;border-radius:999px;background:var(--blue-soft);color:var(--blue);margin-left:8px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:18px;
+    box-shadow:0 1px 2px rgba(20,30,50,.03);}
+  h2{font-size:18px;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+  h2::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--blue);display:inline-block;}
+  h3{font-size:15px;margin:16px 0 8px;}
+  .muted{color:var(--muted);font-size:13px;}
+  table{width:100%;border-collapse:collapse;font-size:12.8px;}
+  th,td{padding:8px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;}
+  th:first-child,td:first-child{text-align:left;}
+  th:nth-child(2),td:nth-child(2){text-align:left;max-width:210px;overflow:hidden;text-overflow:ellipsis;}
+  th:nth-child(3),td:nth-child(3){text-align:left;}
+  th{color:var(--muted);font-weight:600;font-size:12px;background:#fafbfc;position:sticky;top:0;}
+  tr:last-child td{border-bottom:none;}
+  .num{font-variant-numeric:tabular-nums;}
+  .r{color:var(--red);} .g{color:var(--green);} .a{color:var(--amber);}
+  .b{font-weight:700;}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:4px 0 14px;}
+  .kpi{background:#fafbfc;border:1px solid var(--line);border-radius:12px;padding:13px 14px;}
+  .kpi .k{font-size:11.5px;color:var(--muted);}
+  .kpi .v{font-size:19px;font-weight:700;margin-top:3px;}
+  .kpi .s{font-size:11px;color:var(--muted);margin-top:2px;}
+  .note{background:var(--blue-soft);border:1px solid #d7e2fb;border-radius:10px;padding:12px 14px;font-size:13.5px;margin:12px 0 4px;}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .fact{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fafbfc;}
+  .fact .t{font-size:13.5px;font-weight:700;margin-bottom:5px;}
+  .fact .d{font-size:12.8px;color:#41506a;line-height:1.65;}
+  .drivers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .drv{border:1px solid var(--line);border-radius:12px;padding:15px 16px;background:#fff;}
+  .drv .no{font-size:11px;color:var(--blue);font-weight:700;letter-spacing:.5px;}
+  .drv .t{font-size:14px;font-weight:700;margin:3px 0 6px;}
+  .drv .d{font-size:12.6px;color:#41506a;line-height:1.7;}
+  .scroll{overflow-x:auto;}
+  footer{color:var(--muted);font-size:12px;line-height:1.8;margin-top:26px;}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px;}
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+  <header class="top">
+    <h1>费城半导体 (SOX) · 成分股、走势与估值<span class="pill">市场专题</span></h1>
+    <div class="sub">30 只成分股全景 · 近期走势判读 · 高估/低估分层 · 未来走势取决于什么 ｜ 价格截至 2026-10-14，估值与分析师预期截至 2026-10-14</div>
+  </header>
+
+  <div class="card">
+    <h2>一页结论</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="k">SOX 最新点位</div><div class="v">11,684</div><div class="s">2026-10-14 收盘</div></div>
+      <div class="kpi"><div class="k">年初至今</div><div class="v r">+58.6%</div><div class="s">近 1 年 +77.8%</div></div>
+      <div class="kpi"><div class="k">距 2 年高点</div><div class="v g">-20.2%</div><div class="s">高点 2026-06-22 14,635</div></div>
+      <div class="kpi"><div class="k">较 2025-11 低点</div><div class="v r">+84.0%</div><div class="s">低点 2025-11-20 6,352</div></div>
+      <div class="kpi"><div class="k">成分股中位估值</div><div class="v">25.4x</div><div class="s">远期 PE｜PEG 0.84</div></div>
+    </div>
+    <div class="note"><b>一句话：</b>SOX 自 2025 年 11 月低点最多反弹约 130%，2026 年 6 月见顶后回撤 20% 进入高位震荡；按市值近似，前 5 大（NVDA / TSM / AVGO / MU / AMD）合计约占 76%——指数未来基本就是「AI 资本开支 + 存储周期」两条主线的函数，设备与成熟制程组是内部最弱的两环。</div>
+  </div>
+
+  <div class="card">
+    <h2>一、指数走势：一年翻倍后的高位震荡</h2>
+    <svg viewBox="0 0 980 260" style="width:100%;height:auto;font-size:11px"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2f6fed" stop-opacity="0.18"/><stop offset="100%" stop-color="#2f6fed" stop-opacity="0.01"/></linearGradient></defs><line x1="36" y1="228.0" x2="956" y2="228.0" stroke="#e6e9ee" stroke-width="1"/><text x="32" y="231.5" text-anchor="end" fill="#6b7686" font-size="10.5">2,677</text><line x1="36" y1="174.5" x2="956" y2="174.5" stroke="#e6e9ee" stroke-width="1"/><text x="32" y="178.0" text-anchor="end" fill="#6b7686" font-size="10.5">5,888</text><line x1="36" y1="121.0" x2="956" y2="121.0" stroke="#e6e9ee" stroke-width="1"/><text x="32" y="124.5" text-anchor="end" fill="#6b7686" font-size="10.5">9,099</text><line x1="36" y1="67.5" x2="956" y2="67.5" stroke="#e6e9ee" stroke-width="1"/><text x="32" y="71.0" text-anchor="end" fill="#6b7686" font-size="10.5">12,310</text><line x1="36" y1="14.0" x2="956" y2="14.0" stroke="#e6e9ee" stroke-width="1"/><text x="32" y="17.5" text-anchor="end" fill="#6b7686" font-size="10.5">15,520</text><text x="36.0" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2024-10-15</text><text x="166.6" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2025-01-29</text><text x="297.3" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2025-05-12</text><text x="427.9" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2025-08-22</text><text x="558.6" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2025-12-03</text><text x="689.2" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2026-03-18</text><text x="819.8" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2026-06-30</text><text x="950.5" y="248" text-anchor="middle" fill="#6b7686" font-size="10.5">2026-10-09</text><path d="M36.0,228.0 L36.0,186.9 L37.8,186.7 L39.7,185.9 L41.5,185.8 L43.4,185.7 L45.2,186.1 L47.0,187.1 L48.9,186.7 L50.7,185.8 L52.6,185.8 L54.4,183.8 L56.2,186.7 L58.1,190.2 L59.9,189.3 L61.8,189.7 L63.6,188.3 L65.4,185.7 L67.3,183.7 L69.1,184.5 L71.0,186.7 L72.8,187.5 L74.6,189.2 L76.5,189.2 L78.3,192.1 L80.2,191.1 L82.0,190.6 L83.8,191.2 L85.7,189.9 L87.5,190.0 L89.4,189.5 L91.2,190.5 L93.0,191.7 L94.9,190.5 L96.7,188.4 L98.6,188.7 L100.4,187.3 L102.2,188.9 L104.1,188.3 L105.9,189.0 L107.8,191.1 L109.6,188.8 L111.4,189.6 L113.3,186.8 L115.1,185.0 L117.0,186.5 L118.8,189.8 L120.6,191.1 L122.5,189.9 L124.3,187.3 L126.2,186.4 L128.0,186.4 L129.8,187.2 L131.7,188.9 L133.5,189.6 L135.4,188.9 L137.2,186.6 L139.0,184.1 L140.9,185.8 L142.7,186.6 L144.6,188.7 L146.4,189.0 L148.2,188.5 L150.1,186.7 L151.9,186.6 L153.8,184.1 L155.6,183.0 L157.4,181.5 L159.3,181.9 L161.1,183.6 L163.0,191.7 L164.8,190.8 L166.6,190.7 L168.5,188.8 L170.3,189.0 L172.2,190.5 L174.0,189.7 L175.8,187.8 L177.7,187.8 L179.5,189.1 L181.4,187.9 L183.2,188.0 L185.0,187.8 L186.9,186.7 L188.7,186.6 L190.6,185.2 L192.4,184.1 L194.2,184.1 L196.1,187.0 L197.9,189.2 L199.8,191.1 L201.6,189.4 L203.4,194.5 L205.3,193.2 L207.1,196.4 L209.0,195.9 L210.8,194.3 L212.6,197.8 L214.5,195.5 L216.3,199.2 L218.2,199.7 L220.0,197.9 L221.8,198.4 L223.7,196.0 L225.5,194.9 L227.4,196.1 L229.2,195.4 L231.0,195.9 L232.9,196.7 L234.7,194.4 L236.6,194.9 L238.4,197.5 L240.2,199.0 L242.1,201.2 L243.9,201.5 L245.8,201.3 L247.6,200.6 L249.4,207.7 L251.3,212.7 L253.1,211.0 L255.0,213.2 L256.8,202.1 L258.6,207.7 L260.5,206.1 L262.3,205.9 L264.2,205.6 L266.0,208.3 L267.8,208.8 L269.7,210.1 L271.5,208.8 L273.4,206.2 L275.2,202.5 L277.0,201.8 L278.9,202.0 L280.7,202.7 L282.6,202.1 L284.4,201.8 L286.2,199.3 L288.1,200.0 L289.9,200.8 L291.8,199.5 L293.6,198.8 L295.4,198.2 L297.3,192.9 L299.1,190.4 L301.0,190.0 L302.8,190.4 L304.6,190.6 L306.5,191.0 L308.3,191.1 L310.2,192.6 L312.0,193.0 L313.8,194.3 L315.7,191.6 L317.5,192.1 L319.4,191.6 L321.2,193.3 L323.0,192.1 L324.9,189.9 L326.7,188.7 L328.6,189.1 L330.4,188.7 L332.2,187.0 L334.1,185.3 L335.9,185.4 L337.8,185.1 L339.6,187.4 L341.4,184.8 L343.3,185.6 L345.1,185.1 L347.0,185.8 L348.8,185.2 L350.6,181.9 L352.5,181.1 L354.3,180.3 L356.2,180.2 L358.0,180.2 L359.8,180.8 L361.7,179.1 L363.5,178.5 L365.4,180.3 L367.2,178.6 L369.0,178.2 L370.9,177.5 L372.7,177.7 L374.6,178.5 L376.4,177.3 L378.2,177.7 L380.1,177.0 L381.9,177.1 L383.8,177.0 L385.6,178.7 L387.4,178.7 L389.3,178.6 L391.1,178.5 L393.0,177.0 L394.8,177.0 L396.6,176.2 L398.5,179.2 L400.3,180.5 L402.2,178.9 L404.0,179.9 L405.8,180.1 L407.7,178.7 L409.5,178.0 L411.4,178.1 L413.2,175.3 L415.0,174.4 L416.9,174.5 L418.7,176.8 L420.6,176.4 L422.4,178.1 L424.2,178.8 L426.1,179.2 L427.9,176.7 L429.8,176.7 L431.6,175.8 L433.4,175.6 L435.3,175.1 L437.1,178.2 L439.0,179.2 L440.8,179.4 L442.6,178.2 L444.5,176.6 L446.3,175.8 L448.2,175.6 L450.0,173.3 L451.8,172.7 L453.7,172.6 L455.5,171.6 L457.4,171.3 L459.2,171.6 L461.0,168.0 L462.9,168.8 L464.7,167.1 L466.6,167.5 L468.4,167.7 L470.2,167.9 L472.1,167.6 L473.9,167.4 L475.8,166.5 L477.6,164.3 L479.4,162.2 L481.3,162.9 L483.1,159.7 L485.0,162.1 L486.8,158.3 L488.6,158.6 L490.5,165.8 L492.3,160.6 L494.2,163.1 L496.0,159.9 L497.8,159.3 L499.7,159.7 L501.5,157.9 L503.4,158.6 L505.2,161.3 L507.0,158.5 L508.9,156.4 L510.7,153.2 L512.6,152.7 L514.4,150.5 L516.2,152.4 L518.1,152.2 L519.9,151.5 L521.8,156.3 L523.6,152.8 L525.4,155.7 L527.3,156.8 L529.1,153.4 L531.0,156.3 L532.8,154.6 L534.6,159.0 L536.5,159.1 L538.3,160.9 L540.2,163.5 L542.0,161.5 L543.8,166.8 L545.7,165.9 L547.5,160.9 L549.4,160.7 L551.2,157.6 L553.0,155.6 L554.9,155.6 L556.7,153.5 L558.6,151.3 L560.4,152.4 L562.2,151.1 L564.1,149.7 L565.9,149.8 L567.8,148.2 L569.6,149.1 L571.4,155.4 L573.3,156.1 L575.1,156.7 L577.0,161.0 L578.8,158.2 L580.6,154.8 L582.5,153.5 L584.3,152.9 L586.2,152.6 L588.0,152.5 L589.8,153.0 L591.7,153.2 L593.5,154.6 L595.4,149.8 L597.2,148.5 L599.0,145.1 L600.9,146.4 L602.7,148.7 L604.6,145.3 L606.4,144.7 L608.2,143.5 L610.1,144.3 L611.9,142.0 L613.8,140.5 L615.6,142.7 L617.4,138.6 L619.3,138.4 L621.1,140.0 L623.0,140.5 L624.8,137.4 L626.6,134.2 L628.5,134.0 L630.3,139.3 L632.2,137.1 L634.0,139.9 L635.8,145.7 L637.7,145.7 L639.5,138.5 L641.4,136.6 L643.2,137.5 L645.0,134.4 L646.9,137.9 L648.7,137.0 L650.6,137.0 L652.4,135.7 L654.2,136.4 L656.1,135.0 L657.9,135.8 L659.8,133.8 L661.6,131.5 L663.4,136.0 L665.3,137.7 L667.1,137.0 L669.0,143.2 L670.8,140.7 L672.6,142.3 L674.5,147.4 L676.3,142.5 L678.2,141.6 L680.0,140.7 L681.8,145.3 L683.7,145.2 L685.5,142.7 L687.4,142.0 L689.2,142.7 L691.0,141.6 L692.9,144.8 L694.7,143.1 L696.6,141.4 L698.4,139.8 L700.2,146.2 L702.1,148.3 L703.9,153.6 L705.8,146.2 L707.6,142.6 L709.4,142.1 L711.3,140.7 L713.1,139.2 L715.0,130.8 L716.8,127.8 L718.6,124.5 L720.5,122.0 L722.3,118.9 L724.2,118.7 L726.0,117.2 L727.8,113.4 L729.7,112.7 L731.5,111.9 L733.4,107.5 L735.2,104.7 L737.0,97.4 L738.9,99.2 L740.7,105.4 L742.6,101.5 L744.4,97.6 L746.2,96.1 L748.1,97.1 L749.9,89.6 L751.8,81.4 L753.6,86.6 L755.4,76.4 L757.3,71.3 L759.1,77.4 L761.0,72.4 L762.8,71.4 L764.6,79.5 L766.5,84.3 L768.3,84.2 L770.2,75.8 L772.0,73.3 L773.8,69.3 L775.7,58.0 L777.5,61.0 L779.4,58.8 L781.2,58.8 L783.0,56.6 L784.9,43.9 L786.7,40.7 L788.6,45.7 L790.4,69.0 L792.2,57.6 L794.1,61.7 L795.9,69.2 L797.8,53.1 L799.6,49.8 L801.4,37.7 L803.3,51.1 L805.1,48.0 L807.0,33.6 L808.8,28.8 L810.6,48.0 L812.5,48.4 L814.3,40.3 L816.2,52.6 L818.0,44.2 L819.8,35.2 L821.7,50.1 L823.5,62.2 L825.4,57.7 L827.2,67.7 L829.0,63.1 L830.9,56.7 L832.7,56.5 L834.6,66.9 L836.4,61.6 L838.2,66.0 L840.1,74.9 L841.9,78.1 L843.8,76.9 L845.6,66.7 L847.4,65.8 L849.3,66.9 L851.1,75.7 L853.0,80.1 L854.8,88.7 L856.6,98.5 L858.5,84.3 L860.3,84.1 L862.2,82.2 L864.0,69.7 L865.8,72.5 L867.7,71.8 L869.5,66.7 L871.4,72.8 L873.2,71.0 L875.0,66.0 L876.9,65.1 L878.7,65.7 L880.6,62.3 L882.4,72.8 L884.2,77.0 L886.1,76.0 L887.9,77.0 L889.8,82.3 L891.6,79.5 L893.4,79.1 L895.3,74.6 L897.1,81.5 L899.0,80.4 L900.8,84.5 L902.6,83.7 L904.5,83.5 L906.3,77.1 L908.2,74.5 L910.0,73.8 L911.8,79.1 L913.7,75.6 L915.5,87.1 L917.4,86.4 L919.2,85.2 L921.0,79.3 L922.9,74.0 L924.7,65.4 L926.6,61.2 L928.4,63.8 L930.2,64.5 L932.1,61.5 L933.9,64.9 L935.8,62.2 L937.6,62.2 L939.4,58.8 L941.3,53.7 L943.1,53.1 L945.0,52.4 L946.8,54.9 L948.6,62.3 L950.5,63.1 L952.3,68.7 L954.2,69.2 L956.0,77.9 L956.0,228.0 Z" fill="url(#g1)"/><polyline points="36.0,186.9 37.8,186.7 39.7,185.9 41.5,185.8 43.4,185.7 45.2,186.1 47.0,187.1 48.9,186.7 50.7,185.8 52.6,185.8 54.4,183.8 56.2,186.7 58.1,190.2 59.9,189.3 61.8,189.7 63.6,188.3 65.4,185.7 67.3,183.7 69.1,184.5 71.0,186.7 72.8,187.5 74.6,189.2 76.5,189.2 78.3,192.1 80.2,191.1 82.0,190.6 83.8,191.2 85.7,189.9 87.5,190.0 89.4,189.5 91.2,190.5 93.0,191.7 94.9,190.5 96.7,188.4 98.6,188.7 100.4,187.3 102.2,188.9 104.1,188.3 105.9,189.0 107.8,191.1 109.6,188.8 111.4,189.6 113.3,186.8 115.1,185.0 117.0,186.5 118.8,189.8 120.6,191.1 122.5,189.9 124.3,187.3 126.2,186.4 128.0,186.4 129.8,187.2 131.7,188.9 133.5,189.6 135.4,188.9 137.2,186.6 139.0,184.1 140.9,185.8 142.7,186.6 144.6,188.7 146.4,189.0 148.2,188.5 150.1,186.7 151.9,186.6 153.8,184.1 155.6,183.0 157.4,181.5 159.3,181.9 161.1,183.6 163.0,191.7 164.8,190.8 166.6,190.7 168.5,188.8 170.3,189.0 172.2,190.5 174.0,189.7 175.8,187.8 177.7,187.8 179.5,189.1 181.4,187.9 183.2,188.0 185.0,187.8 186.9,186.7 188.7,186.6 190.6,185.2 192.4,184.1 194.2,184.1 196.1,187.0 197.9,189.2 199.8,191.1 201.6,189.4 203.4,194.5 205.3,193.2 207.1,196.4 209.0,195.9 210.8,194.3 212.6,197.8 214.5,195.5 216.3,199.2 218.2,199.7 220.0,197.9 221.8,198.4 223.7,196.0 225.5,194.9 227.4,196.1 229.2,195.4 231.0,195.9 232.9,196.7 234.7,194.4 236.6,194.9 238.4,197.5 240.2,199.0 242.1,201.2 243.9,201.5 245.8,201.3 247.6,200.6 249.4,207.7 251.3,212.7 253.1,211.0 255.0,213.2 256.8,202.1 258.6,207.7 260.5,206.1 262.3,205.9 264.2,205.6 266.0,208.3 267.8,208.8 269.7,210.1 271.5,208.8 273.4,206.2 275.2,202.5 277.0,201.8 278.9,202.0 280.7,202.7 282.6,202.1 284.4,201.8 286.2,199.3 288.1,200.0 289.9,200.8 291.8,199.5 293.6,198.8 295.4,198.2 297.3,192.9 299.1,190.4 301.0,190.0 302.8,190.4 304.6,190.6 306.5,191.0 308.3,191.1 310.2,192.6 312.0,193.0 313.8,194.3 315.7,191.6 317.5,192.1 319.4,191.6 321.2,193.3 323.0,192.1 324.9,189.9 326.7,188.7 328.6,189.1 330.4,188.7 332.2,187.0 334.1,185.3 335.9,185.4 337.8,185.1 339.6,187.4 341.4,184.8 343.3,185.6 345.1,185.1 347.0,185.8 348.8,185.2 350.6,181.9 352.5,181.1 354.3,180.3 356.2,180.2 358.0,180.2 359.8,180.8 361.7,179.1 363.5,178.5 365.4,180.3 367.2,178.6 369.0,178.2 370.9,177.5 372.7,177.7 374.6,178.5 376.4,177.3 378.2,177.7 380.1,177.0 381.9,177.1 383.8,177.0 385.6,178.7 387.4,178.7 389.3,178.6 391.1,178.5 393.0,177.0 394.8,177.0 396.6,176.2 398.5,179.2 400.3,180.5 402.2,178.9 404.0,179.9 405.8,180.1 407.7,178.7 409.5,178.0 411.4,178.1 413.2,175.3 415.0,174.4 416.9,174.5 418.7,176.8 420.6,176.4 422.4,178.1 424.2,178.8 426.1,179.2 427.9,176.7 429.8,176.7 431.6,175.8 433.4,175.6 435.3,175.1 437.1,178.2 439.0,179.2 440.8,179.4 442.6,178.2 444.5,176.6 446.3,175.8 448.2,175.6 450.0,173.3 451.8,172.7 453.7,172.6 455.5,171.6 457.4,171.3 459.2,171.6 461.0,168.0 462.9,168.8 464.7,167.1 466.6,167.5 468.4,167.7 470.2,167.9 472.1,167.6 473.9,167.4 475.8,166.5 477.6,164.3 479.4,162.2 481.3,162.9 483.1,159.7 485.0,162.1 486.8,158.3 488.6,158.6 490.5,165.8 492.3,160.6 494.2,163.1 496.0,159.9 497.8,159.3 499.7,159.7 501.5,157.9 503.4,158.6 505.2,161.3 507.0,158.5 508.9,156.4 510.7,153.2 512.6,152.7 514.4,150.5 516.2,152.4 518.1,152.2 519.9,151.5 521.8,156.3 523.6,152.8 525.4,155.7 527.3,156.8 529.1,153.4 531.0,156.3 532.8,154.6 534.6,159.0 536.5,159.1 538.3,160.9 540.2,163.5 542.0,161.5 543.8,166.8 545.7,165.9 547.5,160.9 549.4,160.7 551.2,157.6 553.0,155.6 554.9,155.6 556.7,153.5 558.6,151.3 560.4,152.4 562.2,151.1 564.1,149.7 565.9,149.8 567.8,148.2 569.6,149.1 571.4,155.4 573.3,156.1 575.1,156.7 577.0,161.0 578.8,158.2 580.6,154.8 582.5,153.5 584.3,152.9 586.2,152.6 588.0,152.5 589.8,153.0 591.7,153.2 593.5,154.6 595.4,149.8 597.2,148.5 599.0,145.1 600.9,146.4 602.7,148.7 604.6,145.3 606.4,144.7 608.2,143.5 610.1,144.3 611.9,142.0 613.8,140.5 615.6,142.7 617.4,138.6 619.3,138.4 621.1,140.0 623.0,140.5 624.8,137.4 626.6,134.2 628.5,134.0 630.3,139.3 632.2,137.1 634.0,139.9 635.8,145.7 637.7,145.7 639.5,138.5 641.4,136.6 643.2,137.5 645.0,134.4 646.9,137.9 648.7,137.0 650.6,137.0 652.4,135.7 654.2,136.4 656.1,135.0 657.9,135.8 659.8,133.8 661.6,131.5 663.4,136.0 665.3,137.7 667.1,137.0 669.0,143.2 670.8,140.7 672.6,142.3 674.5,147.4 676.3,142.5 678.2,141.6 680.0,140.7 681.8,145.3 683.7,145.2 685.5,142.7 687.4,142.0 689.2,142.7 691.0,141.6 692.9,144.8 694.7,143.1 696.6,141.4 698.4,139.8 700.2,146.2 702.1,148.3 703.9,153.6 705.8,146.2 707.6,142.6 709.4,142.1 711.3,140.7 713.1,139.2 715.0,130.8 716.8,127.8 718.6,124.5 720.5,122.0 722.3,118.9 724.2,118.7 726.0,117.2 727.8,113.4 729.7,112.7 731.5,111.9 733.4,107.5 735.2,104.7 737.0,97.4 738.9,99.2 740.7,105.4 742.6,101.5 744.4,97.6 746.2,96.1 748.1,97.1 749.9,89.6 751.8,81.4 753.6,86.6 755.4,76.4 757.3,71.3 759.1,77.4 761.0,72.4 762.8,71.4 764.6,79.5 766.5,84.3 768.3,84.2 770.2,75.8 772.0,73.3 773.8,69.3 775.7,58.0 777.5,61.0 779.4,58.8 781.2,58.8 783.0,56.6 784.9,43.9 786.7,40.7 788.6,45.7 790.4,69.0 792.2,57.6 794.1,61.7 795.9,69.2 797.8,53.1 799.6,49.8 801.4,37.7 803.3,51.1 805.1,48.0 807.0,33.6 808.8,28.8 810.6,48.0 812.5,48.4 814.3,40.3 816.2,52.6 818.0,44.2 819.8,35.2 821.7,50.1 823.5,62.2 825.4,57.7 827.2,67.7 829.0,63.1 830.9,56.7 832.7,56.5 834.6,66.9 836.4,61.6 838.2,66.0 840.1,74.9 841.9,78.1 843.8,76.9 845.6,66.7 847.4,65.8 849.3,66.9 851.1,75.7 853.0,80.1 854.8,88.7 856.6,98.5 858.5,84.3 860.3,84.1 862.2,82.2 864.0,69.7 865.8,72.5 867.7,71.8 869.5,66.7 871.4,72.8 873.2,71.0 875.0,66.0 876.9,65.1 878.7,65.7 880.6,62.3 882.4,72.8 884.2,77.0 886.1,76.0 887.9,77.0 889.8,82.3 891.6,79.5 893.4,79.1 895.3,74.6 897.1,81.5 899.0,80.4 900.8,84.5 902.6,83.7 904.5,83.5 906.3,77.1 908.2,74.5 910.0,73.8 911.8,79.1 913.7,75.6 915.5,87.1 917.4,86.4 919.2,85.2 921.0,79.3 922.9,74.0 924.7,65.4 926.6,61.2 928.4,63.8 930.2,64.5 932.1,61.5 933.9,64.9 935.8,62.2 937.6,62.2 939.4,58.8 941.3,53.7 943.1,53.1 945.0,52.4 946.8,54.9 948.6,62.3 950.5,63.1 952.3,68.7 954.2,69.2 956.0,77.9" fill="none" stroke="#2f6fed" stroke-width="1.8"/><circle cx="255.0" cy="213.2" r="4" fill="#fff" stroke="#d94a4a" stroke-width="2"/><text x="255.0" y="199.2" text-anchor="middle" fill="#1c2430" font-size="11" font-weight="700">低点 3,563</text><text x="255.0" y="212.2" text-anchor="middle" fill="#6b7686" font-size="10">2025-04-08</text><circle cx="808.8" cy="28.8" r="4" fill="#fff" stroke="#d94a4a" stroke-width="2"/><text x="808.8" y="50.8" text-anchor="middle" fill="#1c2430" font-size="11" font-weight="700">高点 14,635</text><text x="808.8" y="63.8" text-anchor="middle" fill="#6b7686" font-size="10">2026-06-22</text></svg>
+    <div class="facts" style="margin-top:14px">
+      <div class="fact"><div class="t"><span class="dot" style="background:#2c9e63"></span>2025-11 → 2026-06：超级反弹 +130%</div>
+        <div class="d">低点 6,352（2025-11-20）→ 高点 14,635（2026-06-22）。驱动来自 AI 算力（NVDA/AVGO/AMD）与存储（MU 年内 +190%）双主线，30 只成分股中 26 只年内收涨。</div></div>
+      <div class="fact"><div class="t"><span class="dot" style="background:#e0a300"></span>2026-06 至今：-20% 回撤后的修复</div>
+        <div class="d">7 月 12,410 → 9 月初 11,339 → 9 月末反弹 12,492 → 10 月中 11,684。近 1 月 +5.0% 属超跌修复，近 3 月 -1.5% 仍是横盘消化，尚未确认新的上行趋势。</div></div>
+      <div class="fact"><div class="t"><span class="dot" style="background:#d94a4a"></span>市场宽度：长多、短弱</div>
+        <div class="d">仅 <b>6 / 30</b> 只站上 50 日均线，<b>16 / 30</b> 只站上 200 日均线，但 <b>26 / 30</b> 只年内上涨——权重股抗跌、中小市值成分股普遍跌破短均线，指数与个股体感分化明显。</div></div>
+      <div class="fact"><div class="t"><span class="dot" style="background:#2f6fed"></span>内部分化：AI 独秀，设备/成熟制程掉队</div>
+        <div class="d">近 3 月只有 AI 算力组（+10.3%）与射频组（+20.7%）上涨；设备材料组 -10.6%、模拟功率组 -14.8%、代工封测组 -16.0%。市场已在给「2027 年 capex 增速回落 + 成熟制程需求疲弱」定价。</div></div>
+    </div>
+    <h3>分组涨跌（组内中位数）</h3>
+    <svg viewBox="0 0 980 352" style="width:100%;height:auto;font-size:11px"><line x1="530.0" y1="22" x2="530.0" y2="338" stroke="#c9ced6" stroke-width="1"/><text x="200" y="46" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">AI 算力 / 定制芯片</text><rect x="530.0" y="34" width="263.1" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="799.1" y="43.5" text-anchor="start" fill="#6b7686" font-size="10.5">+86.3%</text><rect x="530.0" y="47" width="31.5" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="567.5" y="56.5" text-anchor="start" fill="#6b7686" font-size="10.5">+10.3%</text><text x="200" y="92" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">晶圆代工 / 封测</text><rect x="530.0" y="80" width="99.8" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="635.8" y="89.5" text-anchor="start" fill="#6b7686" font-size="10.5">+32.7%</text><rect x="481.3" y="93" width="48.7" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="475.3" y="102.5" text-anchor="end" fill="#6b7686" font-size="10.5">-16.0%</text><text x="200" y="138" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">设备 / 材料 / 测试</text><rect x="530.0" y="126" width="167.8" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="703.8" y="135.5" text-anchor="start" fill="#6b7686" font-size="10.5">+55.0%</text><rect x="497.7" y="139" width="32.3" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="491.7" y="148.5" text-anchor="end" fill="#6b7686" font-size="10.5">-10.6%</text><text x="200" y="184" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">存储</text><rect x="530.0" y="172" width="278.3" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="814.3" y="181.5" text-anchor="start" fill="#6b7686" font-size="10.5">+91.3%</text><rect x="526.9" y="185" width="3.1" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="520.9" y="194.5" text-anchor="end" fill="#6b7686" font-size="10.5">-1.0%</text><text x="200" y="230" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">模拟 / 功率 / 汽车</text><rect x="530.0" y="218" width="90.3" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="626.3" y="227.5" text-anchor="start" fill="#6b7686" font-size="10.5">+29.6%</text><rect x="485.0" y="231" width="45.0" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="479.0" y="240.5" text-anchor="end" fill="#6b7686" font-size="10.5">-14.8%</text><text x="200" y="276" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">射频 / 无线</text><rect x="530.0" y="264" width="59.1" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="595.1" y="273.5" text-anchor="start" fill="#6b7686" font-size="10.5">+19.4%</text><rect x="530.0" y="277" width="62.9" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="598.9" y="286.5" text-anchor="start" fill="#6b7686" font-size="10.5">+20.6%</text><text x="200" y="322" text-anchor="end" fill="#1c2430" font-size="12.5" font-weight="600">FPGA / 光通信 / CPU</text><rect x="530.0" y="310" width="140.9" height="11" rx="2" fill="#2f6fed" opacity="0.85"/><text x="676.9" y="319.5" text-anchor="start" fill="#6b7686" font-size="10.5">+46.2%</text><rect x="515.0" y="323" width="15.0" height="11" rx="2" fill="#e0a300" opacity="0.85"/><text x="509.0" y="332.5" text-anchor="end" fill="#6b7686" font-size="10.5">-4.9%</text><text x="524.0" y="18" text-anchor="end" fill="#6b7686" font-size="11">← 下跌</text><text x="536.0" y="18" fill="#6b7686" font-size="11">上涨 →</text><text x="972" y="18" text-anchor="end" fill="#2f6fed" font-size="11">■ 年初至今</text><text x="972" y="350" text-anchor="end" fill="#e0a300" font-size="11">■ 近 3 月（分组中位数）</text></svg>
+    <div class="scroll" style="margin-top:10px">
+    <table>
+      <tr><th>板块分组</th><th>个股数</th><th>年初至今</th><th>近 3 月</th><th>距高点</th><th>远期 PE</th><th>PEG</th></tr>
+      <tr><td>AI 算力 / 定制芯片</td><td class="num">4</td><td class="num r">+86.3%</td><td class="num r">+10.3%</td><td class="num g">-17.3%</td><td class="num">31.7</td><td class="num">0.58</td></tr>
+      <tr><td>晶圆代工 / 封测</td><td class="num">3</td><td class="num r">+32.7%</td><td class="num g">-16.0%</td><td class="num g">-45.6%</td><td class="num">19.6</td><td class="num">0.74</td></tr>
+      <tr><td>设备 / 材料 / 测试</td><td class="num">7</td><td class="num r">+55.0%</td><td class="num g">-10.6%</td><td class="num g">-33.8%</td><td class="num">31.6</td><td class="num">1.21</td></tr>
+      <tr><td>存储</td><td class="num">2</td><td class="num r">+91.3%</td><td class="num a">-1.0%</td><td class="num g">-35.4%</td><td class="num">16.2</td><td class="num">0.70</td></tr>
+      <tr><td>模拟 / 功率 / 汽车</td><td class="num">8</td><td class="num r">+29.6%</td><td class="num g">-14.8%</td><td class="num g">-32.2%</td><td class="num">25.3</td><td class="num">0.70</td></tr>
+      <tr><td>射频 / 无线</td><td class="num">3</td><td class="num r">+19.4%</td><td class="num r">+20.7%</td><td class="num g">-22.0%</td><td class="num">14.7</td><td class="num">2.23</td></tr>
+      <tr><td>FPGA / 光通信 / CPU</td><td class="num">3</td><td class="num r">+46.2%</td><td class="num g">-4.9%</td><td class="num g">-30.4%</td><td class="num">43.2</td><td class="num">0.81</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>二、成分股全景（30 只，按市值近似权重排序）</h2>
+    <div class="muted" style="margin-bottom:10px">SOX 为修正市值加权指数（大权重有上限约束），下表「权重」为按市值近似折算，仅供看集中度；「距高点」基于 2 年日收盘价。</div>
+    <div class="scroll">
+    <table>
+      <tr><th>代码</th><th>公司</th><th>分组</th><th>权重≈</th><th>市值</th><th>YTD</th><th>近3月</th><th>距高点</th><th>静态PE</th><th>远期PE</th><th>PEG</th><th>目标价空间</th><th>估值</th></tr>
+      <tr>
+<td><b>NVDA</b></td>
+<td>NVIDIA (NVDA)</td>
+<td class="muted">AI 算力 / 定制芯片</td>
+<td class="num">37.2%</td>
+<td class="num">5.34T</td>
+<td class="num r">+17.2%</td>
+<td class="num r">+6.7%</td>
+<td class="num g">-7.5%</td>
+<td class="num">28.0</td>
+<td class="num">18.3</td>
+<td class="num">0.37</td>
+<td class="num">+49%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>TSM</b></td>
+<td>Taiwan Semiconductor Manufacturing Company (TSM)</td>
+<td class="muted">晶圆代工 / 封测</td>
+<td class="num">14.0%</td>
+<td class="num">2.01T</td>
+<td class="num r">+34.5%</td>
+<td class="num r">+4.9%</td>
+<td class="num g">-11.5%</td>
+<td class="num">28.8</td>
+<td class="num">19.6</td>
+<td class="num">—</td>
+<td class="num">+34%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>AVGO</b></td>
+<td>Broadcom (AVGO)</td>
+<td class="muted">AI 算力 / 定制芯片</td>
+<td class="num">11.5%</td>
+<td class="num">1.65T</td>
+<td class="num g">-0.4%</td>
+<td class="num g">-7.5%</td>
+<td class="num g">-28.1%</td>
+<td class="num">44.2</td>
+<td class="num">20.0</td>
+<td class="num">0.37</td>
+<td class="num">+52%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>MU</b></td>
+<td>Micron Technology (MU)</td>
+<td class="muted">存储</td>
+<td class="num">7.2%</td>
+<td class="num">1.03T</td>
+<td class="num r">+189.8%</td>
+<td class="num r">+7.1%</td>
+<td class="num g">-24.7%</td>
+<td class="num">12.3</td>
+<td class="num">5.2</td>
+<td class="num">0.07</td>
+<td class="num">+71%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>AMD</b></td>
+<td>Advanced Micro Devices (AMD)</td>
+<td class="muted">AI 算力 / 定制芯片</td>
+<td class="num">6.5%</td>
+<td class="num">931.85B</td>
+<td class="num r">+155.4%</td>
+<td class="num r">+13.9%</td>
+<td class="num g">-12.1%</td>
+<td class="num">145.7</td>
+<td class="num">51.4</td>
+<td class="num">0.79</td>
+<td class="num">+11%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>ASML</b></td>
+<td>ASML Holding (ASML)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">4.6%</td>
+<td class="num">652.77B</td>
+<td class="num r">+41.8%</td>
+<td class="num g">-7.6%</td>
+<td class="num g">-17.1%</td>
+<td class="num">53.8</td>
+<td class="num">—</td>
+<td class="num">—</td>
+<td class="num">+29%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>INTC</b></td>
+<td>Intel (INTC)</td>
+<td class="muted">FPGA / 光通信 / CPU</td>
+<td class="num">3.6%</td>
+<td class="num">515.57B</td>
+<td class="num r">+149.2%</td>
+<td class="num r">+1.2%</td>
+<td class="num g">-30.4%</td>
+<td class="num">—</td>
+<td class="num">58.0</td>
+<td class="num">0.84</td>
+<td class="num">+20%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>LRCX</b></td>
+<td>Lam Research (LRCX)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">2.5%</td>
+<td class="num">359.06B</td>
+<td class="num r">+55.0%</td>
+<td class="num g">-10.6%</td>
+<td class="num g">-33.8%</td>
+<td class="num">49.8</td>
+<td class="num">30.3</td>
+<td class="num">1.18</td>
+<td class="num">+31%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>AMAT</b></td>
+<td>Applied Materials (AMAT)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">2.5%</td>
+<td class="num">354.44B</td>
+<td class="num r">+66.1%</td>
+<td class="num g">-20.4%</td>
+<td class="num g">-38.2%</td>
+<td class="num">38.5</td>
+<td class="num">25.4</td>
+<td class="num">0.82</td>
+<td class="num">+42%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>TXN</b></td>
+<td>Texas Instruments (TXN)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">1.8%</td>
+<td class="num">256.30B</td>
+<td class="num r">+58.1%</td>
+<td class="num g">-3.6%</td>
+<td class="num g">-15.5%</td>
+<td class="num">42.6</td>
+<td class="num">29.0</td>
+<td class="num">1.22</td>
+<td class="num">+16%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>KLAC</b></td>
+<td>KLA Corporation (KLAC)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">1.6%</td>
+<td class="num">233.35B</td>
+<td class="num r">+40.3%</td>
+<td class="num g">-18.5%</td>
+<td class="num g">-40.7%</td>
+<td class="num">48.9</td>
+<td class="num">32.9</td>
+<td class="num">1.63</td>
+<td class="num">+30%</td>
+<td class="num r">偏贵</td></tr><tr>
+<td><b>MRVL</b></td>
+<td>Marvell Technology (MRVL)</td>
+<td class="muted">AI 算力 / 定制芯片</td>
+<td class="num">1.5%</td>
+<td class="num">215.09B</td>
+<td class="num r">+174.4%</td>
+<td class="num r">+30.3%</td>
+<td class="num g">-22.5%</td>
+<td class="num">82.4</td>
+<td class="num">43.4</td>
+<td class="num">0.87</td>
+<td class="num">+38%</td>
+<td class="num r">偏贵</td></tr><tr>
+<td><b>ADI</b></td>
+<td>Analog Devices (ADI)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">1.4%</td>
+<td class="num">195.56B</td>
+<td class="num r">+47.4%</td>
+<td class="num r">+6.1%</td>
+<td class="num g">-9.4%</td>
+<td class="num">47.9</td>
+<td class="num">25.3</td>
+<td class="num">1.00</td>
+<td class="num">+17%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>QCOM</b></td>
+<td>QUALCOMM (QCOM)</td>
+<td class="muted">射频 / 无线</td>
+<td class="num">1.3%</td>
+<td class="num">184.33B</td>
+<td class="num g">-0.2%</td>
+<td class="num r">+1.2%</td>
+<td class="num g">-31.2%</td>
+<td class="num">20.1</td>
+<td class="num">18.6</td>
+<td class="num">3.02</td>
+<td class="num">+12%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>MPWR</b></td>
+<td>Monolithic Power Systems (MPWR)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">0.4%</td>
+<td class="num">61.09B</td>
+<td class="num r">+32.8%</td>
+<td class="num g">-4.8%</td>
+<td class="num g">-26.4%</td>
+<td class="num">75.8</td>
+<td class="num">38.7</td>
+<td class="num">1.13</td>
+<td class="num">+48%</td>
+<td class="num r">偏贵</td></tr><tr>
+<td><b>TER</b></td>
+<td>Teradyne (TER)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">0.4%</td>
+<td class="num">56.20B</td>
+<td class="num r">+73.2%</td>
+<td class="num r">+11.5%</td>
+<td class="num g">-25.7%</td>
+<td class="num">49.3</td>
+<td class="num">36.9</td>
+<td class="num">1.03</td>
+<td class="num">+24%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>NXPI</b></td>
+<td>NXP Semiconductors (NXPI)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">0.4%</td>
+<td class="num">55.69B</td>
+<td class="num g">-0.2%</td>
+<td class="num g">-18.4%</td>
+<td class="num g">-33.6%</td>
+<td class="num">18.9</td>
+<td class="num">13.2</td>
+<td class="num">0.70</td>
+<td class="num">+39%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>COHR</b></td>
+<td>Coherent (COHR)</td>
+<td class="muted">FPGA / 光通信 / CPU</td>
+<td class="num">0.4%</td>
+<td class="num">51.86B</td>
+<td class="num r">+35.5%</td>
+<td class="num g">-4.9%</td>
+<td class="num g">-38.3%</td>
+<td class="num">63.9</td>
+<td class="num">27.9</td>
+<td class="num">0.52</td>
+<td class="num">+57%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>MCHP</b></td>
+<td>Microchip Technology (MCHP)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">0.3%</td>
+<td class="num">38.69B</td>
+<td class="num r">+9.6%</td>
+<td class="num g">-12.8%</td>
+<td class="num g">-30.8%</td>
+<td class="num">105.0</td>
+<td class="num">18.1</td>
+<td class="num">0.40</td>
+<td class="num">+51%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>ON</b></td>
+<td>ON Semiconductor (ON)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">0.2%</td>
+<td class="num">28.56B</td>
+<td class="num r">+29.4%</td>
+<td class="num g">-16.7%</td>
+<td class="num g">-45.2%</td>
+<td class="num">47.0</td>
+<td class="num">18.9</td>
+<td class="num">0.54</td>
+<td class="num">+43%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>GFS</b></td>
+<td>GLOBALFOUNDRIES (GFS)</td>
+<td class="muted">晶圆代工 / 封测</td>
+<td class="num">0.2%</td>
+<td class="num">26.86B</td>
+<td class="num r">+32.7%</td>
+<td class="num g">-16.0%</td>
+<td class="num g">-45.6%</td>
+<td class="num">38.2</td>
+<td class="num">22.6</td>
+<td class="num">0.85</td>
+<td class="num">+53%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>ENTG</b></td>
+<td>Entegris (ENTG)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">0.2%</td>
+<td class="num">23.39B</td>
+<td class="num r">+70.9%</td>
+<td class="num r">+13.7%</td>
+<td class="num g">-16.8%</td>
+<td class="num">76.5</td>
+<td class="num">34.0</td>
+<td class="num">1.23</td>
+<td class="num">+17%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>LSCC</b></td>
+<td>Lattice Semiconductor (LSCC)</td>
+<td class="muted">FPGA / 光通信 / CPU</td>
+<td class="num">0.1%</td>
+<td class="num">16.33B</td>
+<td class="num r">+46.2%</td>
+<td class="num g">-7.6%</td>
+<td class="num g">-25.9%</td>
+<td class="num">449.6</td>
+<td class="num">43.2</td>
+<td class="num">0.81</td>
+<td class="num">+43%</td>
+<td class="num r">偏贵</td></tr><tr>
+<td><b>SWKS</b></td>
+<td>Skyworks Solutions (SWKS)</td>
+<td class="muted">射频 / 无线</td>
+<td class="num">0.1%</td>
+<td class="num">11.57B</td>
+<td class="num r">+19.4%</td>
+<td class="num r">+33.4%</td>
+<td class="num g">-22.0%</td>
+<td class="num">39.7</td>
+<td class="num">14.3</td>
+<td class="num">1.44</td>
+<td class="num">-1%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>AMKR</b></td>
+<td>Amkor Technology (AMKR)</td>
+<td class="muted">晶圆代工 / 封测</td>
+<td class="num">0.1%</td>
+<td class="num">11.14B</td>
+<td class="num r">+4.4%</td>
+<td class="num g">-28.9%</td>
+<td class="num g">-52.1%</td>
+<td class="num">20.1</td>
+<td class="num">16.4</td>
+<td class="num">0.63</td>
+<td class="num">+70%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>QRVO</b></td>
+<td>Qorvo (QRVO)</td>
+<td class="muted">射频 / 无线</td>
+<td class="num">0.1%</td>
+<td class="num">10.07B</td>
+<td class="num r">+20.6%</td>
+<td class="num r">+20.6%</td>
+<td class="num g">+0.0%</td>
+<td class="num">26.4</td>
+<td class="num">14.7</td>
+<td class="num">—</td>
+<td class="num">-21%</td>
+<td class="num g">便宜</td></tr><tr>
+<td><b>RMBS</b></td>
+<td>Rambus (RMBS)</td>
+<td class="muted">存储</td>
+<td class="num">0.1%</td>
+<td class="num">9.99B</td>
+<td class="num g">-7.2%</td>
+<td class="num g">-9.2%</td>
+<td class="num g">-46.0%</td>
+<td class="num">42.2</td>
+<td class="num">27.1</td>
+<td class="num">1.33</td>
+<td class="num">+54%</td>
+<td class="num r">偏贵</td></tr><tr>
+<td><b>ALGM</b></td>
+<td>Allegro MicroSystems (ALGM)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">0.0%</td>
+<td class="num">6.01B</td>
+<td class="num r">+19.7%</td>
+<td class="num g">-31.6%</td>
+<td class="num g">-53.7%</td>
+<td class="num">422.9</td>
+<td class="num">28.8</td>
+<td class="num">0.47</td>
+<td class="num">+69%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>ACLS</b></td>
+<td>Axcelis Technologies (ACLS)</td>
+<td class="muted">设备 / 材料 / 测试</td>
+<td class="num">0.0%</td>
+<td class="num">3.66B</td>
+<td class="num r">+37.7%</td>
+<td class="num g">-14.9%</td>
+<td class="num g">-38.1%</td>
+<td class="num">39.8</td>
+<td class="num">24.6</td>
+<td class="num">2.54</td>
+<td class="num">+36%</td>
+<td class="num ">中性</td></tr><tr>
+<td><b>WOLF</b></td>
+<td>Wolfspeed (WOLF)</td>
+<td class="muted">模拟 / 功率 / 汽车</td>
+<td class="num">0.0%</td>
+<td class="num">1.30B</td>
+<td class="num r">+29.8%</td>
+<td class="num g">-21.2%</td>
+<td class="num g">-66.6%</td>
+<td class="num">165.4</td>
+<td class="num">—</td>
+<td class="num">—</td>
+<td class="num">+12%</td>
+<td class="num g">便宜</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>三、成分股高估 / 低估分层</h2>
+    <div class="muted" style="margin-bottom:8px">
+      方法：<b>估值温度</b> = 该股「远期 PE 分位、PEG 分位、分析师目标价空间分位（反向）」在 30 只成分股内的均值（0-100，越高越贵）。
+      仅表示<b>板块内部的相对贵贱</b>，不是绝对估值判断；盈利处于周期顶部的公司（如存储）PE 天然低，需结合第四节的周期位置解读。
+    </div>
+    <svg viewBox="0 0 980 660" style="width:100%;height:auto;font-size:11px"><text x="142" y="37" text-anchor="end" fill="#1c2430" font-size="11">RMBS</text><rect x="150" y="28" width="471.8" height="12" rx="2" fill="#d94a4a" opacity="0.85"/><text x="629.8" y="38" fill="#6b7686" font-size="10.5">温度 76｜远期PE 27.1｜PEG 1.3｜目标价空间 +54%</text><text x="142" y="58" text-anchor="end" fill="#1c2430" font-size="11">MPWR</text><rect x="150" y="49" width="465.0" height="12" rx="2" fill="#d94a4a" opacity="0.85"/><text x="623.0" y="59" fill="#6b7686" font-size="10.5">温度 75｜远期PE 38.7｜PEG 1.1｜目标价空间 +48%</text><text x="142" y="79" text-anchor="end" fill="#1c2430" font-size="11">KLAC</text><rect x="150" y="70" width="428.4" height="12" rx="2" fill="#d94a4a" opacity="0.85"/><text x="586.4" y="80" fill="#6b7686" font-size="10.5">温度 69｜远期PE 32.9｜PEG 1.6｜目标价空间 +30%</text><text x="142" y="100" text-anchor="end" fill="#1c2430" font-size="11">MRVL</text><rect x="150" y="91" width="421.6" height="12" rx="2" fill="#d94a4a" opacity="0.85"/><text x="579.6" y="101" fill="#6b7686" font-size="10.5">温度 68｜远期PE 43.4｜PEG 0.9｜目标价空间 +38%</text><text x="142" y="121" text-anchor="end" fill="#1c2430" font-size="11">LSCC</text><rect x="150" y="112" width="409.8" height="12" rx="2" fill="#d94a4a" opacity="0.85"/><text x="567.8" y="122" fill="#6b7686" font-size="10.5">温度 66｜远期PE 43.2｜PEG 0.8｜目标价空间 +43%</text><text x="142" y="142" text-anchor="end" fill="#1c2430" font-size="11">ACLS</text><rect x="150" y="133" width="398.0" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="556.0" y="143" fill="#6b7686" font-size="10.5">温度 64｜远期PE 24.6｜PEG 2.5｜目标价空间 +36%</text><text x="142" y="163" text-anchor="end" fill="#1c2430" font-size="11">LRCX</text><rect x="150" y="154" width="388.1" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="546.1" y="164" fill="#6b7686" font-size="10.5">温度 63｜远期PE 30.3｜PEG 1.2｜目标价空间 +31%</text><text x="142" y="184" text-anchor="end" fill="#1c2430" font-size="11">ENTG</text><rect x="150" y="175" width="384.4" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="542.4" y="185" fill="#6b7686" font-size="10.5">温度 62｜远期PE 34.0｜PEG 1.2｜目标价空间 +17%</text><text x="142" y="205" text-anchor="end" fill="#1c2430" font-size="11">TER</text><rect x="150" y="196" width="373.9" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="531.9" y="206" fill="#6b7686" font-size="10.5">温度 60｜远期PE 36.9｜PEG 1.0｜目标价空间 +24%</text><text x="142" y="226" text-anchor="end" fill="#1c2430" font-size="11">GFS</text><rect x="150" y="217" width="372.0" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="530.0" y="227" fill="#6b7686" font-size="10.5">温度 60｜远期PE 22.6｜PEG 0.8｜目标价空间 +53%</text><text x="142" y="247" text-anchor="end" fill="#1c2430" font-size="11">INTC</text><rect x="150" y="238" width="372.0" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="530.0" y="248" fill="#6b7686" font-size="10.5">温度 60｜远期PE 58.0｜PEG 0.8｜目标价空间 +20%</text><text x="142" y="268" text-anchor="end" fill="#1c2430" font-size="11">ALGM</text><rect x="150" y="259" width="365.2" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="523.2" y="269" fill="#6b7686" font-size="10.5">温度 59｜远期PE 28.8｜PEG 0.5｜目标价空间 +69%</text><text x="142" y="289" text-anchor="end" fill="#1c2430" font-size="11">COHR</text><rect x="150" y="280" width="359.0" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="517.0" y="290" fill="#6b7686" font-size="10.5">温度 58｜远期PE 27.9｜PEG 0.5｜目标价空间 +57%</text><text x="142" y="310" text-anchor="end" fill="#1c2430" font-size="11">TXN</text><rect x="150" y="301" width="340.4" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="498.4" y="311" fill="#6b7686" font-size="10.5">温度 55｜远期PE 29.0｜PEG 1.2｜目标价空间 +16%</text><text x="142" y="331" text-anchor="end" fill="#1c2430" font-size="11">AMAT</text><rect x="150" y="322" width="329.8" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="487.8" y="332" fill="#6b7686" font-size="10.5">温度 53｜远期PE 25.4｜PEG 0.8｜目标价空间 +42%</text><text x="142" y="352" text-anchor="end" fill="#1c2430" font-size="11">AMKR</text><rect x="150" y="343" width="300.1" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="458.1" y="353" fill="#6b7686" font-size="10.5">温度 48｜远期PE 16.4｜PEG 0.6｜目标价空间 +70%</text><text x="142" y="373" text-anchor="end" fill="#1c2430" font-size="11">QCOM</text><rect x="150" y="364" width="300.1" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="458.1" y="374" fill="#6b7686" font-size="10.5">温度 48｜远期PE 18.6｜PEG 3.0｜目标价空间 +12%</text><text x="142" y="394" text-anchor="end" fill="#1c2430" font-size="11">AMD</text><rect x="150" y="385" width="299.5" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="457.5" y="395" fill="#6b7686" font-size="10.5">温度 48｜远期PE 51.4｜PEG 0.8｜目标价空间 +11%</text><text x="142" y="415" text-anchor="end" fill="#1c2430" font-size="11">ADI</text><rect x="150" y="406" width="279.0" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="437.0" y="416" fill="#6b7686" font-size="10.5">温度 45｜远期PE 25.3｜PEG 1.0｜目标价空间 +17%</text><text x="142" y="436" text-anchor="end" fill="#1c2430" font-size="11">AVGO</text><rect x="150" y="427" width="270.3" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="428.3" y="437" fill="#6b7686" font-size="10.5">温度 44｜远期PE 20.0｜PEG 0.4｜目标价空间 +52%</text><text x="142" y="457" text-anchor="end" fill="#1c2430" font-size="11">TSM</text><rect x="150" y="448" width="255.4" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="413.4" y="458" fill="#6b7686" font-size="10.5">温度 41｜远期PE 19.6｜PEG —｜目标价空间 +34%</text><text x="142" y="478" text-anchor="end" fill="#1c2430" font-size="11">ON</text><rect x="150" y="469" width="253.0" height="12" rx="2" fill="#8a93a3" opacity="0.85"/><text x="411.0" y="479" fill="#6b7686" font-size="10.5">温度 41｜远期PE 18.9｜PEG 0.5｜目标价空间 +43%</text><text x="142" y="499" text-anchor="end" fill="#1c2430" font-size="11">MCHP</text><rect x="150" y="490" width="234.4" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="392.4" y="500" fill="#6b7686" font-size="10.5">温度 38｜远期PE 18.1｜PEG 0.4｜目标价空间 +51%</text><text x="142" y="520" text-anchor="end" fill="#1c2430" font-size="11">ASML</text><rect x="150" y="511" width="227.5" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="385.5" y="521" fill="#6b7686" font-size="10.5">温度 37｜远期PE —｜PEG —｜目标价空间 +29%</text><text x="142" y="541" text-anchor="end" fill="#1c2430" font-size="11">NVDA</text><rect x="150" y="532" width="226.9" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="384.9" y="542" fill="#6b7686" font-size="10.5">温度 37｜远期PE 18.3｜PEG 0.4｜目标价空间 +49%</text><text x="142" y="562" text-anchor="end" fill="#1c2430" font-size="11">MU</text><rect x="150" y="553" width="222.0" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="380.0" y="563" fill="#6b7686" font-size="10.5">温度 36｜远期PE 5.2｜PEG 0.1｜目标价空间 +71%</text><text x="142" y="583" text-anchor="end" fill="#1c2430" font-size="11">SWKS</text><rect x="150" y="574" width="218.9" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="376.9" y="584" fill="#6b7686" font-size="10.5">温度 35｜远期PE 14.3｜PEG 1.4｜目标价空间 -1%</text><text x="142" y="604" text-anchor="end" fill="#1c2430" font-size="11">NXPI</text><rect x="150" y="595" width="203.4" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="361.4" y="605" fill="#6b7686" font-size="10.5">温度 33｜远期PE 13.2｜PEG 0.7｜目标价空间 +39%</text><text x="142" y="625" text-anchor="end" fill="#1c2430" font-size="11">WOLF</text><rect x="150" y="616" width="82.5" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="240.5" y="626" fill="#6b7686" font-size="10.5">温度 13｜远期PE —｜PEG —｜目标价空间 +12%</text><text x="142" y="646" text-anchor="end" fill="#1c2430" font-size="11">QRVO</text><rect x="150" y="637" width="54.6" height="12" rx="2" fill="#2c9e63" opacity="0.85"/><text x="212.6" y="647" fill="#6b7686" font-size="10.5">温度 9｜远期PE 14.7｜PEG —｜目标价空间 -21%</text></svg>
+    <div class="facts" style="margin-top:14px">
+      <div class="fact"><div class="t"><span class="dot" style="background:#d94a4a"></span>相对偏贵（温度 ≥65）：RMBS、MPWR、KLAC、MRVL、LSCC</div>
+        <div class="d">共同点：远期 PE 高于板块中位 25.4x，且 PEG 或目标价空间没有给出足够补偿——RMBS/MPWR/LSCC/MRVL 的溢价依赖「AI 定制芯片 / 电源管理 / FPGA」的成长叙事；KLAC、LRCX、ENTG、TER 则是设备链里最抗跌、估值消化最慢的一批。<b>它们的问题不是业绩差，而是预期打得太满。</b></div></div>
+      <div class="fact"><div class="t"><span class="dot" style="background:#2c9e63"></span>相对便宜（温度 ≤40）：QRVO、WOLF、NXPI、SWKS、MU、NVDA、ASML、MCHP</div>
+        <div class="d">NVDA（远期 18.3x / PEG 0.37）、MU（远期 5.2x / PEG 0.07）、AVGO（19.98x / 0.37）、TSM（19.6x）——AI 主线龙头反而不贵，因为盈利增速把估值「跑」了下来；NXPI/MCHP/ON/SWKS/QRVO 则是纯周期折价，便宜在需求没起来。<b>注意 MU 类低 PE 是周期顶部特征，不等于安全边际。</b></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、未来走势取决于什么</h2>
+    <div class="muted" style="margin-bottom:12px">按对指数影响力排序（结合当前权重、估值与股价位置）。</div>
+    <div class="drivers">
+      <div class="drv"><div class="no">FACTOR 01</div><div class="t">AI 资本开支的持续性</div>
+        <div class="d">NVDA+AVGO+AMD+MRVL 约占板块市值 62%，四家 YTD 中位 +86%。云厂商 capex 指引、推理需求是否接力训练需求，直接决定指数的分子。任一权重股下修指引，都会被指数权重放大。</div></div>
+      <div class="drv"><div class="no">FACTOR 02</div><div class="t">存储（HBM / DRAM）价格周期</div>
+        <div class="d">MU 年内 +190%、距高点仍 -25%，远期 PE 仅 5.2x、PEG 0.07——市场默认当前盈利是周期顶部。HBM 供需与 DRAM 合约价拐点出现的时点，决定存储组是「便宜」还是「价值陷阱」。</div></div>
+      <div class="drv"><div class="no">FACTOR 03</div><div class="t">设备股隐含的 2027 年 capex 前瞻</div>
+        <div class="d">AMAT 距高点 -38%、LRCX -34%、近 3 月分别 -20% / -11%，明显弱于指数：设备订单是半导体资本开支的领先指标，市场正在下修 2027 年 WFE 支出。若订单回暖，设备链是弹性最大的修复方向。</div></div>
+      <div class="drv"><div class="no">FACTOR 04</div><div class="t">中国出口管制与地缘政策</div>
+        <div class="d">设备材料组（ASML/AMAT/LRCX/KLAC）与 TSM 的收入上限由政策改写；管制升级 = 立刻砍掉一块可寻址市场，缓和 = 订单回补。这是板块内最大的「外生跳空」风险。</div></div>
+      <div class="drv"><div class="no">FACTOR 05</div><div class="t">成熟制程 / 汽车 / 工业需求复苏</div>
+        <div class="d">模拟功率组（TXN/ADI/NXPI/ON/MCHP 等 8 只）YTD 中位仅 +29.6%、PEG 约 0.7，是板块估值洼地也是需求洼地。这一组能否补涨，决定 SOX 是「AI 一枝独秀」还是「行业普涨」——后者才对应指数级的下一波行情。</div></div>
+      <div class="drv"><div class="no">FACTOR 06</div><div class="t">利率环境与集中度风险</div>
+        <div class="d">30 只成分股 beta 中位 1.76，指数对贴现率高度敏感；市值前 3（NVDA/TSM/AVGO）约 63%。降息预期升温利好高久期成长股，反之回撤会被集中度放大——这也是 6 月以来 -20% 回撤的宏观背景。</div></div>
+    </div>
+    <div class="note" style="margin-top:14px"><b>操作含义（数据推论，非投资建议）：</b>指数层面，11,684 距 6 月高点 -20%、但仅 6/30 只成分股站上 50 日线，趋势未修复前更宜把它当「震荡消化期」看；结构层面，AI 龙头（NVDA/AVGO/TSM）估值不贵但依赖 capex 叙事，存储（MU）便宜但买在周期顶部风险高，真正估值+位置双低的是模拟/功率/汽车组（NXPI/MCHP/ON）与射频组——它们的共同前提是「成熟制程需求复苏」，建议跟踪设备订单与渠道库存两个先行信号。</div>
+  </div>
+
+  <footer>
+    数据来源：① 指数与个股收盘价 —— Yahoo Finance（^SOX 及 30 只成分股，2024-10-15 ~ 2026-10-14 日线）；② 估值、盈利、分析师目标价与评级 —— StockAnalysis.com（2026-10-14）；③ 成分股清单 —— Nasdaq PHLX Semiconductor Sector (SOX) 官方 30 只成分。<br>
+    口径说明：涨跌幅按收盘价计算；「距高点」为近 2 年日收盘最高价的偏离；「权重≈」按成分股市值折算，实际指数采用修正市值加权且大权重有上限，与真实权重有差异；「估值温度」仅为 30 只成分股内部的相对比较。本页为数据研究，不构成投资建议。
+  </footer>
+</div>
+</body>
+</html>
