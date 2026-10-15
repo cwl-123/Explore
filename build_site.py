@@ -155,41 +155,87 @@ SITE_SUB = "个人金融研究 · 跑数 / 报告 / 图表 —— 用数据回�
 
 
 # ---------------------------------------------------------------------------
-# 顶部导航（注入到每个报告页，自带内联样式，不依赖页面 CSS）
+# 顶部导航（注入到各报告页的内容容器内，仅左侧「返回首页」，随页面宽度自然左对齐）
 # ---------------------------------------------------------------------------
 NAV_START = "<!-- SITE_NAV_START -->"
 NAV_END = "<!-- SITE_NAV_END -->"
 
+NAV_CSS = (
+    "#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,"
+    "'PingFang SC','Microsoft YaHei',sans-serif;}"
+    "#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;"
+    "color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;"
+    "padding:5px 14px 5px 12px;transition:.15s;}"
+    "#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}"
+    "#site-nav a b{font-weight:600;color:#1c2430;}"
+    "#site-nav a:hover b{color:#2f6fed;}"
+)
 
-def build_nav(rel_home: str, active_key: str) -> str:
-    links = []
-    for key, label, _, color in CATEGORIES:
-        if key == active_key:
-            style = f"color:#fff;border-color:{color};background:{color}22;"
-        else:
-            style = "color:#c7cedb;border-color:transparent;"
-        links.append(
-            f'<a href="{rel_home}#{key}" style="white-space:nowrap;text-decoration:none;'
-            f'font-size:13px;padding:3px 10px;border:1px solid;border-radius:999px;{style}">{label}</a>'
-        )
-    nav_links = "".join(links)
+CONTAINER_HINTS = ["page", "wrap", "container", "content", "main", "root"]
+
+
+def build_nav(rel_home: str) -> str:
     return (
         f'{NAV_START}\n'
-        f'<div id="site-nav" style="position:sticky;top:0;z-index:9999;background:#1c2430;'
-        f'font:14px/1.5 -apple-system,BlinkMacSystemFont,\'PingFang SC\',\'Microsoft YaHei\',sans-serif;'
-        f'box-shadow:0 1px 8px rgba(0,0,0,.16);">'
-        f'<div style="max-width:1120px;margin:0 auto;padding:0 20px;height:48px;display:flex;'
-        f'align-items:center;gap:10px;overflow-x:auto;">'
-        f'<a href="{rel_home}" style="color:#fff;text-decoration:none;font-weight:700;'
-        f'letter-spacing:.4px;white-space:nowrap;">🔍 {SITE_TITLE}</a>'
-        f'<span style="color:#4a5468;margin:0 4px;">|</span>'
-        f'<div style="display:flex;gap:6px;margin-left:auto;">{nav_links}</div>'
-        f'</div></div>\n'
+        f'<style>{NAV_CSS}</style>\n'
+        f'<div id="site-nav"><a href="{rel_home}">← 返回首页 · <b>{SITE_TITLE}</b></a></div>\n'
         f'{NAV_END}'
     )
 
 
-def inject_nav(path: str, active_key: str) -> bool:
+def _css_rules(style_text: str):
+    return re.findall(r"([^{}]+)\{([^{}]*)\}", style_text)
+
+
+def _has_maxwidth(style_text: str, selector: str) -> bool:
+    for sel, rule in _css_rules(style_text):
+        if "max-width" not in rule:
+            continue
+        if selector in [s.strip() for s in sel.split(",")]:
+            return True
+    return False
+
+
+def _maxwidth_classes(style_text: str):
+    out = set()
+    for sel, rule in _css_rules(style_text):
+        if "max-width" not in rule:
+            continue
+        out.update(re.findall(r"\.([A-Za-z0-9_\-]+)", sel))
+    return out
+
+
+def _insert_pos(html_text: str) -> int:
+    """返回导航插入位置（内容容器起始处），使导航与正文左对齐。"""
+    styles = "".join(re.findall(r"<style[^>]*>(.*?)</style>", html_text, flags=re.S | re.I))
+    bm = re.search(r"<body[^>]*>", html_text, flags=re.I)
+    if not bm:
+        return -1
+    end = bm.end()
+    # 1) body 自身限宽（正文直接放在 body 内）→ 插在 body 之后
+    if _has_maxwidth(styles, "body"):
+        return end
+    body_html = html_text[end:]
+    # 2) 找限宽的内容容器 div（.page / .wrap / ...）
+    for name in CONTAINER_HINTS:
+        if not _has_maxwidth(styles, "." + name):
+            continue
+        m = re.search(
+            r'<div\b[^>]*\bclass="[^"]*\b' + re.escape(name) + r'\b[^"]*"[^>]*>',
+            body_html,
+            flags=re.I,
+        )
+        if m:
+            return end + m.end()
+    # 3) 兜底：任一「限宽 class」的 div
+    mw = _maxwidth_classes(styles)
+    for m in re.finditer(r'<div\b[^>]*\bclass="([^"]*)"[^>]*>', body_html, flags=re.I):
+        if set(m.group(1).split()) & mw:
+            return end + m.end()
+    return end
+
+
+def inject_nav(path: str) -> bool:
     abs_path = os.path.join(ROOT, path)
     if not os.path.isfile(abs_path):
         print(f"  ! 跳过（文件不存在）：{path}")
@@ -197,30 +243,20 @@ def inject_nav(path: str, active_key: str) -> bool:
     with open(abs_path, encoding="utf-8") as f:
         content = f.read()
 
+    body = re.sub(re.escape(NAV_START) + r".*?" + re.escape(NAV_END), "", content, flags=re.S)
     rel_home = os.path.relpath(os.path.join(ROOT, "index.html"), os.path.dirname(abs_path))
     rel_home = rel_home.replace(os.sep, "/")
-    nav = build_nav(rel_home, active_key)
 
-    if NAV_START in content:
-        new = re.sub(
-            re.escape(NAV_START) + r".*?" + re.escape(NAV_END),
-            lambda _: nav,
-            content,
-            flags=re.S,
-        )
-        action = "更新"
-    else:
-        m = re.search(r"<body[^>]*>", content, flags=re.I)
-        if not m:
-            print(f"  ! 跳过（无 <body>）：{path}")
-            return False
-        new = content[: m.end()] + "\n" + nav + content[m.end():]
-        action = "注入"
+    idx = _insert_pos(body)
+    if idx < 0:
+        print(f"  ! 跳过（无 <body>）：{path}")
+        return False
+    new = body[:idx] + build_nav(rel_home) + body[idx:]
 
     if new != content:
         with open(abs_path, "w", encoding="utf-8") as f:
             f.write(new)
-        print(f"  ✓ {action}导航：{path}")
+        print(f"  ✓ 注入导航：{path}")
         return True
     print(f"  = 导航已是最新：{path}")
     return False
@@ -361,7 +397,7 @@ def main() -> None:
         for item in REGISTRY:
             if item.get("kind") == "image":
                 continue
-            inject_nav(item["path"], item["category"])
+            inject_nav(item["path"])
     else:
         print("（--no-nav：跳过导航注入）")
 
