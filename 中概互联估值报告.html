@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中概互联ETF(513050) 重仓股估值报告</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1c2430; --muted:#6b7686; --line:#e6e9ee;
+    --red:#d94a4a; --amber:#e0a300; --green:#2c9e63; --blue:#2f6fed; --blue-soft:#eef3fe;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px;}
+  header.top{margin-bottom:22px;}
+  header.top h1{font-size:26px;margin:0 0 6px;letter-spacing:.3px;}
+  header.top .sub{color:var(--muted);font-size:13px;}
+  .pill{display:inline-block;font-size:12px;padding:2px 10px;border-radius:999px;background:var(--blue-soft);color:var(--blue);margin-left:8px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:18px;
+    box-shadow:0 1px 2px rgba(20,30,50,.03);}
+  h2{font-size:18px;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+  h2::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--blue);display:inline-block;}
+  h3{font-size:15px;margin:0 0 8px;}
+  .muted{color:var(--muted);font-size:13px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;}
+  th:first-child,td:first-child{text-align:left;}
+  th{color:var(--muted);font-weight:600;font-size:12.5px;background:#fafbfc;}
+  tr:last-child td{border-bottom:none;}
+  .num{font-variant-numeric:tabular-nums;}
+  .r{color:var(--red);} .g{color:var(--green);} .a{color:var(--amber);}
+  .b{font-weight:700;}
+  /* KPI cards */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:4px;}
+  .kpi{background:#fafbfc;border:1px solid var(--line);border-radius:12px;padding:14px 14px;}
+  .kpi .k{font-size:12px;color:var(--muted);}
+  .kpi .v{font-size:20px;font-weight:700;margin-top:4px;}
+  /* range chart */
+  .bars{display:flex;flex-direction:column;gap:14px;margin-top:6px;}
+  .barrow{display:grid;grid-template-columns:96px 1fr 92px;align-items:center;gap:12px;}
+  .barrow .name{font-size:13.5px;font-weight:600;}
+  .barrow .name small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;}
+  .track{position:relative;height:26px;background:linear-gradient(90deg,#fdeeee 0%,#f3f4f6 19%,#edfaf3 100%);
+    border-radius:7px;overflow:hidden;}
+  .track .zero{position:absolute;top:-4px;bottom:-4px;left:18.75%;width:1px;background:#c9cfd8;z-index:3;}
+  .track .span{position:absolute;top:5px;height:16px;border-radius:8px;z-index:2;}
+  .track .span.pess{background:linear-gradient(90deg,#e78a8a,#d94a4a);}
+  .track .span.opt{background:linear-gradient(90deg,#69c093,#2c9e63);}
+  .track .neu{position:absolute;top:2px;width:3px;height:22px;background:#2f6fed;border-radius:2px;z-index:4;}
+  .barrow .val{font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;}
+  .barrow .val b{font-size:13.5px;}
+  /* stock cards */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .scard{border:1px solid var(--line);border-radius:12px;padding:16px 16px;background:#fff;}
+  .scard .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .scard .head .n{font-size:16px;font-weight:700;}
+  .scard .head .w{font-size:12px;color:var(--blue);background:var(--blue-soft);padding:2px 8px;border-radius:999px;}
+  .scard .price{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+  .scard .rng{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+  .tag{font-size:12px;padding:3px 9px;border-radius:7px;font-variant-numeric:tabular-nums;}
+  .tag.p{background:#fdecec;color:#b53a3a;}
+  .tag.n{background:#f2f5fb;color:#2f6fed;font-weight:700;}
+  .tag.o{background:#e9f7f0;color:#1f7d4d;}
+  .scard .logic{font-size:13px;color:#3b4654;}
+  .scard .logic b{color:#1c2430;}
+  .concl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px;}
+  .concl .c{border-radius:12px;padding:16px;text-align:center;border:1px solid var(--line);}
+  .concl .c .t{font-size:13px;color:var(--muted);}
+  .concl .c .v{font-size:26px;font-weight:800;margin-top:4px;}
+  .concl .c.pess{background:#fdf3f3;} .concl .c.neu{background:#f2f6ff;} .concl .c.opt{background:#eefaf3;}
+  ul.clean{margin:6px 0 0;padding-left:18px;}
+  ul.clean li{margin-bottom:6px;font-size:13.5px;}
+  .note{font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px;margin-top:14px;}
+  .flag{font-size:12px;color:var(--muted);}
+  @media(max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .grid2{grid-template-columns:1fr;}
+    .concl{grid-template-columns:1fr;}
+    table{font-size:12.5px;}
+    th,td{padding:7px 6px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>中概互联ETF (513050) 重仓股估值报告</h1>
+    <div class="sub">
+      基金：易方达中概互联网ETF · 跟踪指数：中证海外中国互联网50人民币指数 ·
+      <span class="pill">数据截至 2026-09-24</span>
+      <span class="pill">持仓截至 2026-06-30</span>
+    </div>
+  </header>
+
+  <!-- ETF overview -->
+  <section class="card">
+    <h2>一、基金概况</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="k">基金规模</div><div class="v num">330.3亿</div><div class="muted">人民币</div></div>
+      <div class="kpi"><div class="k">单位净值</div><div class="v num">1.0588</div><div class="muted">2026-09-22</div></div>
+      <div class="kpi"><div class="k">近1年收益</div><div class="v num r">-36.95%</div><div class="muted">近3月 +2.81%</div></div>
+      <div class="kpi"><div class="k">前十权重合计</div><div class="v num">91.5%</div><div class="muted">极度集中</div></div>
+    </div>
+    <p class="muted" style="margin-top:14px;">
+      这是一只<strong>高度集中</strong>的指数基金：腾讯 + 阿里两家就占 <strong>57.06%</strong>。
+      按用户口径，仅统计权重 &gt;5% 的公司，共 6 家，合计 <strong>80.43%</strong>。
+      京东(3.38%)、百度(3.24%)、携程(2.76%)、快手(1.69%) 等均为「小卡拉米」，本报告不逐一展开。
+    </p>
+  </section>
+
+  <!-- holdings -->
+  <section class="card">
+    <h2>二、前十大权重明细</h2>
+    <table>
+      <thead><tr><th>持仓</th><th>权重</th><th>是否 &gt;5%</th></tr></thead>
+      <tbody>
+        <tr><td>腾讯控股</td><td class="num">32.34%</td><td class="g b">是</td></tr>
+        <tr><td>阿里巴巴-W</td><td class="num">24.72%</td><td class="g b">是</td></tr>
+        <tr><td>拼多多</td><td class="num">7.03%</td><td class="g b">是</td></tr>
+        <tr><td>美团-W</td><td class="num">5.75%</td><td class="g b">是</td></tr>
+        <tr><td>小米集团-W</td><td class="num">5.32%</td><td class="g b">是</td></tr>
+        <tr><td>网易</td><td class="num">5.27%</td><td class="g b">是</td></tr>
+        <tr><td>京东集团-SW</td><td class="num">3.38%</td><td class="muted">否</td></tr>
+        <tr><td>百度集团-SW</td><td class="num">3.24%</td><td class="muted">否</td></tr>
+        <tr><td>携程集团-S</td><td class="num">2.76%</td><td class="muted">否</td></tr>
+        <tr><td>快手-W</td><td class="num">1.69%</td><td class="muted">否</td></tr>
+        <tr><td class="b">前十合计</td><td class="num b">91.50%</td><td></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- valuation range chart -->
+  <section class="card">
+    <h2>三、六大重仓股估值区间（相对现价涨跌幅）</h2>
+    <p class="muted" style="margin-top:-4px;">每根彩条代表「悲观 → 乐观」的目标区间，蓝色竖线为中性值，灰线为现价(0%)。</p>
+    <div class="bars">
+      <div class="barrow">
+        <div class="name">腾讯<small>32.34%</small></div>
+        <div class="track">
+          <div class="zero"></div>
+          <div class="span pess" style="left:3.9%;width:14.2%"></div>
+          <div class="neu" style="left:29.4%"></div>
+          <div class="span opt" style="left:18.1%;width:28.7%"></div>
+        </div>
+        <div class="val"><b>-24%</b> / +11% / <b class="g">+45%</b></div>
+      </div>
+      <div class="barrow">
+        <div class="name">阿里<small>24.72%</small></div>
+        <div class="track">
+          <div class="zero"></div>
+          <div class="span pess" style="left:11.1%;width:7.6%"></div>
+          <div class="neu" style="left:41.0%"></div>
+          <div class="span opt" style="left:18.7%;width:54.6%"></div>
+        </div>
+        <div class="val"><b>-12%</b> / +36% / <b class="g">+87%</b></div>
+      </div>
+      <div class="barrow">
+        <div class="name">拼多多<small>7.03%</small></div>
+        <div class="track">
+          <div class="zero"></div>
+          <div class="span pess" style="left:8.3%;width:10.4%"></div>
+          <div class="neu" style="left:34.4%"></div>
+          <div class="span opt" style="left:18.7%;width:39.4%"></div>
+        </div>
+        <div class="val"><b>-17%</b> / +25% / <b class="g">+63%</b></div>
+      </div>
+      <div class="barrow">
+        <div class="name">美团<small>5.75%</small></div>
+        <div class="track">
+          <div class="zero"></div>
+          <div class="span pess" style="left:7.3%;width:11.0%"></div>
+          <div class="neu" style="left:53.1%"></div>
+          <div class="span opt" style="left:18.7%;width:79.4%"></div>
+        </div>
+        <div class="val"><b>-18%</b> / +55% / <b class="g">+127%</b></div>
+      </div>
+      <div class="barrow">
+        <div class="name">小米<small>5.32%</small></div>
+        <div class="track">
+          <div class="zero"></div>
+          <div class="span pess" style="left:4.0%;width:14.7%"></div>
+          <div class="neu" style="left:19.9%"></div>
+          <div class="span opt" style="left:18.7%;width:21.6%"></div>
+        </div>
+        <div class="val"><b>-24%</b> / +2% / <b class="g">+35%</b></div>
+      </div>
+      <div class="barrow">
+        <div class="name">网易<small>5.27%</small></div>
+        <div class="track">
+          <div class="zero"></div>
+          <div class="span pess" style="left:18.7%;width:3.6%"></div>
+          <div class="neu" style="left:39.4%"></div>
+          <div class="span opt" style="left:22.3%;width:34.3%"></div>
+        </div>
+        <div class="val"><b class="g">+6%</b> / +33% / <b class="g">+61%</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- summary table -->
+  <section class="card">
+    <h2>四、估值汇总表</h2>
+    <table>
+      <thead>
+        <tr><th>公司 (权重)</th><th>现价</th><th>悲观</th><th>中性</th><th>乐观</th><th>中性空间</th><th>券商目标</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>腾讯 (32.34%)</td><td class="num">HK$436.6</td><td class="num r">HK$333</td><td class="num b">HK$483</td><td class="num g">HK$632</td><td class="num">+11%</td><td class="num muted">+52%</td></tr>
+        <tr><td>阿里 (24.72%)</td><td class="num">HK$110.6</td><td class="num r">HK$97</td><td class="num b">HK$150</td><td class="num g">HK$207</td><td class="num">+36%</td><td class="num muted">+59%</td></tr>
+        <tr><td>拼多多 (7.03%)</td><td class="num">$79.2</td><td class="num r">$66</td><td class="num b">$99</td><td class="num g">$129</td><td class="num">+25%</td><td class="num muted">+45%</td></tr>
+        <tr><td>美团 (5.75%)</td><td class="num">HK$72.3</td><td class="num r">HK$59</td><td class="num b">HK$112</td><td class="num g">HK$164</td><td class="num">+55%</td><td class="num muted">+53%</td></tr>
+        <tr><td>小米 (5.32%)</td><td class="num">HK$27.5</td><td class="num r">HK$21</td><td class="num b">HK$28</td><td class="num g">HK$37</td><td class="num">+2%</td><td class="num muted">—</td></tr>
+        <tr><td>网易 (5.27%)</td><td class="num">HK$186.3</td><td class="num r">HK$197</td><td class="num b">HK$248</td><td class="num g">HK$299</td><td class="num">+33%</td><td class="num muted">+35%</td></tr>
+      </tbody>
+    </table>
+    <p class="note">注：腾讯/阿里/小米为前序单独 SOTP 结果；拼多多、美团、网易为本轮新增。券商目标为各股 TTM 一致预期均价。</p>
+  </section>
+
+  <!-- per stock cards -->
+  <section class="card">
+    <h2>五、个股结论</h2>
+    <div class="grid2">
+
+      <div class="scard">
+        <div class="head"><span class="n">腾讯控股</span><span class="w">32.34%</span></div>
+        <div class="price">现价 HK$436.6 · 市值 3.93万亿港币 · 52周 -31%</div>
+        <div class="rng"><span class="tag p">悲观 333</span><span class="tag n">中性 483</span><span class="tag o">乐观 632</span></div>
+        <div class="logic">
+          游戏+广告现金牛，价值约 <b>1/3 在投资组合</b>。估值锚是稳定的经营现金流，而非烧钱业务。
+          现价≈中性下方；<b>中性 +11%、乐观 +45%（≈券商目标）</b>。核心风险：AI 资本开支侵蚀 FCF + 中国资产折价。
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="head"><span class="n">阿里巴巴</span><span class="w">24.72%</span></div>
+        <div class="price">现价 HK$110.6 · 市值 2.27万亿港币 · 52周 -31%</div>
+        <div class="rng"><span class="tag p">悲观 97</span><span class="tag n">中性 150</span><span class="tag o">乐观 207</span></div>
+        <div class="logic">
+          盈利被自己压在地板上：闪购补贴战 + AI 资本开支使 <b>FCF 转负(-766亿)</b>。
+          估值全靠「正常化」假设——把核心电商 EBITA 还原到 ~1700亿。信则 <b>中性 +36%、乐观 +87%</b>；不信则只是合理。
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="head"><span class="n">拼多多</span><span class="w">7.03%</span></div>
+        <div class="price">现价 $79.2 · 市值 $113B · 52周 -38%</div>
+        <div class="rng"><span class="tag p">悲观 $66</span><span class="tag n">中性 $99</span><span class="tag o">乐观 $129</span></div>
+        <div class="logic">
+          <b>全篮子报表最便宜</b>：EV/EBIT 仅 3.2x，净现金 4520亿=市值 56%，FCF ~1100亿。
+          但增速降到 10%、Temu 投入、市场给「不可投」折价。<b>中性 +25%、乐观 +63%</b>；下行有净现金托底。
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="head"><span class="n">美团</span><span class="w">5.75%</span></div>
+        <div class="price">现价 HK$72.3 · 市值 4500亿港币 · 52周 -28%</div>
+        <div class="rng"><span class="tag p">悲观 59</span><span class="tag n">中性 112</span><span class="tag o">乐观 164</span></div>
+        <div class="logic">
+          <b>即时零售战最大受害者</b>：从盈利 358亿(FY24) 转为亏损 -234亿(FY25)，FCF -393亿。
+          现价只给了正常化核心 ~8x EBIT。<b>赔率最高但最不确定</b>：中性 +55%、乐观 +127%，赌的是战争结束。
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="head"><span class="n">小米集团</span><span class="w">5.32%</span></div>
+        <div class="price">现价 HK$27.5 · 市值 ~7300亿港币 · 52周 —</div>
+        <div class="rng"><span class="tag p">悲观 21</span><span class="tag n">中性 28</span><span class="tag o">乐观 37</span></div>
+        <div class="logic">
+          人车家生态；互联网服务是隐形金矿，手机毛利受存储周期压制，汽车仍在放量。
+          <b>现价≈中性</b>：中性 +2%、乐观 +35%。上行靠汽车+AI 兑现，下行看硬件失血 + 互联网杀估值。
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="head"><span class="n">网易</span><span class="w">5.27%</span></div>
+        <div class="price">现价 HK$186.3 · 市值 5900亿港币 · 52周 -22%</div>
+        <div class="rng"><span class="tag p">悲观 197</span><span class="tag n">中性 248</span><span class="tag o">乐观 299</span></div>
+        <div class="logic">
+          <b>最干净的现金牛</b>：毛利 67%、净利率 28%、净现金 1628亿=市值 30%、分红 2.5%、EV/EBIT 8.6x。
+          游戏是印钞机。<b>连悲观情形都 +6%</b>；中性 +33%、乐观 +61%。风险仅游戏版号/新品周期。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ETF conclusion -->
+  <section class="card">
+    <h2>六、中概互联ETF 整体结论</h2>
+    <p class="muted" style="margin-top:-2px;">按前六大权重加权（合计 80.43%，其余假设持平），当前价对应：</p>
+    <div class="concl">
+      <div class="c pess"><div class="t">悲观情形</div><div class="v r">-14%</div><div class="muted">战争持续 + 中国折价加深</div></div>
+      <div class="c neu"><div class="t">中性情形</div><div class="v" style="color:var(--blue)">+19%</div><div class="muted">盈利正常化，估值修复</div></div>
+      <div class="c opt"><div class="t">乐观情形</div><div class="v g">+53%</div><div class="muted">内卷结束 + AI 变现兑现</div></div>
+    </div>
+    <ul class="clean" style="margin-top:16px;">
+      <li><b>结论：现价已计入较深悲观预期，赔率偏上。</b>基金近一年 -37%，整体估值处于低位；中性情形约 +19%，乐观 +53%。</li>
+      <li><b>权重决定了它是「腾讯+阿里的基金」。</b>两只占 57%，这两家的估值（中性 +11%、+36%）几乎决定整只基金的走向，其余名字是卫星。</li>
+      <li><b>核心矛盾是「投入 vs 毁灭」。</b>阿里(闪购+AI)、美团(闪购)、京东在同一个即时零售战场上烧钱，合计蒸发数千亿利润——这是整只 ETF 当前最大的盈利拖累，也是最大的预期差来源。</li>
+      <li><b>最便宜的是拼多多、网易</b>（EV 口径极度便宜+大额净现金）；<b>赔率最高的是美团</b>（战争结束弹性最大）；<b>最稳的是腾讯</b>。</li>
+      <li><b>关键风险：</b>① 即时零售战无止境；② AI 资本开支无法变现、FCF 持续为负；③ 中国资产/地缘折价进一步扩大；④ QDII 额度紧张导致的<strong>场内溢价</strong>（买入即承担溢价回撤风险）。</li>
+    </ul>
+    <p class="note">
+      方法论：统一 EV 口径（硬件/电商用 EV/Sales 或 EV/EBIT，平台用 EV/EBIT），正常化被战争/资本开支扭曲的盈利，
+      各分部加总后加非经营资产（净现金/投资组合）并扣控股折价。所有公司均给出悲观/中性/乐观三档。
+      本页为个人研究整理，非投资建议。
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>七、数据来源与说明</h2>
+    <ul class="clean">
+      <li>持仓权重：易方达中概互联网ETF(513050) 2026-06-30 半年度披露（天天基金/东方财富）。</li>
+      <li>财务与估值：stockanalysis.com（S&P Global Market Intelligence / Fiscal.ai 口径），TTM 截至 2026-06-30。</li>
+      <li>腾讯/阿里/小米：见前序单独 SOTP；拼多多/美团/网易：本轮 based on TTM 数据 + 正常化假设。</li>
+      <li>口径提醒：TTM 含一次性项；货币混用（HKD/CNY/USD）；「净现金」可能含客户备付金/浮存，实际可分配现金需打折。</li>
+      <li>⚠️ 持仓披露为半年度，可能已滞后于最新季度，权重复盘前需以最新公告为准。</li>
+    </ul>
+  </section>
+
+</div>
+</body>
+</html>

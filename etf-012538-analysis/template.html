@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>化工ETF 012538 成分股深度分析 · 还能拿吗？</title>
+<script src="echarts.min.js"></script>
+<script>
+if (!window.echarts) document.write('<script src="https://unpkg.com/echarts@5/dist/echarts.min.js"><\/script>');
+</script>
+<script>
+if (!window.echarts) document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>');
+</script>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1c2333; --sub:#5a6478; --line:#e6e9f0;
+    --blue:#2f6fed; --red:#e5484d; --green:#18a058; --orange:#f08c00; --purple:#7c5cd6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;line-height:1.75}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+  header{background:linear-gradient(135deg,#122a5e 0%,#2f6fed 100%);border-radius:16px;color:#fff;padding:34px 30px;margin-bottom:22px}
+  header h1{font-size:26px;letter-spacing:.5px}
+  header .sub{opacity:.85;margin-top:6px;font-size:14px}
+  .verdict{display:inline-block;margin-top:16px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:10px 16px;font-size:15px}
+  .verdict b{color:#ffe08a}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:26px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .card .k{font-size:12px;color:var(--sub)}
+  .card .v{font-size:22px;font-weight:700;margin-top:2px}
+  .card .n{font-size:11px;color:var(--sub);margin-top:2px}
+  .up{color:var(--red)} .down{color:var(--green)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:24px}
+  h2{font-size:20px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  h2 .tag{background:var(--blue);color:#fff;border-radius:8px;font-size:13px;padding:2px 10px;font-weight:600}
+  h3{font-size:16px;margin:20px 0 8px;color:#122a5e}
+  p{margin:8px 0;font-size:14.5px}
+  .muted{color:var(--sub);font-size:13px}
+  .chart{width:100%;height:380px;margin:10px 0}
+  .chart-sm{height:320px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+  th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  th{background:#f0f3fa;color:#334;font-weight:600;position:sticky;top:0}
+  td:first-child,th:first-child,td:nth-child(2),th:nth-child(2){text-align:left}
+  tr:hover td{background:#f8faff}
+  .chip{display:inline-block;border-radius:6px;padding:0 7px;font-size:11.5px;font-weight:600}
+  .chip.cheap{background:#e6f7ee;color:#0d7a43}
+  .chip.mid{background:#fff6e0;color:#a36b00}
+  .chip.hot{background:#fdeaea;color:#c22}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .box{border-radius:12px;padding:16px 18px;font-size:14px}
+  .box h4{font-size:15px;margin-bottom:8px}
+  .box ul{padding-left:20px}
+  .box li{margin:6px 0}
+  .hold{background:#eef7f1;border:1px solid #cde9d8}
+  .hold h4{color:var(--green)}
+  .sell{background:#fdf0f0;border:1px solid #f2d4d5}
+  .sell h4{color:var(--red)}
+  .story{background:#f4f7ff;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-size:14px}
+  .warn{background:#fff8ec;border-left:4px solid var(--orange);border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-size:14px}
+  .tbl-scroll{overflow-x:auto}
+  .num{font-variant-numeric:tabular-nums}
+  footer{color:var(--sub);font-size:12px;text-align:center;margin-top:8px}
+  .pill{display:inline-block;background:#eef2fb;color:#3a5bd0;border-radius:99px;padding:2px 12px;font-size:12px;margin:2px 4px 2px 0}
+  .check li{margin:8px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>化工ETF（012538）还能拿吗？—— 成分股 · 估值 · 逻辑 全拆解</h1>
+  <div class="sub">华宝中证细分化工产业主题ETF联接C · 跟踪 中证细分化工产业主题指数（000813，50只成分股） · 数据截至 <span id="gen-date"></span>（持仓为 2026 年二季报）</div>
+  <div class="verdict" id="verdict"></div>
+</header>
+
+<div class="cards" id="cards"></div>
+
+<!-- ================= Q1 ================= -->
+<section>
+  <h2><span class="tag">问题一</span>化工这轮行情的逻辑是什么？是"海外替代 + 涨价预期"吗？</h2>
+  <p>你的理解方向是对的，但不完整。这轮化工行情其实是<b>三条主线叠加</b>，"霍尔木兹 → 海外产能收缩 → 涨价"只是其中之一：</p>
+
+  <div class="story"><b>主线 ①：油价冲击下的"成本再分配"（你说的霍尔木兹逻辑）。</b>
+  地缘冲突把布油推到 <span id="brent-now"></span> 美元附近。海外化工大量依赖石脑油裂解，油价越高、欧洲/日韩产能越亏，被迫降负荷甚至永久退出（欧洲乙烯、MDI 产能近两年持续关停）；而国内<b>煤化工路线</b>（宝丰能源、华鲁恒升、云天化）和<b>轻烃路线</b>（卫星化学用美国乙烷）不跟油价走，油煤价差、乙烷-石脑油价差被拉大——同样涨价，中国龙头成本不动，利润弹性远大于海外。<b>所以准确说法是：油价上行 → 海外高成本产能退出 → 全球供给收缩 + 中国龙头份额和价差双升。</b></div>
+
+  <div class="story"><b>主线 ②：供给侧"配额化 / 反内卷"的自主涨价。</b>
+  制冷剂（巨化股份、昊华科技）是最典型代表：三代 HFCs 实行生产配额制，供给刚性锁死，价格进入长涨价周期，这是<b>与油价无关、确定性最高</b>的一条线。此外国内化工资本开支已连续两年负增长，"反内卷"淘汰中小产能，多数子行业格局出清。</div>
+
+  <div class="story"><b>主线 ③：新能源材料景气反转（本期持仓里权重上升最快的部分）。</b>
+  储能需求爆发 + 前期产能出清，六氟磷酸锂、电解液、隔膜从深度亏损转向量价齐升——天赐材料 2026H1 净利 <span class="up">+968%</span>、多氟多 <span class="up">+897%</span>、恩捷股份 <span class="up">+981%</span>。这条线弹性最大，但也最依赖景气持续性。</div>
+
+  <div class="warn"><b>注意：油价是双刃剑。</b>对煤化工/轻烃/制冷剂是利好，但对纯油气头化工（恒力石化、炼化环节）是成本压力。若霍尔木兹局势缓和、油价快速回落，"涨价+替代"叙事会降温——但油头成本压力同时缓解，指数层面是逻辑切换而非单边利空。</div>
+
+  <h3>油价（WTI / 布伦特，近5年周线）</h3>
+  <div id="chart-oil" class="chart chart-sm"></div>
+
+  <h3>指数走势与估值分位（2012 至今）</h3>
+  <p class="muted">当前指数 PE-TTM <b id="idx-pe"></b> 倍，处于 2012 年以来 <b id="idx-pct"></b> 分位、近 10 年 <b id="idx-pct10"></b> 分位 —— <b>盈利在涨、估值分位仍然偏低</b>，这是"还能拿"最核心的量化依据。</p>
+  <div id="chart-index" class="chart"></div>
+
+  <h3>基金净值 / ETF 价格</h3>
+  <p class="muted">012538 成立于 2021-06-24（上一轮化工+锂电景气顶点），当前净值 <b id="nav-now"></b>，成立以来仍 <b class="down" id="nav-since"></b>；但从 2025 年 7 月低点算起已反弹 <b class="up" id="nav-rebound"></b>。你大概率是"高位站岗后等到了反转"，现在正处于盈利兑现期而非泡沫期。</p>
+  <div id="chart-etf" class="chart chart-sm"></div>
+</section>
+
+<!-- ================= Q2 ================= -->
+<section>
+  <h2><span class="tag">问题二</span>前 15 大重仓股：增速、PE 贵不贵、可持续吗？</h2>
+  <p class="muted">持仓口径 = 化工ETF（516020）2026 年二季报，前 15 大合计约 <b id="top15w"></b>%；PE-TTM / PB / 市值为百度股市通 <span id="val-date"></span> 数据；分位 = PE 在近 5 年中的位置；增速为财报累计同比（"Q2单季"由 H1−Q1 推算，999%+ 表示扭亏/爆增）。</p>
+  <div class="tbl-scroll"><table id="tbl"></table></div>
+
+  <h3>估值分位 × 盈利增速 四象限（气泡 = 持仓权重）</h3>
+  <p class="muted">左下角 = 便宜且盈利下滑（左侧埋伏区）；<b>左上角 = 便宜且高增长（最舒服的区域，万华/盐湖/卫星/宝丰/天赐都在这）</b>；右上角 = 贵且高增长（景气兑现才能消化估值）；右下角 = 贵且下滑（最危险，圣泉集团在这）。</p>
+  <div id="chart-scatter" class="chart"></div>
+
+  <h3>分组点评</h3>
+  <div class="grid2">
+    <div class="box hold">
+      <h4>✔ 便宜 + 高增长（约 27% 权重）——可持续，核心底仓</h4>
+      <ul>
+        <li><b>万华化学 8.2%</b>：全球 MDI 寡头，PE 13.2x（5年分位17%）。H1 净利 +64%、Q2 单季 +109%，MDI 涨价 + 欧洲产能退出直接受益。周期龙头在利润高增时给 13 倍，不贵。</li>
+        <li><b>盐湖股份 6.2%</b>：钾肥+盐湖提锂，PE 10.1x。钾肥供给寡头格局 + 锂价反弹，H1 +138%。资源属性，只要粮价/钾肥价格不崩就稳。</li>
+        <li><b>卫星化学 2.5%</b>：乙烷裂解，PE 10.3x。油价越高它的相对成本优势越大，Q2 单季 +250%，α-烯烃国产替代是第二增长曲线。</li>
+        <li><b>宝丰能源 2.8%</b>：煤制烯烃，PE 10.7x（5年分位 0.3%，历史最低区）。油煤价差最大受益者，内蒙项目放量，H1 +70%。</li>
+        <li><b>云天化 2.5%</b>：磷肥龙头，PE 9.3x，增速平（+6%）但分红高，防御仓位。</li>
+        <li><b>天赐材料 4.8%</b>：六氟+电解液一体化，PE 15.7x（分位13%）。H1 +968% 是低基数+涨价共振，一体化成本优势使其比多氟多更抗跌。</li>
+      </ul>
+    </div>
+    <div class="box sell">
+      <h4>⚠ 高估值 / 弱增长（约 10% 权重）——组合里的风险点</h4>
+      <ul>
+        <li><b>东材科技 3.8%</b>：PE 126x、5年分位 92%，H1 只 +64% 且 Q2 增速在放缓（+27%）。固态电池/电子材料题材溢价，一旦题材退潮回撤会很大。</li>
+        <li><b>多氟多 3.8%</b>：PE 52.6x（分位79%）。业绩爆发（H1 +897%）但估值已计入大量预期，六氟价格若滞涨首先杀它。</li>
+        <li><b>圣泉集团 2.8%</b>：PE 32x（分位85%）但 H1 净利 <b>-10.7%</b>——唯一的"贵且下滑"，合成树脂主业平淡，靠电子化学品讲故事。</li>
+        <li><b>恩捷股份 2.5% / 新宙邦 3.3%</b>：PE 42x / 31x，盈利在恢复但隔膜格局仍不如电解液集中，估值靠景气延续撑着。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="story"><b>结构性结论：</b>这个指数不是"纯传统化工"——2026Q2 前15大里锂电材料链（天赐/多氟多/东材/新宙邦/恩捷）合计约 <b>18%</b> 权重，比 2025Q1 明显上升；传统龙头（万华/盐湖/宝丰/卫星/云天化/兴发）约 25%。前者提供弹性与波动，后者提供估值安全垫。<b>指数整体 PE 16.5x、历史分位 24%，说明"贵"的只是局部题材股，主体仓位并不贵。</b></div>
+</section>
+
+<!-- ================= Q3 ================= -->
+<section>
+  <h2><span class="tag">问题三</span>继续持有 vs 卖出：各自的逻辑与信号清单</h2>
+  <div class="grid2">
+    <div class="box hold">
+      <h4>继续持有的逻辑（当前成立）</h4>
+      <ul>
+        <li><b>盈利上行周期刚兑现一半</b>：2026H1 前15大重仓净利增速中位数约 +70%，且 Q2 单季普遍还在加速（万华 Q2 +109%、卫星 +250%），周期股利润上行期估值通常不会先崩。</li>
+        <li><b>估值分位低</b>：指数 PE 16.5x = 2012 年以来 24% 分位。历史上化工指数泡沫期 PE 分位在 80%+（2015、2021），现在离"贵"很远。</li>
+        <li><b>供给端长逻辑未证伪</b>：欧洲产能退出、国内资本开支负增长、制冷剂配额、盐湖/磷矿资源约束——这些都不是一两个季度能逆转的。</li>
+        <li><b>油价维持高位</b>：只要布油在 80 美元上方，煤化工/轻烃的成本优势和"海外替代"逻辑就持续兑现。</li>
+        <li><b>你已深套刚回本途中</b>：净值从 0.58 反弹到 0.73，此刻卖出等于在盈利上行+低估值分位的组合里兑现亏损，除非急用钱，纪律上不该卖。</li>
+      </ul>
+    </div>
+    <div class="box sell">
+      <h4>卖出的逻辑（触发任一即减仓）</h4>
+      <ul>
+        <li><b>估值信号</b>：指数 PE-TTM 升破 5 年分位 70%（约 PE ≥ 23x），或万华化学 PE 升破 20x——说明市场已把周期高利润当成永续利润定价。</li>
+        <li><b>价格信号</b>：核心化工品价格连续 2 个月环比下跌（聚合MDI、制冷剂R32、六氟磷酸锂、钾肥），涨价周期见顶比财报见顶早 1-2 个季度。</li>
+        <li><b>业绩信号</b>：2026 三季报增速明显不及 H1（尤其 Q2 已在减速的东材、巨化），说明利润兑现到头。</li>
+        <li><b>油价信号</b>：霍尔木兹局势缓和、布油跌破 70 美元且快速下行 → 煤化工价差收窄 + 涨价叙事熄火（对油头是利好但对指数权重结构整体偏空）。</li>
+        <li><b>仓位信号</b>：这只基金占你可投资产比例过高（>30%），无论看多看空都应先把集中度降下来——单一行业基金的正确姿势是卫星仓，不是全部。</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>给你的操作结论</h3>
+  <ul class="check" style="padding-left:22px;font-size:14.5px">
+    <li><b>结论：拿。</b>盈利上行 + 估值 24% 分位 + 供给逻辑未证伪，三个持有条件全部成立，卖出信号一个都没触发。</li>
+    <li><b>不加仓追高</b>：指数近两个交易日连跌 4%+，短期获利盘在兑现；若回调到 PE 分位 15% 以下反而是补仓机会。</li>
+    <li><b>设置"分批止盈"纪律</b>：指数 PE 分位到 50% 减 1/3，到 70% 再减 1/3，留底仓看泡沫化。周期股必须用估值分位止盈，不能用"感觉"。</li>
+    <li><b>每月盯四个数</b>：聚合MDI 价格、R32 价格、六氟磷酸锂价格、布伦特油价。四个里两个趋势性转跌，就提前执行减仓。</li>
+    <li><b>如果受不了波动</b>：组合里 ~10% 的高估值题材股（东材/多氟多/圣泉）是回撤主要来源，可换成分红更稳的资源类 ETF 做部分替代，而不是清仓化工。</li>
+  </ul>
+</section>
+
+<footer>
+  数据来源：东方财富基金季报（516020 2026Q2 持仓）、百度股市通（个股估值）、中证指数官网（000813 指数与 PE）、新浪财经（海外期货油价）、天天基金（012538 净值）。<br>
+  生成日期 <span id="gen-date2"></span> · 本页面仅为数据整理与逻辑分析，不构成投资建议。基金有风险，历史业绩不代表未来。
+</footer>
+</div>
+
+<script>
+const DATA = __DATA__;
+
+const fmt = (x,d=2)=> x==null? '—' : Number(x).toFixed(d);
+const pctFmt = x => x==null? '—' : (x>=999? '>999%' : (x>0?'+':'')+x.toFixed(1)+'%');
+const cls = x => x==null? '' : (x>0?'up':'down');
+
+/* ---------- header & cards ---------- */
+document.getElementById('gen-date').textContent = DATA.meta.gen_date;
+document.getElementById('gen-date2').textContent = DATA.meta.gen_date;
+document.getElementById('verdict').innerHTML =
+  '结论：<b>可以拿</b> —— 盈利上行周期兑现中（前15大重仓 2026H1 净利普遍 +50%~+900%），而指数 PE 仅 <b>'+fmt(DATA.meta.idx_now.pe)+'x（2012年以来 '+fmt(DATA.meta.idx_now.pct,0)+'% 分位）</b>；卖出信号（PE分位>70%、化工品价格连跌、油价崩、业绩失速）目前一个都没触发。';
+
+const idx = DATA.meta.idx_now;
+const navLast = DATA.nav[DATA.nav.length-1];
+const cards = [
+  {k:'基金净值（012538）', v:fmt(navLast[1],4), n:navLast[0]+' · 成立日 2021-06-24'},
+  {k:'成立以来收益', v:pctFmt((navLast[1]-1)*100), n:'成立于上轮景气顶点，仍深套', c:navLast[1]>1?'up':'down'},
+  {k:'指数 PE-TTM（000813）', v:fmt(idx.pe)+'x', n:'2012以来 '+fmt(idx.pct,0)+'% 分位 · 近10年 '+fmt(idx.pct10y,0)+'% 分位'},
+  {k:'布伦特原油', v:'$'+fmt(DATA.brent[DATA.brent.length-1][1],1), n:'霍尔木兹冲击下的成本再分配'},
+  {k:'前15大重仓合计', v:fmt(DATA.stocks.reduce((s,x)=>s+x.weight,0),1)+'%', n:'2026Q2 季报口径'},
+  {k:'成分股数量', v:'50', n:'中证细分化工产业主题指数'},
+];
+document.getElementById('cards').innerHTML = cards.map(c=>
+  `<div class="card"><div class="k">${c.k}</div><div class="v ${c.c||''}">${c.v}</div><div class="n">${c.n}</div></div>`).join('');
+
+document.getElementById('brent-now').textContent = fmt(DATA.brent[DATA.brent.length-1][1],0);
+document.getElementById('idx-pe').textContent = fmt(idx.pe);
+document.getElementById('idx-pct').textContent = fmt(idx.pct,0)+'%';
+document.getElementById('idx-pct10').textContent = fmt(idx.pct10y,0)+'%';
+document.getElementById('nav-now').textContent = fmt(navLast[1],4);
+document.getElementById('nav-since').textContent = pctFmt((navLast[1]-1)*100);
+const navMin = DATA.nav.reduce((a,b)=>b[1]<a[1]?b:a);
+document.getElementById('nav-rebound').textContent = pctFmt((navLast[1]/navMin[1]-1)*100);
+document.getElementById('top15w').textContent = fmt(DATA.stocks.reduce((s,x)=>s+x.weight,0),1);
+document.getElementById('val-date').textContent = DATA.meta.gen_date;
+
+/* ---------- charts ---------- */
+const charts = [];
+function mk(id, opt){
+  const el = document.getElementById(id);
+  if (!window.echarts){ el.innerHTML = '<div style="padding:20px;color:#c22;font-size:13px">图表库加载失败：请确认同目录下存在 echarts.min.js（或联网后刷新）</div>'; return; }
+  try {
+    const c = echarts.init(el); c.setOption(opt); charts.push(c);
+  } catch(e){
+    el.innerHTML = '<div style="padding:20px;color:#c22;font-size:13px">图表渲染失败：'+e.message+'</div>';
+  }
+}
+window.addEventListener('resize', ()=>charts.forEach(c=>c.resize()));
+
+/* oil */
+mk('chart-oil', {
+  tooltip:{trigger:'axis'}, legend:{data:['WTI','布伦特']},
+  grid:{left:50,right:20,top:40,bottom:30},
+  xAxis:{type:'category',data:DATA.wti.map(r=>r[0])},
+  yAxis:{type:'value',name:'美元/桶',scale:true},
+  series:[
+    {name:'WTI',type:'line',showSymbol:false,data:DATA.wti.map(r=>r[1]),lineStyle:{width:1.6},itemStyle:{color:'#f08c00'}},
+    {name:'布伦特',type:'line',showSymbol:false,data:DATA.brent.map(r=>r[1]),lineStyle:{width:1.6},itemStyle:{color:'#e5484d'}}
+  ]
+});
+
+/* index close + PE + percentile */
+const idxS = DATA.idx_series;
+mk('chart-index', {
+  tooltip:{trigger:'axis'},
+  legend:{data:['指数收盘','PE-TTM','PE历史分位(2012~)']},
+  grid:{left:60,right:60,top:40,bottom:50},
+  dataZoom:[{type:'inside'},{type:'slider',height:18,bottom:8}],
+  xAxis:{type:'category',data:idxS.map(r=>r[0])},
+  yAxis:[
+    {type:'value',name:'点位',scale:true},
+    {type:'value',name:'PE / 分位%',max:100,min:0,splitLine:{show:false}}
+  ],
+  series:[
+    {name:'指数收盘',type:'line',showSymbol:false,data:idxS.map(r=>r[1]),lineStyle:{width:1.6},itemStyle:{color:'#2f6fed'}},
+    {name:'PE-TTM',type:'line',showSymbol:false,yAxisIndex:1,data:idxS.map(r=>r[2]),lineStyle:{width:1.2},itemStyle:{color:'#7c5cd6'}},
+    {name:'PE历史分位(2012~)',type:'line',showSymbol:false,yAxisIndex:1,data:idxS.map(r=>r[3]),lineStyle:{width:1,type:'dashed'},itemStyle:{color:'#18a058'},
+      markLine:{symbol:'none',data:[{yAxis:70,label:{formatter:'70% 分位：减仓线'},lineStyle:{color:'#e5484d',type:'dotted'}},{yAxis:30,label:{formatter:'30% 分位：便宜区'},lineStyle:{color:'#18a058',type:'dotted'}}]}}
+  ]
+});
+
+/* etf price */
+mk('chart-etf', {
+  tooltip:{trigger:'axis'}, legend:{data:['化工ETF 516020（前复权）']},
+  grid:{left:55,right:20,top:40,bottom:30},
+  xAxis:{type:'category',data:DATA.etf_series.map(r=>r[0])},
+  yAxis:{type:'value',scale:true},
+  series:[{name:'化工ETF 516020（前复权）',type:'line',showSymbol:false,data:DATA.etf_series.map(r=>r[1]),
+    areaStyle:{opacity:.12},lineStyle:{width:1.8},itemStyle:{color:'#2f6fed'}}]
+});
+
+/* holdings table */
+const rows = DATA.stocks.map(s=>{
+  const pe = s.pe;
+  let chip = 'mid', label='适中';
+  if (pe!=null && pe<16 && s.pe_pct5y!=null && s.pe_pct5y<40){chip='cheap';label='便宜';}
+  else if (pe!=null && (pe>35 || (s.pe_pct5y!=null&&s.pe_pct5y>75))){chip='hot';label='偏贵';}
+  return `<tr>
+    <td class="num">${s.code}</td><td><b>${s.name}</b></td>
+    <td class="num">${fmt(s.weight)}%</td>
+    <td class="num">${fmt(s.mktcap,0)}</td>
+    <td class="num">${fmt(pe,1)}</td>
+    <td class="num">${s.pe_pct5y==null?'—':fmt(s.pe_pct5y,0)+'%'}</td>
+    <td class="num">${fmt(s.pb,2)}</td>
+    <td class="num ${cls(s.np_25)}">${pctFmt(s.np_25)}</td>
+    <td class="num ${cls(s.np_26q1)}">${pctFmt(s.np_26q1)}</td>
+    <td class="num ${cls(s.np_26h1)}">${pctFmt(s.np_26h1)}</td>
+    <td class="num ${cls(s.np_26q2)}">${s.np_26q2==null?'—':(s.np_26q2>=999?'>999%':'+'+fmt(s.np_26q2,0)+'%')}</td>
+    <td class="num">${fmt(s.roe_26h1,1)}%</td>
+    <td style="text-align:center"><span class="chip ${chip}">${label}</span></td>
+  </tr>`;
+}).join('');
+document.getElementById('tbl').innerHTML = `
+  <thead><tr>
+    <th>代码</th><th>名称</th><th>权重</th><th>市值(亿)</th><th>PE-TTM</th><th>PE5年分位</th><th>PB</th>
+    <th>净利同比<br>2025FY</th><th>净利同比<br>2026Q1</th><th>净利同比<br>2026H1</th><th>净利同比<br>2026Q2单季</th><th>ROE<br>2026H1</th><th>估值判定</th>
+  </tr></thead><tbody>${rows}</tbody>`;
+
+/* scatter: PE percentile vs H1 growth, bubble = weight */
+const sc = DATA.stocks.filter(s=>s.pe_pct5y!=null && s.np_26h1!=null).map(s=>({
+  name:s.name, value:[Math.min(s.pe_pct5y,100), Math.max(Math.min(s.np_26h1,300),-50), s.weight, s.pe, s.np_26h1, s.pe_pct5y]
+}));
+mk('chart-scatter', {
+  tooltip:{formatter:p=>`<b>${p.data.name}</b><br>PE-TTM：${fmt(p.data.value[3],1)}x（5年分位 ${fmt(p.data.value[5],0)}%）<br>2026H1 净利同比：${pctFmt(p.data.value[4])}<br>持仓权重：${fmt(p.data.value[2])}%`},
+  grid:{left:60,right:30,top:40,bottom:45},
+  xAxis:{type:'value',name:'PE 5年分位 %',min:0,max:100,splitLine:{lineStyle:{type:'dashed'}}},
+  yAxis:{type:'value',name:'2026H1 净利同比 %（截断在300）',min:-60,max:320,splitLine:{lineStyle:{type:'dashed'}}},
+  series:[{
+    type:'scatter',
+    symbolSize:d=>Math.max(10, Math.sqrt(d[2])*14),
+    data:sc,
+    label:{show:true,formatter:p=>p.data.name,position:'top',fontSize:11,color:'#334'},
+    itemStyle:{color:p=>p.data.value[5]>70?'#e5484d':(p.data.value[5]<35?'#18a058':'#2f6fed'),opacity:.75},
+    markLine:{symbol:'none',silent:true,label:{color:'#999'},lineStyle:{color:'#bbb',type:'dotted'},
+      data:[{xAxis:50},{yAxis:0}]}
+  }]
+});
+</script>
+</body>
+</html>

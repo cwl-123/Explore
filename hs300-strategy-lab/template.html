@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>指数策略对比：沪深300 / 恒生科技 / 纳斯达克100</title>
+<script src="https://unpkg.com/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --ink: #1c1f24; --ink2: #5b6470; --ink3: #8a93a0;
+    --line: #e8eaee; --bg: #f6f7f9; --card: #fff;
+    --accent: #2f54eb;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+         background: var(--bg); color: var(--ink); margin: 0; padding: 40px 24px 80px;
+         -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1440px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: .2px; margin: 0 0 6px; }
+  .sub { font-size: 13px; color: var(--ink3); margin-bottom: 28px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+          box-shadow: 0 1px 2px rgba(16,24,40,.04); padding: 20px 22px; margin-bottom: 20px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--ink2);
+                letter-spacing: .8px; text-transform: uppercase; margin: 0 0 14px; }
+
+  #tabs { display: inline-flex; background: #eceef2; border-radius: 10px; padding: 3px;
+          gap: 2px; margin-bottom: 20px; }
+  .tab { padding: 7px 20px; border: none; background: transparent; border-radius: 8px;
+         cursor: pointer; font-size: 13.5px; color: var(--ink2); transition: all .15s; }
+  .tab:hover { color: var(--ink); }
+  .tab.active { background: #fff; color: var(--ink); font-weight: 600;
+                box-shadow: 0 1px 3px rgba(16,24,40,.12); }
+
+  #metahead { font-size: 13px; color: var(--ink2); line-height: 1.9; }
+  #metahead b { color: var(--ink); font-size: 15px; }
+
+  details summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink2);
+                    list-style: none; user-select: none; }
+  details summary::before { content: "▸"; color: var(--ink3); margin-right: 8px;
+                            display: inline-block; transition: transform .15s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  details summary::-webkit-details-marker { display: none; }
+
+  #chart { width: 100%; height: 540px; }
+  #pechart { width: 100%; height: 280px; }
+  #dcachart { width: 100%; height: 400px; }
+
+  .summary { margin-top: 16px; padding: 14px 16px; background: #f7f8fa;
+             border-radius: 10px; font-size: 13px; color: var(--ink2); line-height: 2; }
+  .summary b { color: var(--ink); }
+  .summary .sum-title { display: block; font-size: 12px; font-weight: 600;
+                        letter-spacing: .8px; color: var(--ink3); margin-bottom: 6px; }
+  .summary ul { margin: 0; padding-left: 18px; }
+  .summary .pros { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line);
+                   color: var(--ink3); font-size: 12.5px; }
+  .summary .pros b { color: var(--ink2); font-weight: 600; }
+
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th, td { padding: 9px 14px; text-align: right; font-size: 13px;
+           border-bottom: 1px solid var(--line); }
+  th { color: var(--ink3); font-weight: 600; font-size: 12px; letter-spacing: .4px;
+       border-bottom: 1px solid #dfe3e9; }
+  td { color: var(--ink); }
+  td:first-child, th:first-child { text-align: left; white-space: nowrap; }
+  tbody tr:hover, tr:hover td { background: #f7f8fa; }
+  table tr:last-child td { border-bottom: none; }
+  .tbl-wrap { overflow-x: auto; }
+
+  .lesson { background: #fff8e6; border: 1px solid #f0d9a8; border-left: 4px solid #e0a417; border-radius: 8px;
+            padding: 10px 14px; margin-bottom: 12px; line-height: 1.8; font-size: 13px; color: #7a5b00; }
+  .lesson .lg { font-weight: 700; }
+  .ref-line { font-size: 13px; color: var(--ink); line-height: 1.8; margin-bottom: 10px; }
+  .cmp { width: 100%; margin-bottom: 12px; font-size: 12.5px; }
+  .cmp .note { text-align: left; color: #66707c; max-width: 300px; line-height: 1.6; }
+  .meta-note { font-size: 12px; color: #8a93a0; line-height: 1.6; }
+  .summary ul.tips { margin: 6px 0 12px 18px; padding: 0; }
+  .summary ul.tips li { margin: 6px 0; line-height: 1.75; }
+  .cmp th, .cmp td { padding: 4px 8px; text-align: right; white-space: nowrap; }
+  .cmp .note { text-align: left; white-space: normal; }
+  td.sota, th.sota, tr.sota td { background: #e9f2ff; }
+  th.sota { color: #1c6ed5; }
+  .sota-tag { display: inline-block; margin-left: 5px; padding: 1px 7px; border-radius: 9px; font-size: 10px;
+              background: #1c6ed5; color: #fff; vertical-align: 1px; letter-spacing: .3px; }
+
+  .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .card-head .card-title { margin: 0; }
+  .switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+  .switch em { font-style: normal; font-size: 12px; color: var(--ink3); }
+  .switch input { display: none; }
+  .switch .slider { width: 34px; height: 20px; border-radius: 10px; background: #d5dae2;
+                    position: relative; transition: background .15s; }
+  .switch .slider::after { content: ""; position: absolute; top: 2px; left: 2px;
+                           width: 16px; height: 16px; border-radius: 50%; background: #fff;
+                           box-shadow: 0 1px 2px rgba(16,24,40,.2); transition: left .15s; }
+  .switch input:checked + .slider { background: var(--accent); }
+  .switch input:checked + .slider::after { left: 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<h1>指数策略对比</h1>
+<div class="sub">低买高卖 / 躺平 / 组合搭配 · 沪深300 · 恒生科技 · 纳斯达克100 · 标普500 · 恒生指数 · 创业板指 · 科创50 · 红利低波 · 黄金</div>
+<div id="tabs"></div>
+<div class="card"><div id="metahead"></div></div>
+<div class="card">
+  <div class="card-head">
+    <p class="card-title">存量资金 · 净值曲线</p>
+    <label class="switch"><input type="checkbox" id="tg-stock"><span class="slider"></span><em>全部曲线</em></label>
+  </div>
+  <div id="chart"></div>
+  <div class="tbl-wrap"><table id="stats"></table></div>
+  <div class="summary" id="stocksum"></div>
+</div>
+<div class="card">
+  <div class="card-head">
+    <p class="card-title">估值 · PE-TTM 与历史分位</p>
+    <label class="switch"><input type="checkbox" id="tg-pe" checked><span class="slider"></span><em>全部曲线</em></label>
+  </div>
+  <div id="pechart"></div>
+  <div class="summary" id="pesum"></div>
+</div>
+<div class="card">
+  <div class="card-head">
+    <p class="card-title">增量资金 · 工资流实验</p>
+    <label class="switch"><input type="checkbox" id="tg-flow"><span class="slider"></span><em>全部曲线</em></label>
+  </div>
+  <div id="dcachart"></div>
+  <div class="tbl-wrap"><table id="flowstats"></table></div>
+  <div class="summary" id="flowsum"></div>
+</div>
+</div>
+<script>
+const DATA = __DATA__;
+const KEYS = Object.keys(DATA.indices);
+const colors = {"满仓躺平": "#999", "货币基金": "#5470c6", "金7债3·月再平衡": "#3ba272", "趋势·站上200日线": "#2f54eb", "双均线50/200·金叉死叉": "#fc8452", "抄底网格·越跌越买": "#f6bd16", "波动率目标·控波动": "#9a60b4", "黄金↔美债轮动": "#1c6ed5", "PE·20买80卖": "#d14a61", "股7债3·月再平衡": "#3ba272", "阶梯仓位·越便宜越重仓": "#9a60b4", "趋势确认·30买90卖": "#fc8452", "PE·30买90卖": "#e0635c", "30买90卖·30%底仓": "#a3413b", "PE·50%买90%卖": "#f6bd16", "破线卖·深跌买（纯价格）": "#2f54eb", "普通定投(立即投)": "#999", "智能定投": "#fac858", "资金池跨期调配": "#d14a61", "PE·20买80卖·流量版": "#48b0d6", "阶梯仓位·流量版": "#9a60b4", "趋势确认·流量版": "#fc8452", "PE·30买90卖·流量版": "#3ba272", "30买90卖·30%底仓·流量版": "#a3413b", "PE·50%买90%卖·流量版": "#f6bd16", "破线卖·深跌买·流量版": "#2f54eb", "Buy The Dip·流量版": "#1c6ed5", "趋势·200日线·流量版": "#2f54eb", "双均线50/200·流量版": "#fc8452", "抄底网格·流量版": "#f6bd16", "波动率目标·流量版": "#9a60b4", "黄金↔美债轮动·流量版": "#1c6ed5", "累计收入": "#ccc"};
+const tradeColor = t => t.action === "买" ? "#d14a61" : "#1c6ed5";
+const tradeTip = t => `${t.action === "买" ? "买入" : "卖出"} ${t.date}<br/>PE ${t.pe} | 分位 ${(t.pctl * 100).toFixed(0)}%`;
+
+const pct = v => (v * 100).toFixed(1) + "%";
+const el = id => document.getElementById(id);
+
+function renderSummaries(D) {
+  const hasPe = !!D.stats["PE·30买90卖"];
+  const REF = hasPe ? "PE·30买90卖" : "满仓躺平";
+  const OLD = Object.keys(D.stats).find(k => k.startsWith("PE·") && k.includes("买80%卖")) || "PE·20买80卖";
+  const ref = D.stats[REF];
+  const hold = D.stats["满仓躺平"];
+  const cash = Object.entries(D.stats).find(([k]) => k.startsWith("货币基金"));
+  const sgn = v => (v >= 0 ? "+" : "") + v.toFixed(1);
+  const pp = v => `${sgn(v * 100)}pp`;
+  const REFNOTE = {
+    "满仓躺平": "不动作的参照物——收益与波动全由市场风格决定",
+    [OLD]: "旧基准：买太挑（20%）卖太勤（80%），见下方结论",
+    "股7债3·月再平衡": "不择时·再平衡被动降波动，回撤数一数二低",
+    "阶梯仓位·越便宜越重仓": "对估值线性控仓——便宜满仓/贵则空，恰好踩反『暴涨在贵』的节奏，只换回撤不换收益",
+    "趋势确认·30买90卖": "基准上加右侧均线过滤（买入需站上 250 日线），收益与基准相当但波动更低、持仓更平滑",
+    "30买90卖·30%底仓": "永不空仓版：空仓期若是下跌段→多扛回调是成本；若是上涨段→多吃一段是福利",
+    "PE·50%买90%卖": "过早抄底对照组：卖出后分位 <50% 就买回（基准 30%），验证抄底太早的代价",
+    "破线卖·深跌买（纯价格）": "纯价格趋势（不看PE）：连续拉升后跌破 20 日线卖、从高点回撤 20% 再接——只在恒生科技这类高波动趋势指数有效（沪深300/纳指假突破多）",
+    "黄金↔美债轮动": "实际利率（名义10Y−CPI同比）分位 ≤50% 持黄金、>50% 持美债——不赌方向只吃利差",
+    "金7债3·月再平衡": "不择时·黄金+债市月再平衡，被动砍掉约 1/3 回撤",
+    "趋势·站上200日线": "经典单均线：站上 200 日线满仓、跌破空仓——反应慢、过滤噪音，但长牛里频繁空仓会踏空",
+    "双均线50/200·金叉死叉": "50/200 金叉买、死叉卖——比单均线更早确认拐点，假信号也多",
+    "抄底网格·越跌越买": "只买不卖：距高点回撤越深仓位越重（8%→60%、18%→80%、30%→满仓），赌黄金长牛",
+    "波动率目标·控波动": "目标年化波动 12%：波动越大仓位越低，风险调整后往往最优",
+  };
+  const ORDER = hasPe
+    ? ["满仓躺平", OLD, "股7债3·月再平衡", "阶梯仓位·越便宜越重仓", "趋势确认·30买90卖", "30买90卖·30%底仓", "PE·50%买90%卖", "破线卖·深跌买（纯价格）"]
+    : ["金7债3·月再平衡", "趋势·站上200日线", "双均线50/200·金叉死叉", "抄底网格·越跌越买", "波动率目标·控波动", "黄金↔美债轮动", "破线卖·深跌买（纯价格）"];
+  const rows = ORDER.filter(k => D.stats[k]).map(k => {
+    const s = D.stats[k];
+    return `<tr><td><b>${k}</b></td><td>${pp(s.total - ref.total)}</td><td>${pp(s.cagr - ref.cagr)}</td><td>${pp(s.mdd - ref.mdd)}</td><td class="note">${REFNOTE[k] || ""}</td></tr>`;
+  }).join("");
+
+  let buf;
+  if (hasPe) {
+    buf = `<div class="ref-line">对照基准：<b>${REF}</b>——分位&lt;30% 全仓买、&gt;90% 清仓、其余持有（买入放宽到 30% 不追深度低估，卖出收紧到 90% 只在极端贵离场，取代旧基准 20买80卖）。它相对满仓躺平：累计 ${pp(ref.total - hold.total)}、年化 ${pp(ref.cagr - hold.cagr)}、最大回撤 ${pp(ref.mdd - hold.mdd)}。</div>
+    <table class="cmp"><thead><tr><th>策略 vs 基准</th><th>累计</th><th>年化</th><th>回撤</th><th>差异说明</th></tr></thead><tbody>${rows}</tbody></table>`;
+  } else {
+    buf = `<div class="ref-line">黄金无 PE，估值择时先天不可用——本页全部是<b>纯价格策略</b>。对照基准取 <b>满仓躺平</b>（25 年黄金长牛：累计 ${pct(ref.total)}、年化 ${pct(ref.cagr)}、最大回撤 ${pct(ref.mdd)}）。</div>
+    <table class="cmp"><thead><tr><th>策略 vs 买入持有</th><th>累计</th><th>年化</th><th>回撤</th><th>差异说明</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  let tips = [];
+  const noTrade = Object.keys(D.stats).filter(k => D.stats[k].trades === 0 && k !== "满仓躺平");
+  if (noTrade.includes("PE·30买90卖") || noTrade.includes("PE·20买80卖")) tips.push(`<li>本区间分位未触买卖线，择时策略 0 次交易、与买入持有重合——该区间择时无区分度</li>`);
+  if (cash && cash[1].total > hold.total) tips.push(`<li>注意：货币基金（${pct(cash[1].total)}）跑赢买入持有——起点估值偏高或区间处于熊市</li>`);
+  if (D.name === "沪深300") tips.push(`<li><b>为什么 A 股要用 30买90卖：</b>A股择时超额的核心不是「躲熊」，是三件事同时做到——① 卖出线别太灵敏（80% 卖掉的是后面 2019 那种「贵但还在涨」的主升段）；② 买入线别太挑剔（等 20% 深度低估 ≈ 等 4.7 年一度的坑，会踏空低位横盘突然启动）；③ 贵不是卖的理由，极端贵才是。旧基准 20买80卖 恰好是「买太挑、卖太勤」，全踩反</li>`);
+  if (ref && D.stats["30买90卖·30%底仓"] && D.name !== "沪深300") {
+    const dd = (D.stats["30买90卖·30%底仓"].cagr - ref.cagr) * 100;
+    tips.push(Math.abs(dd) < 0.05
+      ? `<li><b>底仓的价值：</b>本区间 0 次交易，有无底仓完全重合，无区分度</li>`
+      : dd > 0
+        ? `<li><b>底仓的价值：</b>30% 底仓反而多赚 <b>+${dd.toFixed(2)}pp/年</b>——空仓期多为「踏空段」，部分躺平是福利</li>`
+        : `<li><b>底仓的价值：</b>30% 底仓要付出 <b>${(-dd).toFixed(2)}pp/年</b>——空仓期多为「高估下杀段」，卖不干净多扛回调</li>`);
+  }
+  if (D.name === "沪深300") {
+    const sb = D.stats["股7债3·月再平衡"];
+    const tr = D.stats["趋势确认·30买90卖"];
+    const fl = D.stats["30买90卖·30%底仓"];
+    const ddFloor = fl && ref ? (fl.cagr - ref.cagr) * 100 : null;
+    tips.push(`<li><b>三组反直觉对照（沪深300 独有）：</b>
+      <br/>① <b>底仓</b>（30买90卖·30%底仓）：年化 ${pct(ref.cagr)}→${pct(fl?.cagr)}，<b>费 ${(-ddFloor ?? 0).toFixed(2)}pp/年</b>且回撤不变（都是 -38.6%），换来的只是「永不空仓、顺人性易执行」——收益确实是纯成本，看你要不要可执行性；
+      <br/>② <b>股债配比</b>（股7债3·月再平衡）：年化 ${pct(sb?.cagr)} ≈ 满仓躺平 ${pct(hold.cagr)}，<b>不产生任何超额</b>——唯一价值是把回撤从 ${pct(hold.mdd)} 压到 ${pct(sb?.mdd)}（纯降波工具，与择时无关，想要低回撤再用它）；
+      <br/>③ <b>趋势确认</b>（+250 日均线过滤）：年化 ${pct(tr?.cagr)} ≈ 基准 ${pct(ref.cagr)}，<b>收益无差别</b>（只把波动从 ${pct(ref.vol)} 降到 ${pct(tr?.vol)}、夏普 ${ref.sharpe.toFixed(2)}→${tr?.sharpe.toFixed(2)}）——相当于给基准换了层皮，多一套参数和判断成本，可忽略。</li>`);
+  }
+  if (tips.length) buf += `<ul class="tips">${tips.join("")}</ul>`;
+
+  let prosHtml = '<div class="pros"><b>策略说明</b><br/>' +
+    Object.entries(D.desc.stock).map(([k, v]) => `<b>${k}</b>：${v}`).join("<br/>") + "</div>";
+  el("stocksum").innerHTML = `<span class="sum-title">本节总结</span>${buf}${prosHtml}`;
+
+  let i = D.pe.length - 1;
+  while (hasPe && i >= 0 && (D.pe[i] == null || !isFinite(D.pe[i]))) i--;
+  const curPe = D.pe[i], curPctl = D.pctl[i];
+  const buys = D.trades.filter(t => t.action === "买").length;
+  const sells = D.trades.filter(t => t.action === "卖").length;
+  const zone = curPctl < 0.2 ? "<b>低估区</b>（历史 20% 以下）" : curPctl > 0.8 ? "<b>高估区</b>（历史 80% 以上）" : "<b>中性区</b>（20%~80% 之间，择时策略不动作）";
+  if (hasPe) {
+    el("pesum").innerHTML = `<span class="sum-title">本节总结</span><ul>
+    <li>当前 PE ${curPe.toFixed(1)}，历史分位 ${(curPctl * 100).toFixed(0)}%，处于${zone}</li>
+    <li>分位口径：${D.pct_desc}<br/><span style="font-size:.85em;color:#888">${D.pct_explain}</span></li>
+    <li>回测区间内共触发买入 ${buys} 次、卖出 ${sells} 次（图中三角标记）${buys + sells === 0 ? "——估值信号从未越线，择时策略全程休眠" : ""}</li>
+  </ul>`;
+  }
+
+  const fents = Object.entries(D.flow.table);
+  const plain = D.flow.table["普通定投(立即投)"];
+  const fbest = fents.reduce((a, b) => b[1].xirr > a[1].xirr ? b : a);
+  const flines = [`XIRR 最优：<b>${fbest[0]}</b>（${pct(fbest[1].xirr)}）；无脑普通定投 ${pct(plain.xirr)}`];
+  const fbeat = fents.filter(([k, s]) => !k.startsWith("普通定投") && s.xirr > plain.xirr + 0.001).map(([k]) => k);
+  const flose = fents.filter(([k, s]) => !k.startsWith("普通定投") && s.xirr < plain.xirr - 0.001).map(([k]) => k);
+  if (fbeat.length) flines.push(`跑赢无脑定投：<b>${fbeat.join("、")}</b>`);
+  if (flose.length) flines.push(`跑输无脑定投：${flose.join("、")}——工资流场景下择时更容易踏空`);
+  if (Math.abs(fbest[1].xirr - plain.xirr) <= 0.001) flines.push("所有策略与普通定投几乎无差异——该区间分位未触阈值，智能策略无用武之地");
+  let flowPros = '<div class="pros"><b>策略说明</b><br/>' +
+    Object.entries(D.desc.flow).map(([k, v]) => `<b>${k}</b>：${v}`).join("<br/>") + "</div>";
+  el("flowsum").innerHTML = `<span class="sum-title">本节总结</span><ul>${flines.map(l => `<li>${l}</li>`).join("")}</ul>${flowPros}`;
+}
+const chart = echarts.init(el("chart"));
+const pechart = echarts.init(el("pechart"));
+const dcachart = echarts.init(el("dcachart"));
+
+const AX = {color: "#8a93a0", fontSize: 11};
+const TIP = {trigger: "axis", backgroundColor: "rgba(28,31,36,.92)", borderWidth: 0,
+             textStyle: {color: "#fff", fontSize: 12}, padding: [8, 12],
+             axisPointer: {lineStyle: {color: "#c3c9d2"}}};
+const GRID = {left: 64, right: 28, top: 48, bottom: 56};
+const ax = (extra = {}) => Object.assign({axisLine: {lineStyle: {color: "#dfe3e9"}},
+  axisTick: {show: false}, axisLabel: AX,
+  splitLine: {lineStyle: {color: "#f0f1f4"}},
+  nameTextStyle: AX}, extra);
+const catAx = data => ax({type: "category", data, splitLine: {show: false}, boundaryGap: false});
+const valAx = (name, extra = {}) => ax(Object.assign({type: "value", name, scale: true}, extra));
+const ZOOM = [{type: "inside"},
+  {type: "slider", height: 18, bottom: 14, borderColor: "transparent",
+   backgroundColor: "#f0f1f4", fillerColor: "rgba(47,84,235,.10)",
+   handleStyle: {color: "#c3c9d2"}, moveHandleStyle: {color: "#c3c9d2"},
+   dataBackground: {lineStyle: {color: "#d5dae2"}, areaStyle: {color: "#eceef2"}},
+   selectedDataBackground: {lineStyle: {color: "#2f54eb"}, areaStyle: {color: "rgba(47,84,235,.12)"}},
+   textStyle: {color: "#8a93a0", fontSize: 10}}];
+const LEGEND = {top: 6, icon: "roundRect", itemWidth: 14, itemHeight: 4,
+                itemGap: 18, textStyle: {color: "#5b6470", fontSize: 12}};
+
+let active = KEYS[0];
+let showAllStock = false, showAllFlow = false, showAllPe = true;
+el("tg-stock").onchange = e => { showAllStock = e.target.checked; renderIndex(); };
+el("tg-flow").onchange = e => { showAllFlow = e.target.checked; renderIndex(); };
+el("tg-pe").onchange = e => { showAllPe = e.target.checked; renderIndex(); };
+const sel = (names, on) => Object.fromEntries(names.map(k => [k, on(k)]));
+function buildTabs() {
+  el("tabs").innerHTML = KEYS.map(k =>
+    `<button class="tab${k === active ? " active" : ""}" data-k="${k}">${DATA.indices[k].name}</button>`
+  ).join("");
+  document.querySelectorAll(".tab").forEach(b => b.onclick = () => { active = b.dataset.k; buildTabs(); renderIndex(); });
+}
+
+function renderIndex() {
+  const D = DATA.indices[active];
+  const hasPe = D.pe.some(v => v != null && isFinite(v));
+  el("pechart").parentElement.style.display = hasPe ? "" : "none";
+  el("metahead").innerHTML = `
+    ${D.lesson ? `<div class="lesson"><span class="lg">核心经验｜${D.name}</span><br/>${D.lesson}</div>` : ""}
+    <div class="ref-line"><b>${D.name}</b> ｜ ${D.asset}</div>
+    <div class="meta-note">${D.pe_desc} ｜ 分位口径：${D.pct_desc}（无前视偏差）
+    <br/>回测区间：${D.start} ~ ${D.end}（${D.days} 个交易日）${D.start_pe != null ? `，起点 PE ${D.start_pe.toFixed(1)}` : ""}${D.start_pctl != null ? `（分位 ${(D.start_pctl * 100).toFixed(0)}%）` : ""}
+    ${D.extra ? `<br/>${D.extra}` : ""}</div>`;
+
+  const defaultOn = {"满仓躺平": true};
+  const stockNames = Object.keys(D.series);
+  chart.setOption({
+    tooltip: TIP,
+    legend: Object.assign({data: stockNames, selected: sel(stockNames, k => showAllStock || !!defaultOn[k])}, LEGEND),
+    grid: GRID,
+    xAxis: catAx(D.dates),
+    yAxis: valAx("净值"),
+    dataZoom: ZOOM,
+    series: Object.entries(D.series).map(([name, arr]) => ({
+      name, type: "line", data: arr, showSymbol: false, lineStyle: {width: 1.6}, color: colors[name],
+      emphasis: {focus: "series"},
+    })),
+  }, true);
+
+  if (hasPe) {
+    const peForChart = D.pe.map(v => (v != null && (v < -10 || v > 180)) ? null : v);
+    const peMarks = D.trades.map(t => ({
+      coord: [t.date, t.pe != null && isFinite(t.pe) ? t.pe : null],
+      symbol: "triangle", symbolRotate: t.action === "买" ? 0 : 180, symbolSize: 10,
+      itemStyle: {color: tradeColor(t)},
+      label: {show: true, fontSize: 9, color: tradeColor(t), distance: 6,
+              position: t.action === "买" ? "bottom" : "top",
+              formatter: `${t.action} ${t.pe}/${(t.pctl * 100).toFixed(0)}%`},
+      tooltip: {formatter: () => tradeTip(t)},
+    }));
+    pechart.setOption({
+      tooltip: TIP,
+      legend: Object.assign({data: ["PE-TTM", "历史分位"], selected: {"PE-TTM": true, "历史分位": showAllPe}}, LEGEND),
+      grid: Object.assign({}, GRID, {right: 64}),
+      xAxis: catAx(D.dates),
+      yAxis: [valAx("PE"), valAx("分位", {min: 0, max: 1, splitLine: {show: false}})],
+      dataZoom: ZOOM,
+      series: [
+        {name: "PE-TTM", type: "line", data: peForChart, showSymbol: false, connectNulls: false, lineStyle: {width: 1.2}, color: "#2f54eb",
+         markPoint: {data: peMarks}},
+        {name: "历史分位", type: "line", yAxisIndex: 1, data: D.pctl, showSymbol: false, lineStyle: {width: 1.2}, color: "#fc8452",
+         markLine: {data: [{yAxis: 0.2}, {yAxis: 0.8}], lineStyle: {type: "dashed", color: "#c3c9d2"}, label: {color: "#8a93a0", fontSize: 10}}},
+      ],
+    }, true);
+  }
+
+  const flowNames = [...Object.keys(D.flow.curves), "累计收入"];
+  dcachart.setOption({
+    title: {text: `每月收入 1 万元 · 累计 ${D.flow.income_total} 万 · 未投资金存货基 2%`,
+            left: 4, top: 0, textStyle: {fontSize: 12, fontWeight: 500, color: "#8a93a0"}},
+    tooltip: TIP,
+    legend: Object.assign({data: flowNames, selected: sel(flowNames, k => showAllFlow || k === "普通定投(立即投)")}, LEGEND, {top: 24}),
+    grid: Object.assign({}, GRID, {top: 70}),
+    xAxis: catAx(D.dates),
+    yAxis: valAx("总资产(万元)"),
+    dataZoom: ZOOM,
+    series: [
+      ...Object.entries(D.flow.curves).map(([name, arr]) => ({
+        name, type: "line", data: arr, showSymbol: false, color: colors[name], lineStyle: {width: 1.6},
+        emphasis: {focus: "series"},
+      })),
+      {name: "累计收入", type: "line", data: D.flow.income, showSymbol: false, color: colors["累计收入"], lineStyle: {width: 1, type: "dashed"}},
+    ],
+  }, true);
+
+  const fE = Object.entries(D.flow.table);
+  const fBest = {final: Math.max(...fE.map(([, s]) => s.final)), ret: Math.max(...fE.map(([, s]) => s.ret)), xirr: Math.max(...fE.map(([, s]) => s.xirr))};
+  const fSota = fE.reduce((a, b) => b[1].final > a[1].final ? b : a)[0];
+  const bd = (cond, txt) => cond ? `<b>${txt}</b>` : txt;
+  let flowHtml = `<tr><th>策略</th><th>累计收入(万)</th><th>终点总资产(万)</th><th>总收益率</th><th>XIRR 年化</th></tr>`;
+  for (const [fname, s] of fE) {
+    const isSota = fname === fSota;
+    flowHtml += `<tr${isSota ? ' class="sota"' : ""}><td>${fname}</td><td>${D.flow.income_total}</td><td>${bd(s.final === fBest.final, s.final)}</td><td>${bd(Math.abs(s.ret - fBest.ret) < 1e-9, (s.ret * 100).toFixed(1) + "%")}</td><td>${bd(Math.abs(s.xirr - fBest.xirr) < 1e-9, (s.xirr * 100).toFixed(2) + "%")}</td></tr>`;
+  }
+  el("flowstats").innerHTML = flowHtml;
+
+  const labelMap = {total: "累计收益", cagr: "年化收益(XIRR)", mdd: "最大回撤", vol: "年化波动", sharpe: "夏普", trades: "交易/投入次数", cash_pct: "空仓占比", avg_pos: "平均仓位", cash_streak: "最长空仓/低仓(天)", underperf_days: "最长相对回撤(天)"};
+  const bestDir = {total: 1, cagr: 1, mdd: 1, vol: -1, sharpe: 1, trades: -1, cash_pct: -1, cash_streak: -1, underperf_days: -1};
+  const pctKeys = ["total", "cagr", "mdd", "vol", "cash_pct", "avg_pos"];
+  const rows = [...new Set(Object.values(D.stats).flatMap(o => Object.keys(o)))];
+  const fmt = (r, v) => {
+    if (v == null) return "-";
+    if (pctKeys.includes(r)) return (v * 100).toFixed(1) + "%";
+    if (r === "sharpe") return v.toFixed(2);
+    return v;
+  };
+  const sKeys = Object.keys(D.stats);
+  const sotaKey = sKeys.reduce((a, b) => D.stats[b].total > D.stats[a].total ? b : a);
+  let html = "<tr><th>指标</th>" + sKeys.map(k =>
+    `<th${k === sotaKey ? ' class="sota"' : ""}>${k}</th>`
+  ).join("") + "</tr>";
+  for (const r of rows) {
+    const nums = Object.values(D.stats).map(s => s[r]);
+    let best = null;
+    if (bestDir[r] != null && nums.some(v => v != null)) {
+      const nn = nums.filter(v => v != null);
+      best = bestDir[r] > 0 ? Math.max(...nn) : Math.min(...nn);
+    }
+    html += `<tr><td>${labelMap[r] || r}</td>` + sKeys.map(k => {
+      const v = D.stats[k][r];
+      const tdCls = k === sotaKey ? ' class="sota"' : "";
+      if (v == null) return `<td${tdCls}>-</td>`;
+      const txt = fmt(r, v);
+      return `<td${tdCls}>${bd(best != null && Math.abs(v - best) < 1e-9, txt)}</td>`;
+    }).join("") + "</tr>";
+  }
+  el("stats").innerHTML = html;
+  renderSummaries(D);
+}
+
+buildTabs();
+renderIndex();
+window.addEventListener("resize", () => { chart.resize(); pechart.resize(); dcachart.resize(); });
+</script>
+</body>
+</html>
