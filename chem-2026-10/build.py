@@ -333,6 +333,18 @@ def build_data():
     r12 = [x for x in (fwd(i, 365) for i in sig) if x is not None]
     sig_eps_ratio = [eps[i] / max(eps[max(0, i - win):i + 1]) for i in sig]
 
+    # 唯一相似的「低 PE + 盈利恢复中段」环境：2019 年初（EPS 约为当时峰值 60%）
+    i19 = at(d, "20190102")
+    case19 = {
+        "date": dstr(d[i19]),
+        "c6": c[at(d, "20190703")] / c[i19] - 1,
+        "c12": c[at(d, "20200102")] / c[i19] - 1,
+        "hs6": hs["close"][at(hs["date"], "20190703")] / hs["close"][at(hs["date"], "20190102")] - 1,
+        "hs12": hs["close"][at(hs["date"], "20200102")] / hs["close"][at(hs["date"], "20190102")] - 1,
+        "eps_ratio": eps[i19] / max([x for x in eps[max(0, i19 - win):i19 + 1] if x]),
+        "yoy": eps_yoy(i19),
+    }
+
     dd_idx, seen = [], set()
     for i in range(250, len(c) - 130):
         hi1y = max(c[max(0, i - 250):i + 1])
@@ -356,6 +368,7 @@ def build_data():
         "base12_mean": st.mean(base12), "base12_win": sum(1 for x in base12 if x > 0) / len(base12),
         "eps_ratio": eps_now / eps_peak, "eps_peak": eps_peak, "eps_peak_date": dstr(eps_peak_date),
     }
+    D_case19 = case19
 
     # 商品（统一 2025-01-02 = 100，按周取样）
     comm = {}
@@ -458,7 +471,7 @@ def build_data():
                 "d3m": brent["close"][-1] / brent["close"][at([x.replace("-", "") for x in brent["date"]], "20260721")] - 1,
                 "jun": brent["close"][at([x.replace("-", "") for x in brent["date"]], "20260630")],
                 "hi3y": max(brent["close"][-750:])},
-        "earn": earn, "weights": weights,
+        "earn": earn, "weights": weights, "case19": D_case19,
     }
 
 
@@ -544,7 +557,7 @@ HTML = """<!DOCTYPE html>
 
 <section>
   <h2><span class="tag">问题一</span>最近是涨是跌？</h2>
-  <p><b>跌。而且是「跌了三个多月、最近在加速」的跌。</b>从 __HID__ 的 __HIV__.0f 点高点算起，指数已经回撤 <b>__DD__</b>，10-15 最低见 __LOV__.0f 点；年内 <b class="down">__YTD__</b>，同期沪深300 __HYTD__ —— 相对收益 __UNDER__。</p>
+  <p><b>跌。而且是「从 3 月见顶后一路下台阶、最近一个月还在加速」的跌。</b>从 __HID__ 的 __HIV__.0f 点高点算起，指数已经回撤 <b>__DD__</b>，10-15 最低见 __LOV__.0f 点；年内 <b class="down">__YTD__</b>，同期沪深300 __HYTD__ —— 相对收益 __UNDER__。</p>
   <p>换个说法：2025 年那波 <b class="up">+41%</b> 的行情，2026 年还回去大半 —— 现在的点位和一年前基本持平（近 1 年 __Y1__）。所以这不是「见顶后崩盘」，更像<b>一轮涨完之后的估值消化</b>。</p>
   <div class="tbl-scroll"><table>
     <tr><th>时间窗口</th><th>细分化工</th><th>沪深300</th><th>相对强弱</th></tr>
@@ -608,7 +621,7 @@ HTML = """<!DOCTYPE html>
   <p class="muted">油头链在涨（甲醇近 3 月 +16%、PTA +10%、聚丙烯 +13%、塑料 +10%），地产链在跌（纯碱 -6%、尿素 -2%）—— <b>不是全面复苏，是成本推动的结构性行情</b>。这也是「盈利在涨、股价却不涨」的深层原因：市场不相信涨价能传导到终端需求。</p>
 
   <h3>④ 拥挤度出清 + 风格逆风 <span class="pill">解释下跌速度</span></h3>
-  <p>9 月单月 -11.5%、10 月至今 __DDM__，而同期沪深300 近 1 月 __H1M__ —— 化工<b>跑输大盘</b>。背景是 A 股 10 月的科技回调（参考本站《A股这轮下跌怎么看》：科技板块自高点 -32%），风险偏好整体下移时，前期涨幅大、持仓拥挤的方向被优先卖出。成交额也能印证：20 日均 __V20__.0f 亿，比 250 日均 __V250__.0f 亿<b>缩量 __VOLCUT__</b> —— 是「没人接」的阴跌，不是恐慌性放量出清。</p>
+  <p>9 月单月 -11.4%、10 月至今 __DDM__，而同期沪深300 近 1 月 __H1M__ —— 化工<b>跑输大盘</b>。背景是 A 股 10 月的科技回调（参考本站《A股这轮下跌怎么看》：科技板块自高点 -32%），风险偏好整体下移时，前期涨幅大、持仓拥挤的方向被优先卖出。成交额也能印证：20 日均 __V20__.0f 亿，比 250 日均 __V250__.0f 亿<b>缩量 __VOLCUT__</b> —— 是「没人接」的阴跌，不是恐慌性放量出清。</p>
 
   <div class="warn"><b>还有一个「卖事实」因素：</b>8 月 31 日中报落地后，TTM 盈利一次性抬升 24%（EPS 从 167 跳到 207 点），PE 当天从 23.1 掉到 18.3 倍。按常理这是利好，但市场把它解读成「周期盈利已在高位」—— 于是出现了「业绩越好、估值杀得越狠」的怪现象。这是周期股在盈利兑现期的典型反应。</div>
 </section>
@@ -617,7 +630,7 @@ HTML = """<!DOCTYPE html>
   <h2><span class="tag">问题四</span>可持续吗？—— 盈利可持续，估值修复还缺催化剂</h2>
 
   <h3>4.1 盈利是真的，而且还在加速</h3>
-  <p class="muted">2026 中报（Q3 报 10 月底才披露）：20 只代表股中 Q2 单季净利同比中位数 <b class="up">__Q2MED__</b>；除圣泉（-8%）、云天化（+2%）外全部正增长，万华 +109%、卫星 +250%、天赐 +920%。</p>
+  <p class="muted">2026 中报（Q3 报 10 月底才披露）：有可比数据的 13 只里，Q2 单季净利同比中位数 <b class="up">__Q2MED__</b>；除圣泉（-8%）、云天化（+2%）外全部正增长，万华 +109%、卫星 +250%、天赐 +920%。</p>
   <div class="tbl-scroll"><table>
     <tr><th>个股</th><th>方向</th><th>H1 营收同比</th><th>H1 净利同比</th><th>Q2 单季净利同比</th></tr>
     __EARNROWS__
@@ -636,7 +649,7 @@ HTML = """<!DOCTYPE html>
   <div id="c-pe" class="chart chart-sm"></div>
   <p>PE __PE__.1f 倍，绝对值不贵；但<b>「便宜」在化工里经常是盈利见顶的副产品</b>。检验：2012 年以来，「PE 处于滚动 5 年 25% 分位以下」且「盈利同比 &gt;15%」同时出现（__SIGN__ 个独立样本月），未来 6 个月平均 <b class="down">__SIGMEAN__</b>、胜率仅 <b>__SIGWIN__</b>，12 个月平均 __SIG12__。</p>
   <div class="key"><b>为什么？</b>因为这些样本 <b>100% 出现在 EPS 已达到历史峰值 __SIGMIN__ 以上的时候</b>（2017-11 ~ 2019-04、2022-01 ~ 2022-10）—— 盈利最好的一年，PE 被分母压到最低，看起来最「便宜」，实际上最危险。<b>这次的关键区别：</b>当前 EPS __EPS__.0f 点，只有 2021-22 峰值 __EPSPEAK__.0f 点的 <b>__EPSRATIO__</b>，盈利还在爬坡，不是顶部低 PE。</div>
-  <p class="muted">换句话说：<b>这次不一定是「陷阱」，但也没有历史样本可以背书</b> —— 2012 年以来没出现过「低 PE + 盈利恢复中段」的组合。所以不能只靠估值分位做判断，必须看油价和 Q3 报。</p>
+  <p class="muted">换句话说：<b>这次不一定是「陷阱」，但也没有足够的历史样本背书</b> —— 27 个低 PE 样本全部出现在「盈利已达峰值」的阶段，而这次是 2012 年以来<b>第一次</b>出现在盈利恢复中段（EPS 仅为 5 年峰值的 62%）。最接近的对照是 __C19DATE__（同样极低 PE、盈利同比 __C19YOY__，但 EPS 已回到 5 年峰值的 __C19EPS__）：随后 6 个月化工 __C19_6__、沪深300 __C19HS_6__；12 个月化工 __C19_12__、沪深300 __C19HS_12__ —— <b>便宜能托底，但跑不赢宽基</b>。</p>
 
   <h3>4.3 那么「可持续」的到底是哪一部分？</h3>
   <div class="grid2">
@@ -645,7 +658,7 @@ HTML = """<!DOCTYPE html>
       <ul>
         <li><b>盈利</b>：Q3 大概率仍正增长（低基数 + 涨价滞后传导），但增速会从 __EPSG__ 回落到 +20% 上下</li>
         <li><b>供给端逻辑</b>：制冷剂配额制、行业资本开支连续两年负增长、反内卷政策 —— 不因股价下跌而消失</li>
-        <li><b>估值下限</b>：PE __PE__.1f 倍 + 现金流，再杀 30% 需要盈利崩塌配合，当前看不到</li>
+        <li><b>估值下限</b>：PE __PE__.1f 倍、龙头现金流健康，再杀 30% 需要盈利崩塌配合，当前看不到</li>
       </ul>
     </div>
     <div class="box sell">
@@ -958,6 +971,9 @@ def render(D):
         "SIG12": pct(a["sig12_mean"]), "DDWIN": "%.0f%%" % (a["dd6_win"] * 100),
         "DDMEAN": pct(a["dd6_mean"]), "DDN": a["dd_n"],
         "BASE12": "%.0f%%" % (a["base12_win"] * 100),
+        "C19DATE": D["case19"]["date"], "C19EPS": "%.0f%%" % (D["case19"]["eps_ratio"] * 100),
+        "C19_6": pct(D["case19"]["c6"]), "C19YOY": pct(D["case19"]["yoy"]), "C19_12": pct(D["case19"]["c12"]),
+        "C19HS_6": pct(D["case19"]["hs6"]), "C19HS_12": pct(D["case19"]["hs12"]),
         "COMMSA": D["comm_vals"]["SA0"], "COMMUR": D["comm_vals"]["UR0"],
         "COMMMA": D["comm_vals"]["MA0"], "COMMTA": D["comm_vals"]["TA0"],
         "COMMPP": D["comm_vals"]["PP0"],
