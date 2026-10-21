@@ -335,11 +335,13 @@ section h2 small{font-size:12.5px;font-weight:400;color:var(--muted);margin-left
 .card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
 .card .chip{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;}
 .card .date{font-size:12px;color:#9aa3b2;}
-.card h3{font-size:16px;margin:0 0 8px;line-height:1.45;}
-.card p{margin:0;color:var(--muted);font-size:13.5px;flex:1;}
+.card h3{font-size:16px;margin:0 0 8px;line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card p{margin:0;color:var(--muted);font-size:13.5px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .card .tags{margin-top:12px;font-size:12px;color:#98a1b0;}
 .card .tags span{margin-right:8px;}
-.card .go{margin-top:12px;font-size:13px;font-weight:600;color:var(--blue);}
+.card .go{margin-top:auto;padding-top:14px;font-size:13px;font-weight:600;color:var(--blue);}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:16px;}
 .gallery-grid a{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;
   overflow:hidden;text-decoration:none;color:inherit;}
@@ -364,7 +366,7 @@ def _card(item: dict) -> str:
         f'<span class="chip" style="color:{color};background:{color}18;">{html.escape(CAT_LABEL.get(cat, cat))}</span>'
         f'<span class="date" title="{date_title}">{date}</span></div>'
         f'<h3>{html.escape(item["title"])}</h3>'
-        f'<p>{html.escape(item.get("summary", ""))}</p>'
+        f'<p title="{html.escape(item.get("summary", ""))}">{html.escape(item.get("summary", ""))}</p>'
         f'<div class="tags">{tags}</div>'
         f'<div class="go">查看报告 →</div>'
         f'</a>'
