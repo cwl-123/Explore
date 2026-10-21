@@ -169,6 +169,15 @@ REGISTRY = [
         summary="「加息尾声买入、降息尾声卖出」——用 20 年数据验证一个流行命题。",
         date="2026-09",
     ),
+    dict(
+        title="中美 AI 算力 · 月度估算对照",
+        path="us-china-ai-compute/index.html",
+        category="topics",
+        tags=["AI算力", "Token", "中美对比", "月度估算"],
+        summary="逐月拆解中美 AI 算力存量（H100e）、日均 Token、资本开支、数据中心容量与电力："
+                "供给端美国约 11 倍、使用端中国约 1.6 倍，用一张页面看清「算力在美国、token 在中国」的错位。",
+        date="2026-10",
+    ),
     # —— 图表速览（图片）：把图放进 images/ 后按下面格式登记 ——
     # dict(
     #     title="示例图表标题",
