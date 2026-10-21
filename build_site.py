@@ -13,7 +13,8 @@
 
 说明：
     - 门户首页 = 仓库根目录 index.html（分类分区 + 卡片）
-    - 同一分类内按 date 倒序展示（新的在前）；同日期保持 REGISTRY 里的先后
+    - 同一分类内按 date 倒序展示（新的在前）；date 建议精确到日（YYYY-MM-DD）
+    - 只写月份（YYYY-MM）时按当月 1 日参与排序；同日期保持 REGISTRY 里的先后
     - 各报告页顶部由本脚本注入统一导航（幂等：重复运行不会叠加）
     - 报告页如果是生成产物（如 index.html / *_view.html），重新生成后需再跑一次本脚本
 """
@@ -55,7 +56,7 @@ REGISTRY = [
         tags=["估值择时", "回测", "多指数"],
         summary="在沪深300 / 恒生科技 / 纳指100 / 标普500 / 恒生 / 创业板 / 科创50 / 红利低波 / 中证A500 / 黄金 上，"
                 "横评低买高卖、躺平、组合搭配等策略的长历史表现。",
-        date="2026-10",
+        date="2026-10-09",
     ),
     # —— 估值 · 持仓分析 ——
     dict(
@@ -64,7 +65,7 @@ REGISTRY = [
         category="valuation",
         tags=["恒指", "成分股", "PE", "股息率"],
         summary="恒生指数 95 只成分股的估值与股息率拆解（官方月度 PE-TTM / 股息率），识别高息、低估标的。",
-        date="2026-10",
+        date="2026-10-13",
     ),
     dict(
         title="中概互联 ETF (513050) 重仓股估值报告",
@@ -72,7 +73,7 @@ REGISTRY = [
         category="valuation",
         tags=["中概互联", "ETF", "估值"],
         summary="易方达中概互联网 ETF 重仓股估值报告，看龙头相对贵贱。",
-        date="2026-09",
+        date="2026-09-24",
     ),
     dict(
         title="化工：跌到哪一步了？· 2026年10月体检",
@@ -82,7 +83,7 @@ REGISTRY = [
         summary="直接回答：最近是涨是跌（距 3 月高点 -29%、近 1 月 -9%）、跌在哪（涨最猛的制冷剂/锂电材料回撤 45%~58%）、"
                 "为什么跌（杀估值：PE 砍掉 48%，盈利还在 +47%）、可持续吗（低 PE + 高增长的历史样本胜率仅 19%）、"
                 "未来四条路与概率（磨底 40% / 二次探底 27% / 修复 25% / 反转 8%）。",
-        date="2026-10",
+        date="2026-10-19",
     ),
     dict(
         title="有色矿业 018168 · 2026年10月体检：跌到哪、为什么、还拿不拿",
@@ -92,7 +93,7 @@ REGISTRY = [
         summary="直接回答：最近是涨是跌（8.6 个月 -39.8%，近 1 月 -13.2%）、为什么跌（10Y 利率 5.1% + 金银锂杀价 + 整体杀估值，"
                 "铜价贴新高而铜股跌 12%）、贵不贵（PE 14.8 为 2022 以来 27% 分位但盈利要下修）、"
                 "历史参照（前两轮熊市都到 -50%~-54%）与四条情景概率（磨底 40% / 反弹 25% / 再跌 25% / 新高 10%）。",
-        date="2026-10",
+        date="2026-10-19",
     ),
     dict(
         title="电网设备主题基金 (025833) 还能拿吗？",
@@ -100,7 +101,7 @@ REGISTRY = [
         category="valuation",
         tags=["电网设备", "基金", "光纤"],
         summary="天弘中证电网设备主题 C，光纤含量、估值与持有逻辑（跟踪 931994）。",
-        date="2026-09",
+        date="2026-09-29",
     ),
     # —— 市场专题 ——
     dict(
@@ -110,7 +111,7 @@ REGISTRY = [
         tags=["存储周期", "三星", "海力士", "回撤"],
         summary="AI 存储超级周期见顶后的板块性崩盘：韩股 vs 美股 vs A股存储链对比，"
                 "用 10 年周期数据判断短调还是长熊。",
-        date="2026-10",
+        date="2026-10-15",
     ),
     dict(
         title="费城半导体 (SOX) 怎么看 · 2026年10月体检",
@@ -119,7 +120,7 @@ REGISTRY = [
         tags=["费城半导体", "SOX", "估值", "情景分析"],
         summary="直接回答：现在是涨是跌（长涨中跌短崩）、估值贵吗（远期18x不贵但有条件）、跌在哪（NVDA以外普跌）、"
                 "是底吗/能抄吗（历史同位置12个月胜率90%）、要割肉吗、历史像哪次，附四种情景概率。",
-        date="2026-10",
+        date="2026-10-14",
     ),
     dict(
         title="A股这轮下跌怎么看 · 2026年10月体检",
@@ -128,7 +129,7 @@ REGISTRY = [
         tags=["A股", "回撤", "估值", "情景分析"],
         summary="跌在哪（科技 -32% vs 红利 +6%）、贵不贵（分位 70%）、是不是底、高仓位怎么办，"
                 "附历史类比与四种情景概率。",
-        date="2026-10",
+        date="2026-10-13",
     ),
     dict(
         title="沪深300 现在怎么看 · 数据判读",
@@ -136,7 +137,7 @@ REGISTRY = [
         category="topics",
         tags=["沪深300", "分位", "判读"],
         summary="沪深300 当前估值与买卖点判读（H00300 全收益 · 乐咕 PE-TTM · 滚动 5 年分位，无前视）。",
-        date="2026-09",
+        date="2026-09-28",
     ),
     dict(
         title="黄金 -21% 回撤：持有、卖出还是加仓？",
@@ -144,7 +145,7 @@ REGISTRY = [
         category="topics",
         tags=["黄金", "回撤", "择时"],
         summary="用 26 年数据回答黄金深度回撤后该怎么办。",
-        date="2026-09",
+        date="2026-09-29",
     ),
     dict(
         title="「盈利涨 30%、股价只涨 20%」差的 10% 会补涨吗？",
@@ -152,7 +153,7 @@ REGISTRY = [
         category="topics",
         tags=["盈利", "估值", "恒等式"],
         summary="用估值恒等式分解净利润与股价的关系，检验「补涨」命题。",
-        date="2026-09",
+        date="2026-09-08",
     ),
     dict(
         title="创业板 / 红利「矛与盾」比值择时",
@@ -160,7 +161,7 @@ REGISTRY = [
         category="topics",
         tags=["创业板", "红利", "择时"],
         summary="用创业板红利比值判断、现在在哪 / 什么时候可以再度关注创业板。",
-        date="2026-10",
+        date="2026-10-13",
     ),
     dict(
         title="跟随美联储周期投资 A 股，靠谱吗？",
@@ -168,7 +169,7 @@ REGISTRY = [
         category="topics",
         tags=["美联储", "周期", "验证"],
         summary="「加息尾声买入、降息尾声卖出」——用 20 年数据验证一个流行命题。",
-        date="2026-09",
+        date="2026-09-08",
     ),
     dict(
         title="中美 AI 算力 · 月度估算对照",
@@ -177,7 +178,7 @@ REGISTRY = [
         tags=["AI算力", "Token", "中美对比", "月度估算"],
         summary="逐月拆解中美 AI 算力存量（H100e）、日均 Token、资本开支、数据中心容量与电力："
                 "供给端美国约 11 倍、使用端中国约 1.6 倍，用一张页面看清「算力在美国、token 在中国」的错位。",
-        date="2026-10",
+        date="2026-10-21",
     ),
     # —— 图表速览（图片）：把图放进 images/ 后按下面格式登记 ——
     # dict(
@@ -356,11 +357,12 @@ def _card(item: dict) -> str:
     color = CAT_COLOR.get(cat, "#2f6fed")
     tags = "".join(f"<span>#{html.escape(t)}</span>" for t in item.get("tags", []))
     date = html.escape(item.get("date", "")) if item.get("date") else ""
+    date_title = f'数据截至 {date}' if date else ""
     return (
         f'<a class="card" href="{html.escape(item["path"])}">'
         f'<div class="top">'
         f'<span class="chip" style="color:{color};background:{color}18;">{html.escape(CAT_LABEL.get(cat, cat))}</span>'
-        f'<span class="date">{date}</span></div>'
+        f'<span class="date" title="{date_title}">{date}</span></div>'
         f'<h3>{html.escape(item["title"])}</h3>'
         f'<p>{html.escape(item.get("summary", ""))}</p>'
         f'<div class="tags">{tags}</div>'
@@ -387,8 +389,12 @@ def build_portal() -> str:
     images = [x for x in REGISTRY if x.get("kind") == "image"]
 
     # 每个专题内按日期倒序（新的优先）；同日期保持 REGISTRY 原顺序（sort 稳定）
-    reports.sort(key=lambda x: x.get("date") or "", reverse=True)
-    images.sort(key=lambda x: x.get("date") or "", reverse=True)
+    def _date_key(x: dict) -> str:
+        d = x.get("date") or ""
+        return d + "-01" if len(d) == 7 else d
+
+    reports.sort(key=_date_key, reverse=True)
+    images.sort(key=_date_key, reverse=True)
 
     sections = []
     for key, label, desc, color in CATEGORIES:
