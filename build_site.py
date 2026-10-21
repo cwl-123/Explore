@@ -13,6 +13,7 @@
 
 说明：
     - 门户首页 = 仓库根目录 index.html（分类分区 + 卡片）
+    - 同一分类内按 date 倒序展示（新的在前）；同日期保持 REGISTRY 里的先后
     - 各报告页顶部由本脚本注入统一导航（幂等：重复运行不会叠加）
     - 报告页如果是生成产物（如 index.html / *_view.html），重新生成后需再跑一次本脚本
 """
@@ -384,6 +385,10 @@ def build_portal() -> str:
     today = datetime.date.today().isoformat()
     reports = [x for x in REGISTRY if x.get("kind", "report") == "report"]
     images = [x for x in REGISTRY if x.get("kind") == "image"]
+
+    # 每个专题内按日期倒序（新的优先）；同日期保持 REGISTRY 原顺序（sort 稳定）
+    reports.sort(key=lambda x: x.get("date") or "", reverse=True)
+    images.sort(key=lambda x: x.get("date") or "", reverse=True)
 
     sections = []
     for key, label, desc, color in CATEGORIES:
