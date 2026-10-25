@@ -36,6 +36,7 @@ CATEGORIES = [
     ("strategy", "指数策略回测", "用长历史数据检验买卖规则与估值择时", "#2f6fed"),
     ("valuation", "估值 · 持仓分析", "指数 / ETF / 基金成分股与估值拆解", "#2c9e63"),
     ("topics", "市场专题", "一个命题、一组图，用数据给答案", "#e0a300"),
+    ("digital", "数字生活", "把日常技术问题讲清楚", "#7a5af8"),
     ("gallery", "图表速览", "独立图表与图片", "#d94a4a"),
 ]
 CAT_LABEL = {key: label for key, label, _, _ in CATEGORIES}
@@ -189,6 +190,15 @@ REGISTRY = [
         summary="逐月拆解中美 AI 算力存量（H100e）、日均 Token、资本开支、数据中心容量与电力："
                 "供给端美国约 11 倍、使用端中国约 1.6 倍，用一张页面看清「算力在美国、token 在中国」的错位。",
         date="2026-10-21",
+    ),
+    dict(
+        title="连上公司wifi后，到底会被看光什么？",
+        path="company-wifi-privacy.html",
+        category="digital",
+        tags=["公司Wi-Fi", "隐私", "Knock", "梯子"],
+        summary="用普通人能看懂的话回答：刷知乎、招聘网站、B站，公司可能知道到哪一步；Knock 为什么要单独看；"
+                "开了梯子以后，哪些记录可能藏住，哪些仍然藏不住。",
+        date="2026-10-25",
     ),
     # —— 图表速览（图片）：把图放进 images/ 后按下面格式登记 ——
     # dict(

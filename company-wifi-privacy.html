@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="用普通人能看懂的话，说明公司 Wi-Fi 通常能看到什么：知乎、招聘网站、Knock、B站，以及开了梯子以后还有哪些例外。">
+<title>连上公司wifi后，到底会被看光什么？</title>
+<style>
+  :root{
+    --bg:#f3f4ef;--paper:#fff;--ink:#17231f;--muted:#65716b;--line:#dfe4dc;
+    --green:#176b52;--green-dark:#123c32;--green-soft:#e8f3ed;--lime:#d8ed9f;
+    --amber:#9a5b12;--amber-soft:#fff3df;--red:#a1473c;--red-soft:#fbecea;
+    --blue:#355f88;--blue-soft:#eaf1f7;--shadow:0 16px 50px rgba(26,48,39,.07);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .wrap{max-width:1120px;margin:0 auto;padding:26px 22px 72px;}
+  .hero{position:relative;overflow:hidden;padding:54px 52px 46px;border-radius:28px;
+    color:#f8fbf5;background:var(--green-dark);box-shadow:var(--shadow);}
+  .hero::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;
+    right:-170px;top:-240px;background:rgba(216,237,159,.12);}
+  .hero::after{content:"";position:absolute;width:250px;height:250px;border-radius:50%;
+    right:80px;bottom:-205px;border:1px solid rgba(216,237,159,.24);}
+  .eyebrow{position:relative;margin:0 0 18px;color:var(--lime);font-size:12px;font-weight:700;
+    letter-spacing:2px;}
+  h1{position:relative;max-width:880px;margin:0;font-size:clamp(34px,5.2vw,60px);
+    line-height:1.2;letter-spacing:-1.5px;font-weight:800;}
+  .hero .lead{position:relative;max-width:790px;margin:24px 0 0;color:#d4e0d8;font-size:17px;line-height:1.85;}
+  .hero .lead b{color:#fff;}
+  .hero-note{position:relative;display:flex;gap:12px;align-items:flex-start;margin-top:28px;padding-top:22px;
+    border-top:1px solid rgba(255,255,255,.16);color:#c8d7ce;font-size:13px;}
+  .hero-note .label{flex:none;color:var(--green-dark);background:var(--lime);border-radius:999px;
+    padding:1px 10px;font-size:11px;font-weight:800;}
+  .toc{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 34px;}
+  .toc a{text-decoration:none;background:rgba(255,255,255,.72);border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;color:#4d5c54;font-size:13px;}
+  .toc a:hover{border-color:#9eb8aa;color:var(--green);}
+  section{scroll-margin-top:20px;margin:38px 0;}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:0 2px 16px;}
+  .section-head h2{margin:0;font-size:25px;line-height:1.4;letter-spacing:-.4px;}
+  .section-head p{max-width:570px;margin:0;color:var(--muted);font-size:13px;text-align:right;}
+  .section-no{display:block;margin-bottom:5px;color:var(--green);font-size:11px;font-weight:800;letter-spacing:1.6px;}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:25px 27px;}
+  .scope{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--green);border-radius:0 12px 12px 0;
+    background:var(--green-soft);color:#385448;font-size:13.5px;}
+  .answer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+  .app-card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:20px;
+    padding:24px 25px;box-shadow:0 4px 18px rgba(26,48,39,.025);}
+  .app-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px;}
+  .app-name{display:flex;align-items:center;gap:11px;}
+  .app-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;
+    background:var(--green-dark);color:#fff;font-size:18px;font-weight:800;}
+  .app-name h3{margin:0;font-size:19px;}
+  .app-name small{display:block;color:var(--muted);font-size:11px;font-weight:400;}
+  .tag{flex:none;display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;}
+  .tag.green{background:var(--green-soft);color:var(--green);}
+  .tag.amber{background:var(--amber-soft);color:var(--amber);}
+  .tag.red{background:var(--red-soft);color:var(--red);}
+  .verdict{margin:0 0 17px;font-size:15px;line-height:1.7;}
+  .visibility{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:15px;border-top:1px solid var(--line);}
+  .visibility h4{margin:0 0 6px;font-size:11px;letter-spacing:.3px;}
+  .visibility .can h4{color:var(--amber);}
+  .visibility .cant h4{color:var(--green);}
+  .visibility p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.75;}
+  .app-foot{margin:14px 0 0;padding:10px 12px;border-radius:10px;background:#f7f8f5;color:#5c6861;font-size:12px;}
+  .three-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px;}
+  .lane{padding:21px;border:1px solid var(--line);border-radius:16px;background:#fafbf8;}
+  .lane-num{color:#9aa69f;font-size:11px;font-weight:800;letter-spacing:1px;}
+  .lane h3{margin:5px 0 7px;font-size:17px;}
+  .lane p{margin:0;color:var(--muted);font-size:13px;}
+  .envelope{margin-top:16px;padding:25px;border-radius:16px;background:var(--green-dark);color:#fff;}
+  .route{display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;font-size:13px;font-weight:700;}
+  .route span:not(.arrow){padding:8px 14px;border:1px solid rgba(255,255,255,.2);border-radius:10px;}
+  .route .arrow{color:var(--lime);font-size:20px;}
+  .envelope-parts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;}
+  .envelope-part{padding:17px 18px;border-radius:12px;background:rgba(255,255,255,.08);}
+  .envelope-part h3{margin:0 0 7px;color:var(--lime);font-size:13px;}
+  .envelope-part p{margin:0;color:#d8e3dc;font-size:13px;}
+  .fineprint{margin:14px 0 0;color:var(--muted);font-size:12.5px;}
+  .big-answer{margin-bottom:16px;padding:26px 28px;border-radius:20px;background:var(--amber-soft);
+    border:1px solid #efdbb9;}
+  .big-answer .kicker{color:var(--amber);font-size:11px;font-weight:800;letter-spacing:1.4px;}
+  .big-answer h3{margin:7px 0 8px;font-size:24px;line-height:1.5;}
+  .big-answer p{margin:0;color:#6f5a3e;font-size:14px;}
+  .vpn-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .vpn-card{padding:23px 24px;background:var(--paper);border:1px solid var(--line);border-radius:18px;}
+  .vpn-card h3{margin:0 0 9px;font-size:16px;}
+  .vpn-card p{margin:0;color:var(--muted);font-size:13.5px;}
+  .vpn-card strong{color:var(--ink);}
+  .check-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+  details{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:0 18px;}
+  summary{cursor:pointer;list-style:none;position:relative;padding:17px 28px 17px 0;font-size:14px;font-weight:700;}
+  summary::-webkit-details-marker{display:none;}
+  summary::after{content:"+";position:absolute;right:1px;top:15px;color:var(--green);font-size:21px;font-weight:400;}
+  details[open] summary::after{content:"−";}
+  details p{margin:0 0 17px;color:var(--muted);font-size:13px;}
+  .myths{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .myth{padding:20px 22px;background:var(--paper);border:1px solid var(--line);border-radius:16px;}
+  .myth h3{margin:0 0 7px;font-size:14px;line-height:1.6;}
+  .myth p{margin:0;color:var(--muted);font-size:13px;}
+  .myth h3 span{color:var(--red);margin-right:6px;}
+  .action-card{padding:30px;background:var(--green-dark);color:#fff;border-radius:22px;}
+  .action-card h2{margin:0 0 18px;font-size:25px;}
+  .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+  .action{padding-top:15px;border-top:1px solid rgba(255,255,255,.2);}
+  .action b{display:block;margin-bottom:6px;color:var(--lime);font-size:14px;}
+  .action p{margin:0;color:#d4e0d8;font-size:13px;}
+  .last-word{margin:22px 0 0;font-size:16px;line-height:1.8;}
+  footer{margin-top:28px;padding:20px 3px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px;}
+  footer p{margin:5px 0;}
+  @media (max-width:760px){
+    .wrap{padding:16px 14px 50px;}
+    .hero{padding:35px 25px 30px;border-radius:22px;}
+    h1{font-size:36px;letter-spacing:-1px;}
+    .hero .lead{font-size:15px;}
+    .hero-note{flex-direction:column;gap:8px;}
+    .section-head{display:block;}
+    .section-head h2{font-size:22px;}
+    .section-head p{margin-top:7px;text-align:left;}
+    .answer-grid,.vpn-grid,.check-list,.myths{grid-template-columns:1fr;}
+    .three-lanes,.actions{grid-template-columns:1fr;}
+    .visibility{grid-template-columns:1fr;}
+    .route{gap:7px;font-size:11px;}
+    .route span:not(.arrow){padding:7px 8px;}
+    .envelope-parts{grid-template-columns:1fr;}
+    .card{padding:21px;}
+  }
+  @media print{
+    body{background:#fff;}
+    .wrap{max-width:none;padding:0;}
+    .toc,#site-nav{display:none;}
+    .hero{box-shadow:none;}
+    .card,.app-card,.myth,.vpn-card{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+  <header class="hero">
+    <p class="eyebrow">公司网络隐私 · 一份不吓唬人的说明</p>
+    <h1>连上公司wifi后，<br>到底会被看光什么？</h1>
+    <p class="lead">先给结论：<b>不是一连 Wi-Fi，你的屏幕、相册和所有聊天就被看光；也不是只开了小锁或梯子，就什么都不会留下。</b>多数情况下，公司更容易知道“你去了哪个网站、什么时候去、用了多少流量”，而不是“你具体看了哪一条、搜了什么、写了什么”。</p>
+    <div class="hero-note"><span class="label">真正要看三件事</span><span>网络是谁的，决定路上留下什么；设备归谁管，决定设备里能记录什么；服务是谁的，决定平台后台留下什么。Knock 为什么要单独讲？因为它属于第三类。</span></div>
+  </header>
+
+  <nav class="toc" aria-label="页面目录">
+    <a href="#answers">四个直接答案</a>
+    <a href="#basics">一张图看懂原理</a>
+    <a href="#vpn">现在连着梯子呢</a>
+    <a href="#check">四项自查</a>
+    <a href="#myths">常见误会</a>
+    <a href="#actions">怎么保护私事</a>
+  </nav>
+
+  <section id="answers">
+    <div class="section-head">
+      <div><span class="section-no">01 · 先说你最关心的</span><h2>知乎、招聘网站、Knock、B站，公司知道吗？</h2></div>
+      <p>“看到”指技术上可能留下记录，不代表 IT 正在实时盯着你，也不代表公司一定会保存或查看。</p>
+    </div>
+    <p class="scope"><b>这一节先按同一个场景回答：</b>你自己的手机或电脑，连接公司 Wi-Fi，没开梯子，没有安装公司要求的设备管理、证书或安全审计软件，网站和 App 的加密保护正常。</p>
+    <div class="answer-grid">
+      <article class="app-card">
+        <div class="app-top"><div class="app-name"><span class="app-mark">知</span><h3>刷知乎<small>看问题、回答、搜索</small></h3></div><span class="tag amber">知道你在用</span></div>
+        <p class="verdict"><b>通常能知道你在访问知乎，通常不能仅靠 Wi-Fi 知道你看了哪条回答。</b></p>
+        <div class="visibility">
+          <div class="can"><h4>通常可能看到</h4><p>访问知乎相关服务、发生通信的大致时间、用了多少网络流量。</p></div>
+          <div class="cant"><h4>通常不能仅靠 Wi-Fi 看到</h4><p>具体问题和回答、搜索词、点赞内容、账号密码、你写下的正文。</p></div>
+        </div>
+        <p class="app-foot">有网络记录，不等于能证明你当时正盯着屏幕刷，也可能是 App 在后台更新内容。</p>
+      </article>
+
+      <article class="app-card">
+        <div class="app-top"><div class="app-name"><span class="app-mark">招</span><h3>刷招聘网站<small>看岗位、沟通、更新简历</small></h3></div><span class="tag red">访问本身就敏感</span></div>
+        <p class="verdict"><b>和知乎类似：公司可能知道你访问了招聘网站，但通常看不到你投了哪家、聊了哪家。</b></p>
+        <div class="visibility">
+          <div class="can"><h4>通常可能看到</h4><p>招聘网站或 App 的名字、访问时段、使用流量。这些已足够让人猜测你在看工作机会。</p></div>
+          <div class="cant"><h4>通常不能仅靠 Wi-Fi 看到</h4><p>具体岗位、公司名称、聊天内容、简历正文、薪资要求。</p></div>
+        </div>
+        <p class="app-foot">所以“看不到简历”不等于“没有暴露求职信号”。在意的话，别用公司网络处理求职。</p>
+      </article>
+
+      <article class="app-card">
+        <div class="app-top"><div class="app-name"><span class="app-mark">K</span><h3>Knock 发消息<small>公司提供的通讯工具</small></h3></div><span class="tag red">别只看 Wi-Fi</span></div>
+        <p class="verdict"><b>公司很可能有消息发送相关的后台记录；但管理员能不能读正文，不能一概而论。</b></p>
+        <div class="visibility">
+          <div class="can"><h4>即使换手机流量也可能有记录</h4><p>登录、发消息的时间、联系人或群、文件操作等，具体以产品功能和管理权限为准。</p></div>
+          <div class="cant"><h4>不能直接断言的部分</h4><p>聊天正文谁能看、保存多久、撤回后是否仍留记录，要看产品设计与公司制度。</p></div>
+        </div>
+        <p class="app-foot">Knock 是公司服务，不是单纯“路过公司 Wi-Fi”。开梯子或换网络，都不会清除它自己的后台记录。</p>
+      </article>
+
+      <article class="app-card">
+        <div class="app-top"><div class="app-name"><span class="app-mark">B</span><h3>刷 B 站<small>看视频、搜索、发弹幕</small></h3></div><span class="tag amber">知道你在用</span></div>
+        <p class="verdict"><b>通常能知道你在用 B 站；长时间大流量可能像在看视频，但不等于知道视频标题。</b></p>
+        <div class="visibility">
+          <div class="can"><h4>通常可能看到</h4><p>访问 B 站相关服务、大致时段、下载和上传了多少流量。</p></div>
+          <div class="cant"><h4>通常不能仅靠 Wi-Fi 看到</h4><p>具体视频、搜索词、弹幕正文、账号密码、你看到了几分几秒。</p></div>
+        </div>
+        <p class="app-foot">“流量看起来像视频”只是推测，不能据此证明你实际看了多久，更不能直接知道内容。</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="basics">
+    <div class="section-head">
+      <div><span class="section-no">02 · 不用懂网络也能明白</span><h2>别把“公司能看到什么”全算在 Wi-Fi 头上</h2></div>
+      <p>同样是“公司知道”，信息可能来自网络、设备或服务后台，三条路完全不同。</p>
+    </div>
+    <div class="card">
+      <div class="three-lanes">
+        <div class="lane"><span class="lane-num">第一条路</span><h3>网络：你去了哪里</h3><p>公司 Wi-Fi 是网络出入口，可能记录设备、时间、访问的服务和流量大小。</p></div>
+        <div class="lane"><span class="lane-num">第二条路</span><h3>设备：你做了什么</h3><p>公司电脑，或按要求安装的管理、安全软件，可能在内容被保护之前就已经记录。能看到多少取决于实际权限。</p></div>
+        <div class="lane"><span class="lane-num">第三条路</span><h3>服务：你留下了什么</h3><p>Knock 这类公司服务有自己的后台记录。换 Wi-Fi、开梯子，不会把这类记录变没。</p></div>
+      </div>
+      <div class="envelope">
+        <div class="route"><span>你的设备</span><span class="arrow">→</span><span>公司 Wi-Fi</span><span class="arrow">→</span><span>网站或 App</span></div>
+        <div class="envelope-parts">
+          <div class="envelope-part"><h3>像信封外：路上更容易看到</h3><p>哪台设备在通信、什么时候通信、大致去往哪个网站或服务、传输量有多大。</p></div>
+          <div class="envelope-part"><h3>像信封里：有保护时通常看不到</h3><p>具体页面、搜索词和正文。常见保护叫 HTTPS，可理解为把你和网站之间的内容封进信封。</p></div>
+        </div>
+      </div>
+      <p class="fineprint"><b>两个重要提醒：</b>小锁保护的是传输过程，不是把“去了哪个网站”也必然藏掉；公司设备或公司要求安装的证书、安全软件，可能改变上面的结论。反过来，安装了某个公司 App，也不等于它自动获得读取你整台手机的权限。</p>
+    </div>
+  </section>
+
+  <section id="vpn">
+    <div class="section-head">
+      <div><span class="section-no">03 · 你现在的情况</span><h2>已经连着梯子，还会被公司发现吗？</h2></div>
+      <p>只看“梯子已连接”这个开关，无法判断你现在是否暴露。设备、软件和梯子模式都要一起看。</p>
+    </div>
+    <div class="big-answer">
+      <span class="kicker">最短答案</span>
+      <h3>公司可能发现你“在用梯子”，但不必然知道你在梯子里面访问了什么。</h3>
+      <p>在自己的设备、没有公司管理软件、所有网络请求都确实走梯子的前提下，公司 Wi-Fi 通常更容易看到梯子的连接入口、使用时间和流量，而不是梯子里的知乎、招聘网站或 B 站地址。下面任何一种情况，都会让结论改变。</p>
+    </div>
+    <div class="vpn-grid">
+      <article class="vpn-card"><h3>梯子不是所有流量都走</h3><p>如果设置是“规则”“自动”或“只有部分 App 走梯子”，那些<strong>直接联网</strong>的服务，仍可能按普通公司 Wi-Fi 的方式留下访问记录。</p></article>
+      <article class="vpn-card"><h3>设备本身归公司管</h3><p>公司电脑，或装有公司管理、安全、审计软件的设备，可能在网络保护之前记录浏览、应用或文件行为。<strong>梯子不是橡皮擦。</strong></p></article>
+      <article class="vpn-card"><h3>安装过公司要求的证书</h3><p>有些公司会用证书配合网络检查，让原本封好的内容在公司设备或网络上被重新打开检查。能否看到、看到多少，取决于实际配置。</p></article>
+      <article class="vpn-card"><h3>Knock 不受这层保护结论影响</h3><p>只要用的是公司提供的通讯服务，<strong>后台原本可能留下的记录，不会因为梯子自动消失。</strong>梯子改变的是网络路线，不是 Knock 的管理权限。</p></article>
+      <article class="vpn-card"><h3>“发现梯子”和“发现内容”是两回事</h3><p>公司可能看到连接的是某个梯子服务，或通过连接特征猜测你在用梯子，也可能限制这类连接。这不等于它同时看到了具体页面。</p></article>
+      <article class="vpn-card"><h3>信任不是消失，而是换了对象</h3><p>梯子提供方成了新的网络出入口。免费或来路不明的梯子，不一定比公司 Wi-Fi 更值得信任，更不等于绝对匿名。</p></article>
+    </div>
+  </section>
+
+  <section id="check">
+    <div class="section-head">
+      <div><span class="section-no">04 · 对照你自己的设备</span><h2>四项自查，比问“开了梯子没”更有用</h2></div>
+      <p>这些只能帮助判断风险，不能远程替你确认公司实际部署了什么。</p>
+    </div>
+    <div class="check-list">
+      <details open><summary>设备是公司发的，还是完全属于自己的？</summary><p>公司电脑、公司手机应按工作设备对待。自己的设备、且没有公司管理配置，才更接近前面“通常只看得到去了哪”的基础场景。</p></details>
+      <details><summary>公司有没有要求安装管理配置、证书或安全软件？</summary><p>常见名字包括设备管理、描述文件、安全证书、网络准入、安全审计。安装了不代表一定在看所有内容，但不能再按“只有 Wi-Fi”来简单判断。不要为了自查去删除公司安全组件。</p></details>
+      <details><summary>梯子是“全部走”，还是“按规则走”？</summary><p>“全局”通常表示尽量让所有网络请求走梯子；“规则”“自动”“分应用”通常只有一部分走。还要看连接是否真正生效，不能只看界面开关变绿。</p></details>
+      <details><summary>你用的是公司账号或公司服务吗？</summary><p>Knock、公司邮箱、公司网盘等，可能有自己的登录、发送、分享或文件记录。这个维度与连哪个 Wi-Fi、开没开梯子关系不大。</p></details>
+    </div>
+  </section>
+
+  <section id="myths">
+    <div class="section-head">
+      <div><span class="section-no">05 · 不用恐慌，也别掉以轻心</span><h2>六句最容易误解的话</h2></div>
+    </div>
+    <div class="myths">
+      <article class="myth"><h3><span>误会 1</span>“连上公司 Wi-Fi，IT 就能看我的屏幕和相册。”</h3><p>一般不能。Wi-Fi 本身不会自动获得你屏幕、相册或其他 App 内容的读取权限。设备被管理、装了高权限软件或手机本身被控制，是另一回事。</p></article>
+      <article class="myth"><h3><span>误会 2</span>“网站有小锁，公司连我去了哪都不知道。”</h3><p>不对。小锁主要保护内容，访问的网站或服务、通信时间和流量仍可能露出。部分新技术能少露一些，但不能当作必然。</p></article>
+      <article class="myth"><h3><span>误会 3</span>“公司能记录，就说明有人天天在看我。”</h3><p>不对。技术上能记录、实际保存了、有人去查询，是三件事。本页只解释技术边界，不断言你的公司正在查看。</p></article>
+      <article class="myth"><h3><span>误会 4</span>“撤回或删除，就代表所有记录都没了。”</h3><p>不能这样保证。尤其是公司通讯服务，前台消息消失与后台是否仍有记录，不是一回事。</p></article>
+      <article class="myth"><h3><span>误会 5</span>“用了梯子，公司就肯定发现不了任何访问。”</h3><p>不对。设备管理、公司证书、部分流量没走梯子、公司服务自己的记录，都可能绕过这句话所想象的保护。</p></article>
+      <article class="myth"><h3><span>误会 6</span>“换成手机流量，就绝对隐私了。”</h3><p>也不对。它只是让公司 Wi-Fi 不再是你的网络出入口。设备管理软件、公司账号的后台记录，以及你使用的网站和梯子提供方，仍需分别考虑。</p></article>
+    </div>
+  </section>
+
+  <section id="actions">
+    <div class="action-card">
+      <h2>如果你只想记住最实用的做法</h2>
+      <div class="actions">
+        <div class="action"><b>私事与工作设备分开</b><p>求职、私人聊天、个人文件，尽量用自己的设备、自己的账号。公司配发的设备默认只处理工作。</p></div>
+        <div class="action"><b>敏感私事不用公司网络</b><p>自己的手机流量更简单直接：它不能解决所有隐私问题，但能避免公司 Wi-Fi 记录你的访问去向。也要遵守公司制度。</p></div>
+        <div class="action"><b>Knock 只谈适合公司知道的事</b><p>不要把公司通讯工具当私人树洞。梯子不会改变服务后台权限，也无法保证撤回后没有记录。</p></div>
+      </div>
+      <p class="last-word"><b>一句话收尾：</b>自己的普通设备连公司 Wi-Fi，通常更像“公司知道你去了哪”，不是“公司看光你做了什么”；一旦涉及公司管理设备或 Knock 这类公司服务，就不能只靠小锁或梯子来判断。</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>更新于 2026-10-25 · 本页讲常见技术情况，不是对你当前设备、公司网络或 Knock 部署方式的实际检测。</p>
+    <p>“可能看到”不等于“公司有权随意查看”。是否告知、保存多久、谁能查询，应结合所在地法律、公司制度和具体产品说明判断。</p>
+  </footer>
+</div>
+</body>
+</html>
