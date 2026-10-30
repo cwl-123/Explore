@@ -451,7 +451,7 @@ content = f'''
   <div class="grid3" style="margin-bottom:6px">
     <div class="box"><div class="k">Q3 单季营收增速</div><div class="v g">{fp(q3_rev_g*100)}</div><div class="s">中位股 {fp(q3_rev_med*100)}</div></div>
     <div class="box"><div class="k">Q3 单季净利增速</div><div class="v g">{fp(q3_np_g*100)}</div><div class="s">H1 {fp(h1_np_g*100)} → Q3 {fp(q3_np_g*100)}</div></div>
-    <div class="box"><div class="k">Q3 净利率</div><div class="v">{q3_margin*100:.1f}%</div><div class="s">H1 为 {h1_margin*100:.1f}%，压缩 {(h1_margin-q3_margin)*100:.1f}pp</div></div>
+    <div class="box"><div class="k">Q3 净利率</div><div class="v">{nm3_single:.1f}%</div><div class="s">Q2 为 {nm2_single:.1f}%，压缩 {nm2_single-nm3_single:.1f}pp</div></div>
   </div>
   <div id="g-growth" class="chart"></div>
   <p class="chart-note">营收增速（+61.8%）远高于净利增速（+32.3%），说明增长更多来自“量”和低毛利业务；中位股净利增速从 H1 的 {fp(h1_med*100)} 掉到 Q3 的 {fp(q3_med*100)}。</p>
@@ -485,7 +485,7 @@ content = f'''
     <div class="box"><div class="k">Top3 Q3 净利环比</div><div class="v r">{fp(q3_np_qoq_top3*100)}</div><div class="s">Q2 环比 {fp(q2_np_qoq_top3*100)}；中际 {fp(m.loc[m.code=='300308','np_qoq'].iloc[0]*100)}、新易盛 {fp(m.loc[m.code=='300502','np_qoq'].iloc[0]*100)}、宁德 {fp(m.loc[m.code=='300750','np_qoq'].iloc[0]*100)}</div></div>
     <div class="box"><div class="k">其余 73 只 Q3 净利环比</div><div class="v r">{fp(q3_np_qoq_ex3*100)}</div><div class="s">Q2 环比 {fp(q2_np_qoq_ex3*100)}；只有 {qoq_pos}/{qoq_valid} 只环比正增长（5 家 Q2 亏损/基数不可比）</div></div>
   </div>
-  <div class="callout"><b>结构：</b>中际 {fp(m.loc[m.code=='300308','np_qoq'].iloc[0]*100)}、天孚 {fp(m.loc[m.code=='300394','np_qoq'].iloc[0]*100)}、三环 {fp(m.loc[m.code=='300408','np_qoq'].iloc[0]*100)}、长川 {fp(m.loc[m.code=='300604','np_qoq'].iloc[0]*100)} 仍在环比增长；新易盛 {fp(m.loc[m.code=='300502','np_qoq'].iloc[0]*100)}、胜宏 {fp(m.loc[m.code=='300476','np_qoq'].iloc[0]*100)}、阳光 {fp(m.loc[m.code=='300274','np_qoq'].iloc[0]*100)}、宁德 {fp(m.loc[m.code=='300750','np_qoq'].iloc[0]*100)} 环比转负。跌的不是“整个板块”，是上一季度涨得最陡、毛利率最先松动的那一段。</div>
+  <div class="callout"><b>结构：</b>中际 {fp(m.loc[m.code=='300308','np_qoq'].iloc[0]*100)}、天孚 {fp(m.loc[m.code=='300394','np_qoq'].iloc[0]*100)}、三环 {fp(m.loc[m.code=='300408','np_qoq'].iloc[0]*100)}、长川 {fp(m.loc[m.code=='300604','np_qoq'].iloc[0]*100)} 仍在环比增长；新易盛 {fp(m.loc[m.code=='300502','np_qoq'].iloc[0]*100)}、胜宏 {fp(m.loc[m.code=='300476','np_qoq'].iloc[0]*100)}、阳光 {fp(m.loc[m.code=='300274','np_qoq'].iloc[0]*100)}、宁德 {fp(m.loc[m.code=='300750','np_qoq'].iloc[0]*100)} 环比转负。跌的不是“整个板块”，是上一季度预期最满、毛利率最先松动的那一段。</div>
 
   <h3>前 12 大持仓：权重、增速与贡献</h3>
   <div class="tbl-wrap" style="max-height:480px">
