@@ -1,0 +1,45 @@
+name: Probe Deploy Host
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: SFTP probe
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          echo "== sftp pwd/ls =="
+          sftp -b - -i ~/.ssh/deploy_key -P "${SSH_PORT:-22}" \
+            -o StrictHostKeyChecking=accept-new -o BatchMode=yes \
+            "$SSH_USER@$SSH_HOST" <<'EOF' || true
+          pwd
+          ls -la
+          ls -la explore 2>/dev/null || true
+          ls -la /var/www 2>/dev/null || true
+          EOF
+
+      - name: SSH probe users
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          for u in root ubuntu deploy www-data; do
+            echo "== $u =="
+            ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" \
+              -o StrictHostKeyChecking=accept-new -o BatchMode=yes -o ConnectTimeout=8 \
+              "$u@$SSH_HOST" 'id; pwd; ls -la' 2>&1 | head -20 || true
+          done
