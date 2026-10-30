@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存储股复盘：说“别接飞刀”15 天后，韩股反弹了 13%</title>
+<style>
+:root{
+  --bg:#0b0f14;--card:#141a22;--card2:#1a212b;--line:#26303c;
+  --tx:#e6edf3;--tx2:#9aa7b4;--tx3:#6b7683;
+  --red:#f85149;--green:#3fb950;--blue:#58a6ff;--gold:#e3b341;--purple:#bc8cff;--cyan:#39c5cf;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.78;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:34px 22px 90px}
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(88,166,255,.25)}
+a:hover{border-bottom-color:var(--blue)}
+header{padding:30px 0 26px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.kicker{font-size:12px;letter-spacing:2.4px;color:var(--gold);font-weight:700;margin-bottom:12px}
+h1{font-size:31px;line-height:1.35;font-weight:800;letter-spacing:.2px}
+h1 .sub{display:block;font-size:17px;font-weight:500;color:var(--tx2);margin-top:8px;letter-spacing:0}
+.meta{color:var(--tx3);font-size:12.5px;margin-top:16px;line-height:1.9}
+.meta b{color:var(--tx2);font-weight:600}
+h2{font-size:21px;margin:56px 0 6px;display:flex;align-items:baseline;gap:12px;letter-spacing:.2px}
+h2 .no{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:1px;font-variant-numeric:tabular-nums}
+h2::after{content:"";flex:1;height:1px;background:var(--line);margin-left:4px}
+h3{font-size:16px;margin:26px 0 8px;color:var(--tx)}
+p{margin:9px 0;color:#d5dee8}
+.lead{font-size:15.5px;color:var(--tx2)}
+small,.small{font-size:12.5px;color:var(--tx2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card.tight{padding:14px 16px}
+.verdict{border-left:4px solid var(--gold);background:linear-gradient(90deg,rgba(227,179,65,.10),rgba(20,26,34,0) 62%);border-radius:0 12px 12px 0;padding:20px 24px}
+.verdict .tag{display:inline-block;background:var(--gold);color:#111;font-weight:800;font-size:11.5px;padding:2px 11px;border-radius:20px;margin-bottom:10px;letter-spacing:.6px}
+.verdict p{font-size:16px;line-height:1.85;color:#e9eff6;margin:6px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 6px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 14px;text-align:center}
+.kpi .v{font-size:25px;font-weight:800;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.kpi .k{font-size:11.5px;color:var(--tx2);margin-top:4px;line-height:1.5}
+.kpi .s{font-size:11px;color:var(--tx3);margin-top:2px}
+.up{color:var(--red)}.down{color:var(--green)}.dim{color:var(--tx3)}
+.gold{color:var(--gold)}.blue{color:var(--blue)}.cyan{color:var(--cyan)}.purple{color:var(--purple)}
+.hl{color:var(--gold);font-weight:700}
+.hlb{color:var(--blue);font-weight:700}
+.hlg{color:var(--green);font-weight:700}
+.hlr{color:var(--red);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:var(--card2);color:var(--tx2);font-weight:600;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font-size:12.5px}
+td{padding:7px 10px;text-align:right;border-bottom:1px solid #1d2530;white-space:nowrap;vertical-align:middle}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+td.num{font-variant-numeric:tabular-nums}
+tr:hover td{background:rgba(88,166,255,.04)}
+tr.hl-row td{background:rgba(227,179,65,.06)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tag-mini{display:inline-block;font-size:10.5px;color:var(--tx3);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:6px;vertical-align:1px;font-weight:400}
+.timeline{margin:16px 0 0;padding-left:22px;border-left:1px solid var(--line)}
+.tl{position:relative;padding:0 0 18px 18px}
+.tl::before{content:"";position:absolute;left:-26px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--tx3);box-shadow:0 0 0 3px var(--bg)}
+.tl.key::before{background:var(--gold);box-shadow:0 0 0 3px var(--bg),0 0 0 5px rgba(227,179,65,.18)}
+.tl .d{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.5px;font-variant-numeric:tabular-nums}
+.tl .t{font-size:14px;color:var(--tx);margin-top:1px}
+.tl .t b{color:#fff}
+.tl .t span{color:var(--tx2)}
+.judge{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.jcard{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--card)}
+.jcard.ok{border-top:3px solid var(--green)}
+.jcard.no{border-top:3px solid var(--red)}
+.jcard.mid{border-top:3px solid var(--gold)}
+.jcard h4{font-size:14.5px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.jcard h4 .badge{font-size:11px;font-weight:800;padding:1px 8px;border-radius:20px;letter-spacing:.4px}
+.badge.ok{background:rgba(63,185,80,.16);color:var(--green)}
+.badge.no{background:rgba(248,81,73,.16);color:var(--red)}
+.badge.mid{background:rgba(227,179,65,.16);color:var(--gold)}
+.jcard p{font-size:13.5px;color:var(--tx2);margin:6px 0}
+.jcard p b{color:var(--tx)}
+.quote{border-left:3px solid var(--blue);background:rgba(88,166,255,.05);padding:10px 16px;margin:14px 0;border-radius:0 8px 8px 0;color:#c8d6e6;font-size:14px}
+.quote b{color:#fff}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.num-box{background:var(--card2);border-radius:10px;padding:13px 15px;border:1px solid var(--line)}
+.num-box .t{font-size:11.5px;color:var(--tx3);letter-spacing:.4px}
+.num-box .v{font-size:20px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+.num-box .s{font-size:12px;color:var(--tx2);margin-top:2px}
+.lesson{margin:16px 0;padding:16px 18px 15px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;border-left:3px solid var(--cyan)}
+.lesson .n{font-size:11.5px;color:var(--cyan);font-weight:800;letter-spacing:1.4px}
+.lesson h4{font-size:15.5px;margin:3px 0 6px}
+.lesson p{font-size:13.5px;color:var(--tx2);margin:5px 0}
+.lesson p b{color:var(--tx)}
+.lesson .act{font-size:13px;color:#cfe6ea;background:rgba(57,197,207,.07);border-radius:7px;padding:7px 12px;margin-top:9px}
+.lesson .act b{color:var(--cyan)}
+.check{list-style:none;padding:0;margin:10px 0}
+.check li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed #222c38;font-size:13.8px;color:var(--tx2)}
+.check li:last-child{border-bottom:0}
+.check li::before{content:"";position:absolute;left:4px;top:15px;width:12px;height:12px;border:1.5px solid var(--tx3);border-radius:3px}
+.check li b{color:var(--tx)}
+.tagrow{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 0}
+.pill{display:inline-block;font-size:11.5px;padding:1px 9px;border-radius:20px;font-weight:600;letter-spacing:.2px}
+.pill.red{background:rgba(248,81,73,.14);color:var(--red)}
+.pill.green{background:rgba(63,185,80,.14);color:var(--green)}
+.pill.gold{background:rgba(227,179,65,.14);color:var(--gold)}
+.pill.blue{background:rgba(88,166,255,.14);color:var(--blue)}
+.note{font-size:12px;color:var(--tx3);margin-top:7px;line-height:1.7}
+.hr{height:1px;background:var(--line);margin:34px 0}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12.3px;color:var(--tx3);line-height:1.85}
+footer b{color:var(--tx2)}
+.src{font-size:12.3px;color:var(--tx3);line-height:1.9}
+@media(max-width:860px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .judge,.nums{grid-template-columns:1fr}
+  h1{font-size:25px}
+  .wrap{padding:24px 16px 70px}
+  h2{font-size:19px;margin-top:44px}
+}
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="../index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+
+<header>
+  <div class="kicker">REVIEW · 存储股 · 2026-10-30</div>
+  <h1>说“别接飞刀”的 15 天后：韩股反弹 13%，A 股还在创新低
+    <span class="sub">回头看 10/15 那份三星 / 海力士报告——对在哪一步、错在哪一步、偏差多大，以及你顺手清掉电网设备这一笔</span>
+  </h1>
+  <div class="meta">
+    原报告：<b>2026-10-15</b>（韩股/A 股当日收盘，美股 10/14）　｜　复盘：<b>2026-10-30</b> 收盘<br>
+    数据口径：韩股 <b>Naver 日线</b>（含外资持股）、美股 <b>新浪财经日线</b>（Yahoo 自 10/30 起大陆 403）、A 股 <b>腾讯前复权</b>、电网设备 <b>中证官网 + 天天基金</b><br>
+    <b>注意收盘时点</b>：美股数据截至 10/29（今日未开盘），韩股/A 股为 10/30 收盘
+  </div>
+</header>
+
+<div class="card verdict">
+  <span class="tag">复盘结论</span>
+  <p><b class="hl">框架对了，时间尺度错了。</b>“PER 便宜是峰值利润的幻觉、要用 PBR 和周期位置判断”——这套逻辑今天依然成立，海力士 PBR 从 3.43 涨到 <b>3.79</b>、三星 2.44 → <b>2.57</b>，离报告自己定的“安全边际”（1.5 / 2.0）反而更远了。<b class="hlr">但报告是在二次探底当天说“恐慌加速段、别接飞刀”的</b>：三星 10/15 收 207,500 韩元，正好落在 7/30 的低点 207,000 上；海力士 3 个交易日后见底（10/20），随后 7 个交易日反弹 <b>+27.4%</b>。</p>
+  <p>15 天成绩单：<b class="hlb">海力士 +12.8%、三星 +6.7%、A 股存储链等权 -7.8%</b>（7 只里 5 只今天创出新低）。“存储崩盘”从来不是一个板块，而是三条节奏完全不同的链。</p>
+  <p>你清掉电网设备：<b class="hlg">结果对</b>——10/15 之后它又跌了 -6.0%，你少亏了这些钱；<b class="hlr">但归因错了</b>——你躲开的不是“存储崩盘”，是“高 β 成长杀估值”。存储与电网的日收益相关性只有 <b>0.27~0.53</b>，而它们各自与创业板的相关性是 <b>0.55~0.72</b>。</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="v up">+12.8%</div><div class="k">SK 海力士 · 报告日→今</div><div class="s">期间最高 +27.4%</div></div>
+  <div class="kpi"><div class="v up">+6.7%</div><div class="k">三星电子 · 报告日→今</div><div class="s">10/15 正好是二次探底</div></div>
+  <div class="kpi"><div class="v down">-7.8%</div><div class="k">A 股存储链等权</div><div class="s">7 只里 5 只今日新低</div></div>
+  <div class="kpi"><div class="v down">-6.0%</div><div class="k">025833 · 报告日→今</div><div class="s">你避开的这一段</div></div>
+</div>
+<p class="note">“期间最高”= 报告日后最低点 → 其后最高收盘，衡量反弹力度，而非你的实际收益。海力士 10/20 见 1,190,000，10/29 收 1,516,000。</p>
+
+<h2><span class="no">01</span>这 15 天，数字上发生了什么</h2>
+<p class="lead">先看结果。所有收益都以 <b>10/15 收盘</b>（报告数据截止日）为起点，终点为各市场最新收盘。</p>
+
+<div class="card tight">
+<svg viewBox="0 0 1000 400" style="width:100%;height:auto;display:block" font-family="inherit" role="img"><line x1="62" y1="308.4" x2="878" y2="308.4" stroke="#232c38" stroke-width="1"/><text x="53" y="312.4" fill="#6b7683" font-size="11" text-anchor="end">90</text><line x1="62" y1="234.1" x2="878" y2="234.1" stroke="#232c38" stroke-width="1"/><text x="53" y="238.1" fill="#6b7683" font-size="11" text-anchor="end">100</text><line x1="62" y1="159.8" x2="878" y2="159.8" stroke="#232c38" stroke-width="1"/><text x="53" y="163.8" fill="#6b7683" font-size="11" text-anchor="end">110</text><line x1="62" y1="85.5" x2="878" y2="85.5" stroke="#232c38" stroke-width="1"/><text x="53" y="89.5" fill="#6b7683" font-size="11" text-anchor="end">120</text><text x="62.0" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/15</text><line x1="62.0" y1="354" x2="62.0" y2="358" stroke="#2d3644"/><text x="279.6" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/19</text><line x1="279.6" y1="354" x2="279.6" y2="358" stroke="#2d3644"/><text x="388.4" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/21</text><line x1="388.4" y1="354" x2="388.4" y2="358" stroke="#2d3644"/><text x="497.2" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/23</text><line x1="497.2" y1="354" x2="497.2" y2="358" stroke="#2d3644"/><text x="660.4" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/26</text><line x1="660.4" y1="354" x2="660.4" y2="358" stroke="#2d3644"/><text x="769.2" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/28</text><line x1="769.2" y1="354" x2="769.2" y2="358" stroke="#2d3644"/><text x="878.0" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/30</text><line x1="878.0" y1="354" x2="878.0" y2="358" stroke="#2d3644"/><line x1="62" y1="234.1" x2="878" y2="234.1" stroke="#5b6675" stroke-width="1" stroke-dasharray="5,5" opacity=".8"/><polyline fill="none" stroke="#2f6fed" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="62.0,234.1 116.4,217.9 279.6,194.5 334.0,262.9 388.4,204.1 442.8,236.5 497.2,219.1 660.4,202.9 714.8,152.5 769.2,72.0 823.6,67.2 878.0,138.7"/><circle cx="878.0" cy="138.7" r="3.2" fill="#2f6fed"/><polyline fill="none" stroke="#39c5cf" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points="62.0,234.1 116.4,200.1 279.6,176.8 334.0,228.7 388.4,176.8 442.8,209.0 497.2,212.6 660.4,212.6 714.8,171.4 769.2,99.8 823.6,151.7 878.0,184.0"/><circle cx="878.0" cy="184.0" r="3.2" fill="#39c5cf"/><polyline fill="none" stroke="#e3b341" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,234.1 116.4,275.9 279.6,255.1 334.0,262.2 388.4,248.1 442.8,293.7 497.2,276.9 660.4,256.1 714.8,236.1 769.2,192.6 823.6,231.7"/><circle cx="823.6" cy="231.7" r="3.2" fill="#e3b341"/><polyline fill="none" stroke="#f85149" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,234.1 116.4,230.1 279.6,225.0 334.0,217.3 388.4,200.0 442.8,223.3 497.2,198.6 660.4,237.6 714.8,260.7 769.2,206.1 823.6,256.9 878.0,291.8"/><circle cx="878.0" cy="291.8" r="3.2" fill="#f85149"/><polyline fill="none" stroke="#bc8cff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4,3" points="62.0,234.1 116.4,237.0 279.6,243.9 334.0,245.8 388.4,257.7 442.8,289.2 497.2,260.5 660.4,272.8 714.8,296.8 769.2,273.7 823.6,305.0 878.0,332.8"/><circle cx="878.0" cy="332.8" r="3.2" fill="#bc8cff"/><line x1="334.0" y1="42" x2="334.0" y2="354" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,4" opacity=".5"/><rect x="86.0" y="327" width="240.0" height="19" rx="4" fill="#0d1117" opacity=".86"/><text x="326.0" y="340" fill="#8b949e" font-size="11.5" text-anchor="end">10/20 韩股二次探底（海力士 1,190,000）</text><line x1="62" y1="12" x2="76" y2="12" stroke="#2f6fed" stroke-width="2.4"/><text x="81" y="16" fill="#9aa7b4" font-size="11.5">SK海力士</text><text x="134.6" y="16" fill="#2f6fed" font-size="11.5" font-weight="700">+12.8%</text><line x1="210.8" y1="12" x2="224.8" y2="12" stroke="#39c5cf" stroke-width="2.4"/><text x="229.8" y="16" fill="#9aa7b4" font-size="11.5">三星电子</text><text x="282.2" y="16" fill="#39c5cf" font-size="11.5" font-weight="700">+6.7%</text><line x1="352.0" y1="12" x2="366.0" y2="12" stroke="#e3b341" stroke-width="2.4"/><text x="371.0" y="16" fill="#9aa7b4" font-size="11.5">美光 MU</text><text x="419.4" y="16" fill="#e3b341" font-size="11.5" font-weight="700">+0.3%</text><line x1="489.20000000000005" y1="12" x2="503.20000000000005" y2="12" stroke="#f85149" stroke-width="2.4"/><text x="508.20000000000005" y="16" fill="#9aa7b4" font-size="11.5">A股存储链等权</text><text x="590.2" y="16" fill="#f85149" font-size="11.5" font-weight="700">-7.8%</text><line x1="660.0000000000001" y1="12" x2="674.0000000000001" y2="12" stroke="#bc8cff" stroke-width="2.4"/><text x="679.0000000000001" y="16" fill="#9aa7b4" font-size="11.5">创业板指</text><text x="731.4" y="16" fill="#bc8cff" font-size="11.5" font-weight="700">-13.3%</text></svg>
+<p class="note">归一化：10/15 = 100。虚线为创业板指（同期 -13.3%），用来对照“高 β 成长”这条共同因子。A 股存储链等权为 7 只等权平均（佰维、江波龙等权重相同，不代表真实仓位）。</p>
+</div>
+
+<div class="scroll">
+<table>
+<thead><tr><th>标的</th><th>数据日</th><th>10/15</th><th>10/30</th><th>报告日→今</th><th>6 月顶</th><th>距顶</th><th>报告后最低</th><th>低点→最高</th><th>距低点</th></tr></thead>
+<tbody><tr><td>SK海力士<span class="tag-mini">韩股</span></td><td class="num dim">2026-10-30</td><td class="num">1,238,000.00</td><td class="num">1,397,000.00</td><td class="num up">+12.8%</td><td class="num dim">06-22</td><td class="num down">-52.1%</td><td class="num dim">10-20</td><td class="num up">+27.4%</td><td class="num up">+17.4%</td></tr><tr><td>三星电子<span class="tag-mini">韩股</span></td><td class="num dim">2026-10-30</td><td class="num">207,500.00</td><td class="num">221,500.00</td><td class="num up">+6.7%</td><td class="num dim">06-18</td><td class="num up">-38.9%</td><td class="num dim">10-20</td><td class="num up">+17.2%</td><td class="num up">+6.0%</td></tr><tr><td>西数 WDC<span class="tag-mini">美股</span></td><td class="num dim">2026-10-29</td><td class="num">356.45</td><td class="num">395.41</td><td class="num up">+10.9%</td><td class="num dim">06-18</td><td class="num up">-47.0%</td><td class="num dim">10-16</td><td class="num up">+19.4%</td><td class="num up">+19.1%</td></tr><tr><td>希捷 STX<span class="tag-mini">美股</span></td><td class="num dim">2026-10-29</td><td class="num">690.81</td><td class="num">700.47</td><td class="num up">+1.4%</td><td class="num dim">06-22</td><td class="num up">-36.0%</td><td class="num dim">10-23</td><td class="num up">+11.1%</td><td class="num up">+11.1%</td></tr><tr><td>美光 MU<span class="tag-mini">美股</span></td><td class="num dim">2026-10-29</td><td class="num">931.24</td><td class="num">934.27</td><td class="num up">+0.3%</td><td class="num dim">06-25</td><td class="num up">-23.0%</td><td class="num dim">10-22</td><td class="num up">+14.8%</td><td class="num up">+9.1%</td></tr><tr><td>闪迪 SNDK<span class="tag-mini">美股</span></td><td class="num dim">2026-10-29</td><td class="num">1,394.83</td><td class="num">1,330.05</td><td class="num down">-4.6%</td><td class="num dim">06-25</td><td class="num up">-43.0%</td><td class="num dim">10-23</td><td class="num up">+13.5%</td><td class="num up">+7.4%</td></tr><tr><td>北京君正<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">100.54</td><td class="num">109.61</td><td class="num up">+9.0%</td><td class="num dim">07-03</td><td class="num down">-57.8%</td><td class="num dim">10-27</td><td class="num up">+18.4%</td><td class="num up">+15.9%</td></tr><tr><td>澜起科技<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">162.80</td><td class="num">158.30</td><td class="num down">-2.8%</td><td class="num dim">07-01</td><td class="num up">-49.8%</td><td class="num dim">10-30</td><td class="num down">新低中</td><td class="num down">+0.0%</td></tr><tr><td>兆易创新<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">278.22</td><td class="num">257.80</td><td class="num down">-7.3%</td><td class="num dim">06-29</td><td class="num down">-69.3%</td><td class="num dim">10-30</td><td class="num down">新低中</td><td class="num down">+0.0%</td></tr><tr><td>深科技<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">28.12</td><td class="num">25.68</td><td class="num down">-8.7%</td><td class="num dim">06-30</td><td class="num down">-60.0%</td><td class="num dim">10-30</td><td class="num down">新低中</td><td class="num down">+0.0%</td></tr><tr><td>江波龙<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">244.00</td><td class="num">212.17</td><td class="num down">-13.0%</td><td class="num dim">06-29</td><td class="num down">-70.7%</td><td class="num dim">10-30</td><td class="num down">新低中</td><td class="num down">+0.0%</td></tr><tr><td>佰维存储<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">154.00</td><td class="num">130.77</td><td class="num down">-15.1%</td><td class="num dim">06-29</td><td class="num down">-74.2%</td><td class="num dim">10-30</td><td class="num down">新低中</td><td class="num down">+0.0%</td></tr><tr><td>香农芯创<span class="tag-mini">A股</span></td><td class="num dim">2026-10-30</td><td class="num">112.60</td><td class="num">94.03</td><td class="num down">-16.5%</td><td class="num dim">06-25</td><td class="num down">-69.3%</td><td class="num dim">10-30</td><td class="num down">新低中</td><td class="num down">+0.0%</td></tr></tbody>
+</table>
+</div>
+<p class="note">“6 月顶”取 2026-06-01~07-15 的最高收盘；“报告后最低”取 10/15 之后的收盘最低点及其日期；“距低点”= 现价相对那个最低点。<br>
+数据源从 Yahoo 换成 Naver 后，与原报告有约 1 个百分点的差异（原报告：三星 -42.1%、海力士 -56.7%；本页按 Naver 收盘为 -42.8% / -57.6%），属于数据商收盘价差异，不影响结论。</p>
+
+<svg viewBox="0 0 1000 420" style="width:100%;height:auto;display:block" font-family="inherit" role="img"><line x1="62" y1="314.1" x2="878" y2="314.1" stroke="#232c38" stroke-width="1"/><text x="53" y="318.1" fill="#6b7683" font-size="11" text-anchor="end">60</text><line x1="62" y1="236.8" x2="878" y2="236.8" stroke="#232c38" stroke-width="1"/><text x="53" y="240.8" fill="#6b7683" font-size="11" text-anchor="end">80</text><line x1="62" y1="159.5" x2="878" y2="159.5" stroke="#232c38" stroke-width="1"/><text x="53" y="163.5" fill="#6b7683" font-size="11" text-anchor="end">100</text><line x1="62" y1="82.3" x2="878" y2="82.3" stroke="#232c38" stroke-width="1"/><text x="53" y="86.3" fill="#6b7683" font-size="11" text-anchor="end">120</text><text x="62.0" y="394" fill="#6b7683" font-size="11" text-anchor="middle">6/1</text><line x1="62.0" y1="374" x2="62.0" y2="378" stroke="#2d3644"/><text x="191.7" y="394" fill="#6b7683" font-size="11" text-anchor="middle">6/25</text><line x1="191.7" y1="374" x2="191.7" y2="378" stroke="#2d3644"/><text x="332.2" y="394" fill="#6b7683" font-size="11" text-anchor="middle">7/21</text><line x1="332.2" y1="374" x2="332.2" y2="378" stroke="#2d3644"/><text x="461.9" y="394" fill="#6b7683" font-size="11" text-anchor="middle">8/14</text><line x1="461.9" y1="374" x2="461.9" y2="378" stroke="#2d3644"/><text x="607.8" y="394" fill="#6b7683" font-size="11" text-anchor="middle">9/10</text><line x1="607.8" y1="374" x2="607.8" y2="378" stroke="#2d3644"/><text x="748.3" y="394" fill="#6b7683" font-size="11" text-anchor="middle">10/6</text><line x1="748.3" y1="374" x2="748.3" y2="378" stroke="#2d3644"/><text x="878.0" y="394" fill="#6b7683" font-size="11" text-anchor="middle">10/30</text><line x1="878.0" y1="374" x2="878.0" y2="378" stroke="#2d3644"/><line x1="62" y1="159.5" x2="878" y2="159.5" stroke="#5b6675" stroke-width="1" stroke-dasharray="5,5" opacity=".8"/><text x="62" y="38" fill="#6b7683" font-size="10.5" text-anchor="start">6/1=100</text><polyline fill="none" stroke="#2f6fed" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,159.5 67.4,160.0 78.2,170.2 83.6,207.5 99.8,233.5 105.2,183.8 110.6,211.1 116.0,202.4 121.4,194.4 137.7,171.8 143.1,156.4 148.5,133.7 153.9,106.9 159.3,94.0 175.5,68.6 180.9,128.1 186.3,124.1 191.7,68.9 197.1,108.9 213.3,116.2 218.7,112.6 224.1,127.3 229.5,188.3 234.9,149.4 251.1,162.8 256.5,186.0 261.9,206.5 267.4,188.5 272.8,189.5 289.0,244.3 294.4,233.1 299.8,205.5 305.2,244.8 326.8,257.5 332.2,245.7 337.6,246.7 343.0,232.2 348.4,258.3 364.6,249.0 370.0,292.5 375.4,316.9 380.8,329.8 386.2,265.0 402.5,289.7 407.9,288.1 413.3,273.2 418.7,301.5 424.1,313.4 440.3,313.8 445.7,312.9 451.1,300.0 456.5,285.5 461.9,277.0 483.5,274.2 488.9,300.7 494.3,269.4 499.7,263.1 515.9,272.7 521.3,271.6 526.7,269.9 532.1,263.1 537.5,275.7 553.8,272.2 559.2,269.1 564.6,282.2 570.0,285.0 575.4,276.6 591.6,254.4 597.0,252.8 602.4,242.5 607.8,243.0 613.2,249.7 629.4,270.8 634.8,266.0 640.2,258.7 645.6,257.2 651.0,243.6 667.2,238.7 672.6,244.9 678.1,241.3 705.1,258.0 710.5,253.3 715.9,254.4 721.3,247.0 726.7,244.8 748.3,254.2 753.7,265.5 759.1,270.3 780.7,283.5 786.1,307.9 791.5,312.9 796.9,343.5 802.3,339.1 818.6,332.7 824.0,351.4 829.4,335.4 834.8,344.2 840.2,339.4 856.4,335.0 861.8,321.3 867.2,299.4 872.6,298.1 878.0,317.5"/><circle cx="878.0" cy="317.5" r="3.2" fill="#2f6fed"/><polyline fill="none" stroke="#39c5cf" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,159.5 67.4,146.8 78.2,156.8 83.6,181.7 99.8,218.8 105.2,189.4 110.6,211.0 116.0,214.9 121.4,188.9 137.7,172.8 143.1,166.2 148.5,162.3 153.9,144.6 159.3,154.0 175.5,154.6 180.9,202.7 186.3,169.0 191.7,149.0 197.1,170.1 213.3,188.3 218.7,176.2 224.1,197.7 229.5,229.3 234.9,203.3 251.1,193.9 256.5,218.2 261.9,238.7 267.4,238.2 272.8,230.4 289.0,264.2 294.4,254.8 299.8,236.5 305.2,263.6 326.8,275.8 332.2,259.2 337.6,257.5 343.0,247.0 348.4,269.7 364.6,264.7 370.0,302.4 375.4,315.1 380.8,316.8 386.2,255.3 402.5,280.8 407.9,280.2 413.3,273.6 418.7,290.8 424.1,290.2 440.3,291.3 445.7,280.8 451.1,263.1 456.5,249.2 461.9,242.0 483.5,248.7 488.9,271.9 494.3,245.9 499.7,234.3 515.9,261.4 521.3,261.4 526.7,256.4 532.1,251.5 537.5,261.4 553.8,258.1 559.2,257.0 564.6,268.6 570.0,269.2 575.4,263.1 591.6,247.0 597.0,247.6 602.4,247.6 607.8,248.1 613.2,258.7 629.4,270.8 634.8,268.6 640.2,265.3 645.6,262.5 651.0,258.1 667.2,241.5 672.6,238.7 678.1,228.8 705.1,247.0 710.5,241.5 715.9,247.6 721.3,242.0 726.7,240.4 748.3,243.7 753.7,248.1 759.1,254.8 780.7,268.1 786.1,286.9 791.5,286.3 796.9,316.2 802.3,305.7 818.6,298.5 824.0,314.6 829.4,298.5 834.8,308.5 840.2,309.6 856.4,309.6 861.8,296.9 867.2,274.7 872.6,290.8 878.0,300.7"/><circle cx="878.0" cy="300.7" r="3.2" fill="#39c5cf"/><polyline fill="none" stroke="#e3b341" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,159.5 67.4,148.9 72.8,143.1 78.2,174.3 83.6,223.5 99.8,191.7 105.2,196.7 110.6,213.1 116.0,174.3 121.4,179.7 137.7,140.0 143.1,165.0 148.5,156.7 153.9,122.8 175.5,93.9 180.9,153.5 186.3,154.7 191.7,93.1 197.1,123.4 213.3,118.6 218.7,115.2 224.1,160.7 229.5,181.9 251.1,178.5 256.5,195.8 261.9,191.9 267.4,175.9 272.8,180.5 289.0,196.3 294.4,179.1 299.8,208.5 305.2,227.6 310.6,229.2 326.8,223.0 332.2,183.7 337.6,187.9 343.0,176.5 348.4,202.3 364.6,210.0 370.0,239.8 375.4,270.2 380.8,219.6 386.2,238.8 402.5,236.4 407.9,212.9 413.3,212.7 418.7,217.0 424.1,218.5 440.3,224.7 445.7,221.9 451.1,205.9 456.5,191.5 461.9,183.4 478.1,168.4 483.5,194.9 488.9,196.3 494.3,182.4 499.7,185.2 515.9,206.2 521.3,197.8 526.7,195.8 532.1,196.9 537.5,197.9 553.8,188.2 559.2,197.6 564.6,189.2 570.0,188.4 575.4,166.6 597.0,172.7 602.4,162.4 607.8,181.2 613.2,182.0 629.4,201.1 634.8,199.8 640.2,200.2 645.6,181.2 651.0,166.9 667.2,156.4 672.6,136.9 678.1,146.0 683.5,142.7 688.9,142.1 705.1,152.7 710.5,148.5 715.9,148.5 721.3,136.5 726.7,144.8 742.9,148.9 748.3,155.8 753.7,140.0 759.1,159.4 764.5,162.0 780.7,176.9 786.1,190.3 791.5,204.8 796.9,198.5 802.3,218.0 818.6,208.3 824.0,211.6 829.4,205.0 834.8,226.4 840.2,218.5 856.4,208.7 861.8,199.4 867.2,179.1 872.6,197.3"/><circle cx="872.6" cy="197.3" r="3.2" fill="#e3b341"/><polyline fill="none" stroke="#bc8cff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4,3" points="62.0,159.5 67.4,149.3 72.8,142.7 78.2,146.1 83.6,158.9 99.8,173.2 105.2,158.5 110.6,169.0 116.0,173.2 121.4,171.3 137.7,151.5 143.1,144.7 148.5,138.4 153.9,130.1 175.5,119.6 180.9,136.0 186.3,130.2 191.7,118.4 197.1,135.8 213.3,133.6 218.7,121.2 224.1,129.2 229.5,153.1 234.9,152.8 251.1,159.8 256.5,163.4 261.9,169.9 267.4,153.0 272.8,170.1 289.0,181.8 294.4,169.3 299.8,173.9 305.2,184.8 310.6,210.6 326.8,209.2 332.2,185.5 337.6,197.1 343.0,196.3 348.4,205.5 364.6,194.8 370.0,220.6 375.4,215.5 380.8,228.6 386.2,218.9 402.5,223.0 407.9,204.7 413.3,200.2 418.7,202.1 424.1,197.5 440.3,200.0 445.7,198.8 451.1,193.7 456.5,195.2 461.9,191.3 478.1,180.2 483.5,183.5 488.9,206.2 494.3,204.1 499.7,199.2 515.9,210.3 521.3,213.7 526.7,212.0 532.1,206.3 537.5,211.0 553.8,209.7 559.2,214.1 564.6,222.0 570.0,222.0 575.4,224.5 591.6,213.6 597.0,217.4 602.4,217.8 607.8,219.5 613.2,221.1 629.4,224.6 634.8,228.3 640.2,222.1 645.6,223.4 651.0,216.1 667.2,213.5 672.6,213.4 678.1,215.4 683.5,224.3 705.1,238.9 710.5,238.6 715.9,239.3 759.1,249.0 764.5,248.3 780.7,256.1 786.1,256.6 791.5,265.6 796.9,273.8 802.3,274.8 818.6,277.4 824.0,278.1 829.4,282.4 834.8,293.9 840.2,283.5 856.4,287.9 861.8,296.8 867.2,288.3 872.6,299.7 878.0,309.9"/><circle cx="878.0" cy="309.9" r="3.2" fill="#bc8cff"/><line x1="175.5" y1="42" x2="175.5" y2="374" stroke="#f85149" stroke-width="1" stroke-dasharray="3,4" opacity=".5"/><rect x="185.5" y="53" width="146.4" height="19" rx="4" fill="#0d1117" opacity=".86"/><text x="185.5" y="66" fill="#f85149" font-size="11.5" text-anchor="start">6/22 存储三巨头同步见顶</text><line x1="380.8" y1="42" x2="380.8" y2="374" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,4" opacity=".5"/><rect x="284.4" y="77" width="88.4" height="19" rx="4" fill="#0d1117" opacity=".86"/><text x="372.8" y="90" fill="#8b949e" font-size="11.5" text-anchor="end">7/30 第一只脚</text><line x1="796.9" y1="42" x2="796.9" y2="374" stroke="#e3b341" stroke-width="1" stroke-dasharray="3,4" opacity=".5"/><rect x="624.5" y="51" width="164.4" height="19" rx="4" fill="#0d1117" opacity=".86"/><text x="788.9" y="64" fill="#e3b341" font-size="11.5" text-anchor="end">10/15 报告发布（第二只脚）</text><line x1="62" y1="12" x2="76" y2="12" stroke="#2f6fed" stroke-width="2.4"/><text x="81" y="16" fill="#9aa7b4" font-size="11.5">SK海力士</text><text x="134.6" y="16" fill="#2f6fed" font-size="11.5" font-weight="700">-40.9%</text><line x1="210.8" y1="12" x2="224.8" y2="12" stroke="#39c5cf" stroke-width="2.4"/><text x="229.8" y="16" fill="#9aa7b4" font-size="11.5">三星电子</text><text x="282.2" y="16" fill="#39c5cf" font-size="11.5" font-weight="700">-36.5%</text><line x1="358.40000000000003" y1="12" x2="372.40000000000003" y2="12" stroke="#e3b341" stroke-width="2.4"/><text x="377.40000000000003" y="16" fill="#9aa7b4" font-size="11.5">美光 MU</text><text x="425.8" y="16" fill="#e3b341" font-size="11.5" font-weight="700">-9.8%</text><line x1="495.6" y1="12" x2="509.6" y2="12" stroke="#bc8cff" stroke-width="2.4"/><text x="514.6" y="16" fill="#9aa7b4" font-size="11.5">创业板指</text><text x="567.0" y="16" fill="#bc8cff" font-size="11.5" font-weight="700">-38.9%</text></svg>
+<p class="note">6/1 = 100 的全景。三巨头 6 月中旬同步见顶，7 月底第一只脚，10 月中第二只脚——<b>10/15 那份报告，恰好写在第二只脚的脚底上</b>。三星二次探底 207,500 vs 7/30 的 207,000，差 0.24%。</p>
+
+<div class="nums">
+  <div class="num-box"><div class="t">KOSPI（同期）</div><div class="v up">+3.2%</div><div class="s">存储崩了，大盘没崩</div></div>
+  <div class="num-box"><div class="t">纳斯达克（同期）</div><div class="v down">-2.0%</div><div class="s">截至 2026-10-29</div></div>
+  <div class="num-box"><div class="t">海力士最大反弹</div><div class="v up">+27.4%</div><div class="s">7 个交易日（10/20→10/29）</div></div>
+</div>
+
+<h2><span class="no">02</span>分析对了什么：六条，都有事后证据</h2>
+
+<div class="judge">
+  <div class="jcard ok">
+    <h4>① “板块性崩盘，不是系统性危机” <span class="badge ok">对，A</span></h4>
+    <p>当时说：纳指只跌 3.3%，存储股跌 25~70%，这是行业周期反转而非宏观危机。</p>
+    <p>后来：同期 KOSPI <b>+3.2%</b>、纳指 <b>-2.0%</b>，存储三巨头从高点回撤 23%~52%。<b>大盘确实没跟着崩</b>。这条判断决定了后面的操作方向：这是“换仓”问题，不是“清仓离场”问题。</p>
+  </div>
+  <div class="jcard ok">
+    <h4>② “PER 9.4 / 5.6 是峰值利润的幻觉” <span class="badge ok">对，A</span></h4>
+    <p>当时说：看着便宜，但 EPS 是周期顶的 EPS；真正该看 PBR 和周期位置。</p>
+    <p>后来：15 天过去，三星 EPS 仍是 <b>22,292 韩元</b>（2026.06 口径）、海力士 <b>224,313</b>，一个季度都没更新。所谓“9.4 倍 PE 的便宜货”（今天 9.9 倍），分母还是峰值。<b>用 PER 抄底存储，等于用峰值利润骗自己</b>——这条今天仍在保护你。</p>
+  </div>
+  <div class="jcard ok">
+    <h4>③ “A 股存储链弹性最大、最脆弱” <span class="badge ok">对，A</span></h4>
+    <p>当时说：A 股存储链最深 -70%，比韩股 -57% 更极端。</p>
+    <p>后来：15 天内 A 股等权 <b>-7.8%</b>，韩股 <b>+9.8%</b>、美股 <b>+2.0%</b>；7 只 A 股里 5 只今天创出新低，而三星、海力士都没跌破 10/20 的低点。<b>“最深回撤”确实等于“最脆弱”</b>。</p>
+    <p>但要补一句当时没说的：<b>脆弱 ≠ 反弹弱</b>。10/15 之后 A 股这些名字也弹过一段——北京君正现在仍比报告日高 <b>+9.0%</b>，澜起只差 -2.8%。区别不在弹性大小，在<b>反弹能不能站住</b>：韩股 10/20 的低点至今没破，A 股弹 3 天就被卖回来，今天 5 只创新低。<b>高 β 在下跌和反弹两端都放大，但只有站住的那一端算数。</b></p>
+  </div>
+  <div class="jcard mid">
+    <h4>④ “外资在持续流出” <span class="badge mid">一半对，B</span></h4>
+    <p>当时说：三星外资持股 90 日 47.81%→46.16%、海力士 51.27%→49.02%，资金在撤。</p>
+    <p>后来：三星 <b>46.16% → 46.17%</b>（<b>几乎没动，流出停了</b>），海力士 <b>49.02% → 48.72%</b>（继续小幅流出）。海力士对，三星错——<b>把两只股票的外资行为当成一个“板块资金流”</b>，是当时一个粗糙的合并，而“外资在撤”这个结论对两只股票的含义并不一样。</p>
+  </div>
+  <div class="jcard mid">
+    <h4>⑤ “只有需求没坏的短调才 9~15 个月 V 回” <span class="badge mid">未被触发，B+</span></h4>
+    <p>当时说：过去 10 年 ≥30% 回撤全部对应周期顶，短调（2020、2024）才在 9~15 个月内 V 回。</p>
+    <p>后来：这波反弹只用了 <b>7 个交易日</b>，远快于“9~15 个月的 V 回”，所以它<b>不属于</b>报告定义的“健康 V 回”，更像熊市里的高波动反抽。这条历史框架没有被证伪，但也没帮你赚到钱——见 04 节。</p>
+  </div>
+  <div class="jcard ok">
+    <h4>⑥ 数据准确性 <span class="badge ok">对，A-</span></h4>
+    <p>13 个标的、峰值日、区间涨跌、外资持股，逐项对得上，误差多在 1pp 以内（数据商差异）。<b>没有算错的数</b>——错的都是判断，不是算术。这一点其实很重要：它说明复盘该盯“推理链”，不是“数字”。</p>
+  </div>
+</div>
+
+<h2><span class="no">03</span>分析错了什么：五条，第一条最贵</h2>
+
+<div class="judge">
+  <div class="jcard no">
+    <h4>① 在二次探底当天说“恐慌加速段” <span class="badge no">错，致命</span></h4>
+    <p>报告用“近 5 日三星 -21.8%、海力士 -26.6%”证明“恐慌还在加速”，隐含结论是<b>还要跌</b>。但 10/15 的位置是：三星 207,500 = 7/30 低点上方 0.24%；海力士 1,238,000 = 距 7 月底部只差 -6.4%。<b>这不是“加速段”，这是“第二只脚踩在第一只脚上”</b>。</p>
+    <p>结果：10/16 起韩股直接反转，海力士 10/20 再插一根 -3.9% 后见底。<b>报告的“别接飞刀”，在最低点前 3 个交易日发出。</b>买在报告日：海力士 +12.8%、三星 +6.7%。</p>
+  </div>
+  <div class="jcard no">
+    <h4>② “等缩量止跌 + 合约价企稳”没有可执行定义 <span class="badge no">错，方法论</span></h4>
+    <p>报告给了两个信号：缩量止跌、存储合约价企稳。但<b>没给阈值、没给数据源、没给时间窗</b>。合约价是月度/季度数据，等它“企稳”通常落后股价 4~8 周——按这条执行，你会错过整段反弹，然后在合约价确认时买在更高位。</p>
+    <p>等价于：报告写着“等确认”，实际含义是“永远不买”。<b>一个不可执行的信号，比一个错误的信号更危险，因为它看起来是谨慎的。</b></p>
+  </div>
+  <div class="jcard no">
+    <h4>③ 把三条链当成一个板块 <span class="badge no">错，最影响操作</span></h4>
+    <p>报告用“存储股”一个词覆盖韩股、美股、A 股。但 15 天内：韩股 <b>+9.8%</b>、美股 <b>+2.0%</b>、A 股 <b>-7.8%</b>——<b>方向相反</b>。</p>
+    <p>子因子不同：韩股定价 HBM/AI 存储的<b>当期盈利</b>（跌 59% 后估值先到位）；A 股定价国产替代的<b>想象空间 + 筹码结构</b>（跌 70% 后仍在挤泡沫）；美股定价<b>资本开支周期</b>。同一个“崩盘”标题，三种交易。</p>
+  </div>
+  <div class="jcard no">
+    <h4>④ 历史类比越界：-59% 已破历史极值 <span class="badge no">错，置信度</span></h4>
+    <p>报告说“同级别回撤（≥30%）过去 10 年全部对应周期顶”，用 4~5 个样本推出“1~3 年盈利下行”。但海力士本轮最大回撤 <b>-59.2%</b>（现价距顶 -52.1%），<b>超过 10 年最深记录 -49.7%（2015）</b>；三星 -42.9%，也追平了它自己的 -45.2%。</p>
+    <p>历史样本被击穿之后，“按历史规律该跌 1~3 年”这句话的<b>概率含义已经模糊</b>：你既可以说“跌得比历史都深，所以还没完”，也可以说“跌得比历史都深，所以坏消息已透支”。<b>同一个事实支持两个相反结论时，它就不是证据。</b></p>
+  </div>
+  <div class="jcard no">
+    <h4>⑤ 只给定性判断，没给概率 <span class="badge no">错，可证伪性</span></h4>
+    <p>报告的原话是“长趋势开始的概率远大于短期回调”。没有数字、没有情景、没有“如果错了会怎样”。</p>
+    <p>对比 <a href="../fund-025833-review/index.html">025833 复盘</a> 里那套“磨底 40% / 二次探底 27% / 修复 25% / 反转 8%”——<b>有概率的报告才能被打分</b>。没有概率的判断，事后只能靠“感觉它对不对”来评价，这等于放弃了复盘。</p>
+  </div>
+</div>
+
+<h2><span class="no">04</span>预估 vs 实际：偏差量化</h2>
+<p class="lead">把报告里可检验的说法逐条拆出来打分。评分只看“15 天内是否被数据支持”，长周期判断标“待验证”。</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>报告的说法（10/15）</th><th>15 天后的实际</th><th>判定</th></tr></thead>
+<tbody>
+<tr><td>“这不是普通回调，是泡沫破裂”</td><td>海力士 -59.2% 后反弹 27.4%，仍距顶 -52.1%；三星距顶 -38.9%</td><td class="gold">部分兑现</td></tr>
+<tr><td>“长趋势开始的概率远大于短期回调”</td><td>韩股 +9.8%、纳指 -2.0%；两周期证据不足</td><td class="dim">待验证</td></tr>
+<tr><td>“现在不接飞刀”</td><td>韩股 +9.8%（最高 +27.4%）、美股 +2.0%、A 股 -7.8%</td><td class="gold">韩美错 / A 股对</td></tr>
+<tr><td>“三星 PBR 回到 1.5 以下、海力士 2 以下才有安全边际”</td><td>现在 2.57 / 3.79；对应股价还要跌 -42% / -47%</td><td class="up">规则有效</td></tr>
+<tr><td>“外资持续流出”</td><td>三星 46.16→46.17（停）、海力士 49.02→48.72（续）</td><td class="dim">一半对</td></tr>
+<tr><td>“A 股存储链最深 -70%”</td><td>佰维 -74.2%、江波龙 -70.7%，今日 5 只创新低</td><td class="up">对</td></tr>
+<tr><td>“板块性而非系统性”</td><td>KOSPI +3.2%、纳指 -2.0%</td><td class="up">对</td></tr>
+<tr><td>“其后 1~3 年盈利下行、2~4.7 年才收复前高”</td><td>15 天无法检验；但当前跌幅已破 10 年极值</td><td class="dim">待验证</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h3>偏差最大的那一条，其实是“时间”</h3>
+<p>报告对<b>方向</b>的判断，15 天后看是对的：存储仍在 -40%~-74% 的深坑里，A 股还在新低，PBR 没到安全边际。报告对<b>节奏</b>的判断，15 天后看是错的：它在最不该说“还要跌”的那一天说了“还要跌”。</p>
+<p>这两件事的<b>赔率完全不同</b>：方向错了，你损失的是几倍的估值差；节奏错了，你损失的是 13%（海力士）到 27%（反弹幅度）的<b>入场机会</b>，而且是在你最想买的时候。</p>
+<p class="note">如果把报告当成“3 年持有的入场判断”，它至今没错；如果当成“什么时候买”的判断，它错了 3 个交易日。同一份报告，两种读法，两种结局——这就是为什么报告必须写清楚<b>它回答的是哪个问题</b>。</p>
+</div>
+
+<h2><span class="no">05</span>历史坐标复查：那套“周期顶”规律还站得住吗</h2>
+<p class="lead">10 年、四个标的、所有 ≥30% 的回撤。这张表是报告立论的底座，值得单独验一遍。</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>标的</th><th>峰值日</th><th>峰值</th><th>谷底日</th><th>谷底</th><th>深度</th><th>收复前高</th><th>历时</th></tr></thead>
+<tbody><tr><td>美光 MU</td><td class="num dim">2011-04-27</td><td class="num">11.79</td><td class="num dim">2011-10-03</td><td class="num">4.33</td><td class="num down">-63.3%</td><td class="num dim">2013-05-29</td><td class="num">2.1 年</td></tr><tr><td>美光 MU</td><td class="num dim">2014-12-05</td><td class="num">36.49</td><td class="num dim">2016-05-13</td><td class="num">9.56</td><td class="num down">-73.8%</td><td class="num dim">2017-09-27</td><td class="num">2.8 年</td></tr><tr><td>西数 WDC</td><td class="num dim">2014-12-22</td><td class="num">114.28</td><td class="num dim">2020-03-18</td><td class="num">29.19</td><td class="num down">-74.5%</td><td class="num dim">2025-09-29</td><td class="num">10.8 年</td></tr><tr><td>SK海力士</td><td class="num dim">2015-06-02</td><td class="num">51,200</td><td class="num dim">2016-05-09</td><td class="num">25,750</td><td class="num down">-49.7%</td><td class="num dim">2017-01-11</td><td class="num">1.6 年</td></tr><tr><td>三星电子</td><td class="num dim">2017-11-01</td><td class="num">57,220</td><td class="num dim">2019-01-04</td><td class="num">37,450</td><td class="num down">-34.6%</td><td class="num dim">2020-01-09</td><td class="num">2.2 年</td></tr><tr><td>SK海力士</td><td class="num dim">2018-05-23</td><td class="num">95,300</td><td class="num dim">2019-01-03</td><td class="num">57,700</td><td class="num down">-39.5%</td><td class="num dim">2019-12-27</td><td class="num">1.6 年</td></tr><tr><td>美光 MU</td><td class="num dim">2018-05-29</td><td class="num">62.62</td><td class="num dim">2018-12-24</td><td class="num">29.02</td><td class="num down">-53.7%</td><td class="num dim">2020-11-23</td><td class="num">2.5 年</td></tr><tr><td>三星电子</td><td class="num dim">2020-01-20</td><td class="num">62,400</td><td class="num dim">2020-03-23</td><td class="num">42,500</td><td class="num down">-31.9%</td><td class="num dim">2020-11-13</td><td class="num">0.8 年</td></tr><tr><td>SK海力士</td><td class="num dim">2020-02-17</td><td class="num">105,000</td><td class="num dim">2020-03-19</td><td class="num">69,000</td><td class="num down">-34.3%</td><td class="num dim">2020-12-02</td><td class="num">0.8 年</td></tr><tr><td>三星电子</td><td class="num dim">2021-01-11</td><td class="num">91,000</td><td class="num dim">2024-11-14</td><td class="num">49,900</td><td class="num down">-45.2%</td><td class="num dim">2025-10-10</td><td class="num">4.7 年</td></tr><tr><td>SK海力士</td><td class="num dim">2021-02-25</td><td class="num">148,500</td><td class="num dim">2022-12-29</td><td class="num">75,000</td><td class="num down">-49.5%</td><td class="num dim">2024-02-13</td><td class="num">3.0 年</td></tr><tr><td>美光 MU</td><td class="num dim">2021-04-12</td><td class="num">95.59</td><td class="num dim">2021-10-13</td><td class="num">66.38</td><td class="num down">-30.6%</td><td class="num dim">2021-12-29</td><td class="num">0.7 年</td></tr><tr><td>美光 MU</td><td class="num dim">2022-01-14</td><td class="num">97.36</td><td class="num dim">2022-09-26</td><td class="num">48.88</td><td class="num down">-49.8%</td><td class="num dim">2024-03-07</td><td class="num">2.1 年</td></tr><tr><td>美光 MU</td><td class="num dim">2024-06-18</td><td class="num">153.45</td><td class="num dim">2025-04-04</td><td class="num">64.72</td><td class="num down">-57.8%</td><td class="num dim">2025-09-12</td><td class="num">1.2 年</td></tr><tr><td>SK海力士</td><td class="num dim">2024-07-11</td><td class="num">241,000</td><td class="num dim">2024-09-19</td><td class="num">152,800</td><td class="num down">-36.6%</td><td class="num dim">2025-06-16</td><td class="num">0.9 年</td></tr><tr><td>美光 MU</td><td class="num dim">2026-03-18</td><td class="num">461.73</td><td class="num dim">2026-03-30</td><td class="num">321.80</td><td class="num down">-30.3%</td><td class="num dim">2026-04-14</td><td class="num">0.1 年</td></tr><tr class="hl-row"><td>三星电子</td><td class="num dim">2026-06-18</td><td class="num">362,500</td><td class="num dim">2026-07-30</td><td class="num">207,000</td><td class="num down">-42.9%</td><td class="num dim">未收复</td><td class="num">—</td></tr><tr class="hl-row"><td>西数 WDC</td><td class="num dim">2026-06-18</td><td class="num">746.23</td><td class="num dim">2026-10-16</td><td class="num">332.00</td><td class="num down">-55.5%</td><td class="num dim">未收复</td><td class="num">—</td></tr><tr class="hl-row"><td>SK海力士</td><td class="num dim">2026-06-22</td><td class="num">2,919,000</td><td class="num dim">2026-10-20</td><td class="num">1,190,000</td><td class="num down">-59.2%</td><td class="num dim">未收复</td><td class="num">—</td></tr><tr class="hl-row"><td>美光 MU</td><td class="num dim">2026-06-25</td><td class="num">1,214</td><td class="num dim">2026-07-29</td><td class="num">739.00</td><td class="num down">-39.1%</td><td class="num dim">未收复</td><td class="num">—</td></tr></tbody>
+</table>
+</div>
+<p class="note">口径：收盘价；“收复”= 收盘重新站上峰值；“历时”= 峰值到收复的自然年。三星 2015 年前数据未纳入（Naver 10 年窗口），样本共 20 个，仍是小样本——所有“历史概率”都该按 ±1 个标准误读。<br>
+美光 2011/2014 两行的绝对价格是复权前的历史价（美光未拆股），与现在的 900 美元不可直接比较，只看百分比。</p>
+
+<div class="card">
+<h3>三条能用的结论</h3>
+<p><b>1. “深度”确实是分水岭，但报告说得太整齐。</b>浅回撤（-30%~-37%，n=6）收复时间中位数 <b>0.8 年</b>（0.1~2.2 年）；深回撤（≤-37%，n=10）中位数 <b>2.3 年</b>（1.2~10.8 年，西数 10.8 年是 HDD 结构性衰退的异常值）。</p>
+<p>两个例外值得记住：三星 2017 那次只跌 -34.6%，却用了 <b>2.2 年</b>才收复——因为它紧接着撞上了 2018 年的存储下行；美光 2021 那次只跌 -30.6%，<b>0.7 年</b>就回来了。<b>同样的跌幅，差 3 倍时间</b>，取决于你是在周期中部还是尾部受伤。</p>
+<p><b>2. 但“周期顶”这个标签，这次被跌穿了。</b>海力士 10 年最深 -49.7%，本轮 <b>-59.2%</b>；三星 10 年最深 -45.2%，本轮 <b>-42.9%</b>（还没破）。<b>“历史最深”不是底，只是标尺</b>——标尺被折断时，它既不能证明“还要跌”，也不能证明“到底了”。</p>
+<p><b>3. 反弹速度不能当反转证据。</b>历史上熊市里的反抽同样凶：海力士 2021-22 那轮 -49.5% 的大熊，中途也有 +27.7% 的 10 日反弹；本轮是 +27.4%（7 个交易日）。<b>只差 0.3pp。</b>所以“反弹 27%”这个事实，对“底部”和“死猫跳”两种假设<b>完全没有区分力</b>。</p>
+</div>
+
+<h2><span class="no">06</span>你清掉电网设备，这一笔到底对不对</h2>
+<p class="lead">先给结论：<b class="hlg">结果对，钱是真省下来了；但让你赚钱的不是存储报告。</b>下面把四种口径都摊开。</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>清仓时点</th><th>基金净值</th><th>10/30 估算</th><th>基金</th><th>ETF 159326</th><th>沪深300</th><th>创业板指</th><th>相对沪深300</th></tr></thead>
+<tbody><tr><td>6/22 起一直持有<div class="tag-mini">从真顶拿到今天的反面参照</div></td><td class="num">1.5560</td><td class="num dim">0.9506</td><td class="num down">-38.9%</td><td class="num down">-40.6%</td><td class="num down">-21.2%</td><td class="num down">-44.6%</td><td class="num down">-17.7pp</td></tr><tr><td>9/29 电网报告后<div class="tag-mini">原报告建议减仓</div></td><td class="num">1.0910</td><td class="num dim">0.9506</td><td class="num down">-12.9%</td><td class="num down">-13.5%</td><td class="num down">-8.3%</td><td class="num down">-23.2%</td><td class="num down">-4.6pp</td></tr><tr><td>10/15 存储报告后<div class="tag-mini">你说清仓的那天</div></td><td class="num">1.0114</td><td class="num dim">0.9506</td><td class="num down">-6.0%</td><td class="num down">-6.3%</td><td class="num down">-4.3%</td><td class="num down">-13.3%</td><td class="num down">-1.7pp</td></tr><tr><td>10/16 次日开盘<div class="tag-mini">实际成交更可能在这天</div></td><td class="num">1.0221</td><td class="num dim">0.9506</td><td class="num down">-7.0%</td><td class="num down">-7.4%</td><td class="num down">-4.4%</td><td class="num down">-12.9%</td><td class="num down">-2.6pp</td></tr></tbody>
+</table>
+</div>
+<p class="note">10/30 基金净值未公布，估算 = 10/29 官方净值 0.9775 ×（1 + 跟踪 ETF 10/30 涨跌 -2.75%）= 0.9506；指数用同一跌幅估算。<br>
+“相对沪深300”= 基金跌幅 − 沪深300 跌幅，正值表示清仓比换到沪深300更划算（现金收益按 0% 计；放货基按年化 1.3~1.5% 折算约 +0.2%，可忽略）。</p>
+
+<svg viewBox="0 0 1000 400" style="width:100%;height:auto;display:block" font-family="inherit" role="img"><line x1="62" y1="338.6" x2="878" y2="338.6" stroke="#232c38" stroke-width="1"/><text x="53" y="342.6" fill="#6b7683" font-size="11" text-anchor="end">60</text><line x1="62" y1="231.5" x2="878" y2="231.5" stroke="#232c38" stroke-width="1"/><text x="53" y="235.5" fill="#6b7683" font-size="11" text-anchor="end">80</text><line x1="62" y1="124.3" x2="878" y2="124.3" stroke="#232c38" stroke-width="1"/><text x="53" y="128.3" fill="#6b7683" font-size="11" text-anchor="end">100</text><text x="62.0" y="374" fill="#6b7683" font-size="11" text-anchor="middle">6/1</text><line x1="62.0" y1="354" x2="62.0" y2="358" stroke="#2d3644"/><text x="191.7" y="374" fill="#6b7683" font-size="11" text-anchor="middle">6/25</text><line x1="191.7" y1="354" x2="191.7" y2="358" stroke="#2d3644"/><text x="326.8" y="374" fill="#6b7683" font-size="11" text-anchor="middle">7/20</text><line x1="326.8" y1="354" x2="326.8" y2="358" stroke="#2d3644"/><text x="451.1" y="374" fill="#6b7683" font-size="11" text-anchor="middle">8/12</text><line x1="451.1" y1="354" x2="451.1" y2="358" stroke="#2d3644"/><text x="575.4" y="374" fill="#6b7683" font-size="11" text-anchor="middle">9/4</text><line x1="575.4" y1="354" x2="575.4" y2="358" stroke="#2d3644"/><text x="715.9" y="374" fill="#6b7683" font-size="11" text-anchor="middle">9/30</text><line x1="715.9" y1="354" x2="715.9" y2="358" stroke="#2d3644"/><text x="878.0" y="374" fill="#6b7683" font-size="11" text-anchor="middle">10/30</text><line x1="878.0" y1="354" x2="878.0" y2="358" stroke="#2d3644"/><line x1="62" y1="124.3" x2="878" y2="124.3" stroke="#5b6675" stroke-width="1" stroke-dasharray="5,5" opacity=".8"/><text x="62" y="38" fill="#6b7683" font-size="10.5" text-anchor="start">6/1=100</text><polyline fill="none" stroke="#e3b341" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="62.0,124.3 67.4,121.6 72.8,116.7 78.2,115.7 83.6,125.2 99.8,138.4 105.2,118.9 110.6,134.3 116.0,141.8 121.4,141.2 137.7,123.9 143.1,106.5 148.5,104.3 153.9,101.9 175.5,76.2 180.9,92.3 186.3,92.8 191.7,85.2 197.1,118.6 213.3,124.5 218.7,117.6 224.1,134.3 229.5,154.5 234.9,151.6 251.1,160.0 256.5,175.7 261.9,192.0 267.4,186.5 272.8,192.2 289.0,214.6 294.4,205.3 299.8,215.6 305.2,231.7 310.6,249.8 326.8,249.9 332.2,236.9 337.6,245.7 343.0,226.2 348.4,241.0 364.6,227.5 370.0,245.0 375.4,239.0 380.8,249.1 386.2,242.9 402.5,236.3 407.9,228.1 413.3,218.6 418.7,220.7 424.1,214.9 440.3,213.0 445.7,217.2 451.1,211.6 456.5,215.9 461.9,210.7 478.1,198.6 483.5,201.3 488.9,224.1 494.3,220.6 499.7,217.0 515.9,224.7 521.3,220.3 526.7,218.0 532.1,214.0 537.5,219.1 553.8,220.5 559.2,224.7 564.6,227.6 570.0,225.9 575.4,227.7 591.6,225.4 597.0,228.0 602.4,220.5 607.8,227.7 613.2,228.2 629.4,230.9 634.8,232.7 640.2,227.9 645.6,227.5 651.0,221.9 667.2,215.7 672.6,218.6 678.1,223.3 683.5,231.3 705.1,248.1 710.5,250.7 715.9,251.0 759.1,252.3 764.5,254.6 780.7,259.5 786.1,262.0 791.5,271.0 796.9,280.5 802.3,276.5 818.6,268.3 824.0,271.5 829.4,273.1 834.8,277.4 840.2,271.3 856.4,280.7 861.8,288.3 867.2,283.1 872.6,293.2"/><circle cx="872.6" cy="293.2" r="3.2" fill="#e3b341"/><polyline fill="none" stroke="#58a6ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,124.3 67.4,121.7 72.8,116.8 78.2,116.0 83.6,126.2 99.8,140.1 105.2,119.8 110.6,135.7 116.0,143.4 121.4,143.0 137.7,124.9 143.1,106.8 148.5,104.5 153.9,102.2 175.5,75.6 180.9,92.2 186.3,92.8 191.7,85.1 197.1,119.6 213.3,125.9 218.7,119.5 224.1,136.5 229.5,157.4 234.9,154.4 251.1,163.8 256.5,180.1 261.9,197.2 267.4,191.5 272.8,197.5 289.0,220.7 294.4,211.1 299.8,222.0 305.2,238.5 310.6,257.1 326.8,257.3 332.2,243.9 337.6,253.0 343.0,232.7 348.4,248.1 364.6,235.1 370.0,253.2 375.4,247.1 380.8,257.6 386.2,251.1 402.5,244.2 407.9,235.8 413.3,226.0 418.7,228.2 424.1,222.3 440.3,220.3 445.7,224.6 451.1,218.9 456.5,223.3 461.9,218.0 478.1,205.6 483.5,208.4 488.9,232.2 494.3,228.6 499.7,224.9 515.9,232.8 521.3,228.3 526.7,225.9 532.1,221.9 537.5,227.0 553.8,228.4 559.2,232.8 564.6,235.7 570.0,233.9 575.4,235.7 591.6,233.4 597.0,236.0 602.4,228.3 607.8,235.8 613.2,236.4 629.4,239.1 634.8,241.0 640.2,236.1 645.6,235.8 651.0,230.0 667.2,223.6 672.6,226.7 678.1,231.6 683.5,239.7 705.1,257.2 710.5,260.0 715.9,260.4 759.1,261.6 764.5,263.9 780.7,268.8 786.1,271.4 791.5,280.7 796.9,290.4 802.3,286.3 818.6,277.9 824.0,281.2 829.4,282.8 834.8,287.3 840.2,281.1 856.4,290.6 861.8,298.6 867.2,293.4 872.6,303.6"/><circle cx="872.6" cy="303.6" r="3.2" fill="#58a6ff"/><polyline fill="none" stroke="#bc8cff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4,3" points="62.0,124.3 67.4,110.1 72.8,101.0 78.2,105.6 83.6,123.4 99.8,143.2 105.2,122.9 110.6,137.4 116.0,143.3 121.4,140.7 137.7,113.1 143.1,103.7 148.5,95.0 153.9,83.5 175.5,68.9 180.9,91.6 186.3,83.6 191.7,67.2 197.1,91.3 213.3,88.3 218.7,71.2 224.1,82.3 229.5,115.3 234.9,115.0 251.1,124.6 256.5,129.6 261.9,138.6 267.4,115.2 272.8,139.0 289.0,155.2 294.4,137.9 299.8,144.2 305.2,159.4 310.6,195.1 326.8,193.2 332.2,160.3 337.6,176.4 343.0,175.2 348.4,188.1 364.6,173.2 370.0,208.9 375.4,201.9 380.8,220.1 386.2,206.6 402.5,212.2 407.9,187.0 413.3,180.7 418.7,183.4 424.1,176.9 440.3,180.4 445.7,178.8 451.1,171.6 456.5,173.8 461.9,168.3 478.1,152.9 483.5,157.6 488.9,189.1 494.3,186.1 499.7,179.3 515.9,194.7 521.3,199.4 526.7,197.0 532.1,189.1 537.5,195.7 553.8,193.8 559.2,199.9 564.6,210.9 570.0,210.9 575.4,214.4 591.6,199.2 597.0,204.5 602.4,205.1 607.8,207.4 613.2,209.6 629.4,214.5 634.8,219.6 640.2,211.0 645.6,212.8 651.0,202.7 667.2,199.1 672.6,199.0 678.1,201.8 683.5,214.1 705.1,234.3 710.5,233.9 715.9,234.9 759.1,248.3 764.5,247.4 780.7,258.2 786.1,258.9 791.5,271.3 796.9,282.7 802.3,284.1 818.6,287.7 824.0,288.6 829.4,294.6 834.8,310.6 840.2,296.1 856.4,302.3 861.8,314.5 867.2,302.8 872.6,318.7 878.0,332.8"/><circle cx="878.0" cy="332.8" r="3.2" fill="#bc8cff"/><line x1="710.5" y1="42" x2="710.5" y2="354" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,4" opacity=".5"/><rect x="718.5" y="53" width="88.4" height="19" rx="4" fill="#0d1117" opacity=".86"/><text x="718.5" y="66" fill="#8b949e" font-size="11.5" text-anchor="start">9/29 电网报告</text><line x1="796.9" y1="42" x2="796.9" y2="354" stroke="#e3b341" stroke-width="1" stroke-dasharray="3,4" opacity=".5"/><rect x="634.9" y="79" width="154.0" height="19" rx="4" fill="#0d1117" opacity=".86"/><text x="788.9" y="92" fill="#e3b341" font-size="11.5" text-anchor="end">10/15 存储报告 → 你清仓</text><line x1="62" y1="12" x2="76" y2="12" stroke="#e3b341" stroke-width="2.4"/><text x="81" y="16" fill="#9aa7b4" font-size="11.5">025833 净值</text><text x="155.0" y="16" fill="#e3b341" font-size="11.5" font-weight="700">-33.4%</text><line x1="231.20000000000005" y1="12" x2="245.20000000000005" y2="12" stroke="#58a6ff" stroke-width="2.4"/><text x="250.20000000000005" y="16" fill="#9aa7b4" font-size="11.5">931994 指数</text><text x="324.2" y="16" fill="#58a6ff" font-size="11.5" font-weight="700">-35.3%</text><line x1="400.4000000000001" y1="12" x2="414.4000000000001" y2="12" stroke="#bc8cff" stroke-width="2.4"/><text x="419.4000000000001" y="16" fill="#9aa7b4" font-size="11.5">创业板指</text><text x="471.8" y="16" fill="#bc8cff" font-size="11.5" font-weight="700">-38.9%</text></svg>
+<p class="note">025833 净值（6/1=100）。真正的顶是 6/22 的 1.556，你 10/15 清仓时它已经在 -35% 的位置。9/29 那份电网报告已经指出“这不是电网基金、是光纤 β”，10/15 的存储报告只是让你<b>下了最后决心</b>。</p>
+
+<div class="judge">
+  <div class="jcard ok">
+    <h4>结果：对 <span class="badge ok">+6.0pp 的避险</span></h4>
+    <p>10/15 之后两周，025833 又跌 <b>-6.0%</b>，同期沪深300 -4.3%、创业板 -13.3%。<b>清仓=把“下跌”换成“不跌”</b>，10 万元少亏约 6,013 元。</p>
+    <p>如果更早（9/29 报告后）就清，避开的跌幅是 <b>-12.9%</b>——晚清两周，避险效果只剩一半。<b>“减仓”这件事的价值随时间衰减</b>，因为跌得越深，剩下的空间越小。</p>
+  </div>
+  <div class="jcard no">
+    <h4>归因：错 <span class="badge no">相关性只有 0.27~0.53</span></h4>
+    <p>如果卖出的理由是“存储崩了 → AI 资本开支见顶 → 我持有的东西也会跌”，那 15 天的数据直接反驳了它：<b>存储反弹 +9.8% 的同时，电网设备继续跌 -6.0%</b>。同一条“AI 链”，走出了相反方向。</p>
+    <p>真实的相关性（日收益，2026 年 7-10 月）：海力士 vs 亨通 <b>0.43</b>、vs 中天 <b>0.53</b>；而亨通 vs 创业板 <b>0.72</b>、海力士 vs 创业板 <b>0.55</b>。<b>存储和电网不是一条链上的上下游，它们只是挂在“创业板/AI 成长”这一个共同因子上。</b></p>
+  </div>
+</div>
+
+<h3>10/30 那天，两条链又同步了</h3>
+<div class="scroll">
+<table>
+<thead><tr><th>标的</th><th>10/29</th><th>10/30</th><th>涨跌</th></tr></thead>
+<tbody><tr><td>SK海力士</td><td class="num dim">1,516,000.00</td><td class="num">1,397,000.00</td><td class="num down">-7.85%</td></tr><tr><td>三星电子</td><td class="num dim">230,500.00</td><td class="num">221,500.00</td><td class="num down">-3.90%</td></tr><tr><td>亨通光电</td><td class="num dim">44.60</td><td class="num">42.42</td><td class="num down">-4.89%</td></tr><tr><td>中天科技</td><td class="num dim">25.17</td><td class="num">23.17</td><td class="num down">-7.95%</td></tr><tr><td>创业板指</td><td class="num dim">2,517.59</td><td class="num">2,413.63</td><td class="num down">-4.13%</td></tr><tr><td>沪深300</td><td class="num dim">4,041.84</td><td class="num">3,985.50</td><td class="num down">-1.39%</td></tr></tbody>
+</table>
+</div>
+<p>今天是“共同因子回归”的一天：海力士 -7.85%、三星 -3.90%、亨通 -4.89%、中天 -7.95%、创业板 -4.13% 一起跌。<b>这恰恰说明问题所在：它们的同步是“偶发”的，不是“结构性”的。</b>你在 10/15 用存储的信号做了电网的决策，赚了钱，但赚的是<b>β 的钱</b>——如果哪天存储涨、电网也涨，同一个推理会让你在错误的时候买入。</p>
+
+<div class="quote">
+<b>一句话总结这一笔：</b>你卖对了东西（高 β、光纤 β、拥挤交易），但记账时把功劳记在了“存储崩盘”头上。下次如果只记“看到别的板块崩就清仓”，会在一个真正对冲的组合里亏钱。
+</div>
+
+<h2><span class="no">07</span>收获：七条能带走的规则</h2>
+
+<div class="lesson">
+  <div class="n">RULE 01</div>
+  <h4>把“2 周”和“2 年”写成两句话，永远不要合成一句</h4>
+  <p>“长趋势开始的概率远大于短期回调”——这句话把两个<b>赌注期不同</b>的判断压进一个句子，结果读者只能二选一：全信（错过 27% 反弹）或全不信（在 -59% 时抄底）。</p>
+  <p><b>正确写法：</b>“未来 2 周：中性偏空，因为二次探底可能失败；未来 2 年：偏空，因为 EPS 要下修 2~3 个季度。”两句话、两种仓位、互不干扰。</p>
+</div>
+
+<div class="lesson">
+  <div class="n">RULE 02</div>
+  <h4>跌得急 ≠ 还要跌，这是两件独立的事</h4>
+  <p>报告把“近 5 日 -21.8%”当作“恐慌加速”的证据，又由此推出“现在别买”。但<b>波动率放大是双向的</b>：这波下跌 5 天 -26.6%，反弹 7 天 +27.4%。急跌之后，赔率通常改善、胜率不变——把赔率改善当成“更危险”，是 10/15 最贵的一次混淆。</p>
+</div>
+
+<div class="lesson">
+  <div class="n">RULE 03</div>
+  <h4>给“触发价”，不要给“态度”</h4>
+  <p>报告自己给出了可执行的锚：<b>三星 PBR&lt;1.5、海力士 PBR&lt;2.0</b>。按现价倒推，那是三星 129,078 韩元（比现价再跌 42%）、海力士 737,996 韩元（再跌 47%）。这个锚今天依然有效，而且比“别接飞刀”有用一万倍——因为<b>它可以挂单</b>。</p>
+  <div class="act"><b>做法：</b>把这类阈值写成价格提醒，而不是写成一句评论。到价就买 1/3，再跌 15% 买第二个 1/3，剩下的等季度 EPS 确认。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">RULE 04</div>
+  <h4>跨品种迁移决策前，先算一次相关性</h4>
+  <p>这次 0.27~0.53 的相关性，意味着“存储崩→电网跌”只在<b>共同因子（创业板）发威</b>时成立，概率大约一半。用 50% 的传导去下 100% 的仓位决策，是运气不是方法。</p>
+  <div class="act"><b>做法：</b>下次想“因为 A 崩了所以卖 B”时，先问三件事：相关性是否 &gt;0.7？有没有共同的现金流驱动？A 的下跌是不是 B 的<b>上游价格</b>？三条都不满足，就当噪音。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">RULE 05</div>
+  <h4>结果对 ≠ 逻辑对，复盘必须分开记分</h4>
+  <p>这一笔：结果 +6.0pp（对），逻辑 0.27 相关性（错）。如果只记结果，你会在下次加倍使用这个错误逻辑；如果只记逻辑，你会否定一次本来正确的减仓。</p>
+  <div class="act"><b>做法：</b>每笔交易记两栏——“结果分”和“过程分”。过程分低而结果分高的交易，是<b>最危险的成功</b>。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">RULE 06</div>
+  <h4>“历史最深”不是底，是标尺；标尺会被折断</h4>
+  <p>海力士 -59.2% 已破 10 年极值 -49.7%。这时候再用“历史上最多跌 50%”来算下跌空间，等于用一个已经被证伪的分布做风险管理。</p>
+  <div class="act"><b>做法：</b>历史分位数只用来定<b>仓位大小</b>，不用来定<b>方向</b>；一旦现价突破历史极值区间，把“历史概率”降级为“参考”，改用估值锚（PBR）+ 现金流验证。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">RULE 07</div>
+  <h4>一份报告只回答一个问题，写清楚它不回答什么</h4>
+  <p>10/15 那份报告回答的是“现在还值不值得<b>长期投资</b>”，答案是“不值得，等 PBR 到位”。但它被读成了“<b>现在别买</b>”，于是错过了 13%~27%。报告没写“本报告不构成入场时点建议”，读者就会自己补上。</p>
+  <div class="act"><b>做法：</b>报告开头加一行“本报告回答 X，不回答 Y”。X = 3 年维度值不值得配；Y = 下周会不会反弹。</div>
+</div>
+
+<h2><span class="no">08</span>现在：一张可执行的观察清单</h2>
+
+<div class="card">
+<p>不给建议，只给<b>可验证的条件</b>。每条都能在行情软件里盯住，到点就动，不到点就不动。</p>
+<ul class="check">
+  <li><b>海力士 PBR ≤ 2.0</b>　对应股价约 <b>737,996 韩元</b>（现价 1,397,000，还需 -47%）；三星 PBR ≤ 1.5 对应 <b>129,078</b>（还需 -42%）。</li>
+  <li><b>或者</b>三条同时成立：① 不破关键低点（海力士 1,190,000〔10/20〕／三星 207,000〔7/30〕）；② 成交额较高峰期萎缩 60% 以上；③ DRAM/NAND 合约价月度环比转正。</li>
+  <li><b>A 股存储链</b>：今天 5 只创新低，明显还在“第二波杀跌”，与韩股背离。看 <b>10/30 低点能否守住 3 个交易日</b> + 成交额萎缩，再谈右侧。</li>
+  <li><b>电网设备（已清仓）</b>：不要在存储反弹时反手买回。它的问题（光纤供给重估、亨通/中天扩产 400 亿）与存储无关，看的是 G.652.D 现货价和 Q4 招标，不是海力士。</li>
+  <li><b>如果一定要参与存储</b>：1/3 起步、按价格触发加仓、单标的不超过总仓位 5%——因为这轮跌幅已破历史极值，<b>任何“跌够了”的判断都没有历史依据</b>。</li>
+</ul>
+</div>
+
+<div class="card verdict" style="border-left-color:var(--cyan);background:linear-gradient(90deg,rgba(57,197,207,.08),rgba(20,26,34,0) 62%)">
+  <span class="tag" style="background:var(--cyan)">最后一句</span>
+  <p>这份报告的<b>框架值得留着</b>（周期位置 + PBR + 峰值利润陷阱），<b>节奏判断应该扔掉</b>（“恐慌加速段”“别接飞刀”）。它教给你的最重要一件事，不是“存储不能买”，而是：<b class="hlb">一份好的周期报告，应该让你知道“在什么价格买、买多少”，而不是让你“感觉现在很危险”。</b></p>
+</div>
+
+<footer>
+  <p class="src"><b>口径与数据源</b><br>
+  · 韩股：Naver Finance 日线（2015-01 起，收盘价）与外资持股比例；当前 PER/PBR/EPS/BPS 来自 Naver 移动端 integration 接口（10/30 快照）。<br>
+  · 美股：新浪财经 US_MinKService 日线（Yahoo 自 2026-10-30 起对大陆 403），截至 10/29 收盘。<br>
+  · A 股：腾讯前复权日线（10/30 收盘）；电网设备 025833 净值来自天天基金，指数 931994 来自中证指数官网，ETF 159326 来自腾讯行情。<br>
+  · 原报告数据：<a href="./index.html">2026-10-15 存储股崩盘报告</a>；电网设备原报告：<a href="../fund-025833/index.html">025833 还能拿吗</a>、<a href="../fund-025833-review/index.html">025833 复盘</a>。<br>
+  · 相关性为日收益的皮尔逊相关系数，按两市场共同交易日对齐（韩股与 A 股假期不同，样本 n 见各段说明）。<br>
+  · 本页为个人研究记录，不构成投资建议。所有“如果”情景均为事后推演，实际成交价、税费、汇率均未计入。</p>
+</footer>
+
+</div>
+</body>
+</html>
