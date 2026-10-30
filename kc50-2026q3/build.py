@@ -60,6 +60,43 @@ for c in s["code"]:
 s["rev_q3"] = [x[0] for x in revq]; s["rev_q3ly"] = [x[1] for x in revq]
 rev_growth = s["rev_q3"].sum() / s["rev_q3ly"].sum() - 1
 
+# QoQ: single-quarter Q3 2026 vs Q2 2026, and Q3 revenue vs Q2 revenue.
+# Q3 = 9M - H1; Q2 = H1 - Q1. Only positive comparable bases are used.
+p = f.pivot_table(index="SECURITY_CODE", columns="REPORTDATE", values="PARENT_NETPROFIT", aggfunc="first")
+
+def fv(df, code, dt):
+    try:
+        v = df.loc[code, dt]
+        return float(v) if pd.notna(v) else np.nan
+    except Exception:
+        return np.nan
+
+qrows = []
+for c in r["code"]:
+    q3 = fv(p, c, "2026-09-30") - fv(p, c, "2026-06-30")
+    q2 = fv(p, c, "2026-06-30") - fv(p, c, "2026-03-31")
+    r3 = fv(rev, c, "2026-09-30") - fv(rev, c, "2026-06-30")
+    r2 = fv(rev, c, "2026-06-30") - fv(rev, c, "2026-03-31")
+    qrows.append({
+        "code": c, "q3": q3, "q2": q2, "r3": r3, "r2": r2,
+        "qoq": (q3 / q2 - 1) if (pd.notna(q2) and q2 > 0 and pd.notna(q3) and q3 > 0) else np.nan,
+        "qoq_rev": (r3 / r2 - 1) if (pd.notna(r2) and r2 > 0 and pd.notna(r3) and r3 > 0) else np.nan,
+    })
+qdf = pd.DataFrame(qrows)
+qmap = qdf.set_index("code").to_dict("index")
+qp = qdf.dropna(subset=["q3", "q2"])
+qr = qdf.dropna(subset=["r3", "r2"])
+qoq_growth = qp["q3"].sum() / qp["q2"].sum() - 1
+qp_ex = qp[qp["code"] != "688525"]
+qoq_growth_ex = qp_ex["q3"].sum() / qp_ex["q2"].sum() - 1
+qoq_rev = qr["r3"].sum() / qr["r2"].sum() - 1
+qr_ex = qr[qr["code"] != "688525"]
+qoq_rev_ex = qr_ex["r3"].sum() / qr_ex["r2"].sum() - 1
+qoq_median = qdf["qoq"].median()
+qoq_rev_median = qdf["qoq_rev"].median()
+qoq_pos = int((qdf["qoq"] > 0).sum()); qoq_n = int(qdf["qoq"].notna().sum())
+qoq_rev_pos = int((qdf["qoq_rev"] > 0).sum()); qoq_rev_n = int(qdf["qoq_rev"].notna().sum())
+
 pos = r[r["ttm"] > 0]
 pe_agg_all = r["TOTAL_MARKET_CAP"].sum() / r["ttm"].sum()
 pe_agg_ex = pos["TOTAL_MARKET_CAP"].sum() / pos["ttm"].sum()
@@ -128,11 +165,14 @@ for _, x in r.iterrows():
         "pe": None if pe is None else round(pe, 1), "loss": loss,
         "pb": None if pd.isna(x["PB_MRQ"]) else round(float(x["PB_MRQ"]), 2),
         "growth": None if pd.isna(x["np_yoy"]) else round(float(x["np_yoy"]), 1),
+        "qoq": None if pd.isna(qmap[x["code"]]["qoq"]) else round(float(qmap[x["code"]]["qoq"]) * 100, 1),
         "single": None if pd.isna(x["single_q"]) else round(float(x["single_q"]) * 100, 1),
         "rev": None if pd.isna(x["rev_yoy"]) else round(float(x["rev_yoy"]), 1),
+        "qoq_rev": None if pd.isna(qmap[x["code"]]["qoq_rev"]) else round(float(qmap[x["code"]]["qoq_rev"]) * 100, 1),
         "period": "Q3" if x["latest"] == "2026-09-30" else "H1",
     })
 stocks.sort(key=lambda z: -z["weight"])
+qoq_chart = [z for z in stocks if z["qoq"] is not None and z["single"] is not None][:10]
 
 hist_payload = []
 for _, x in d.iterrows():
@@ -166,6 +206,15 @@ DATA = {
         "single_median": round(float(s["single_q"].median()) * 100, 1),
         "breadth": round(float((s["np_yoy"] > 0).mean()) * 100, 1),
         "single_breadth": round(float((s["single_q"] > 0).sum() / s["single_q"].notna().sum()) * 100, 1),
+        "qoq": round(float(qoq_growth) * 100, 1),
+        "qoq_ex": round(float(qoq_growth_ex) * 100, 1),
+        "qoq_rev": round(float(qoq_rev) * 100, 1),
+        "qoq_rev_ex": round(float(qoq_rev_ex) * 100, 1),
+        "qoq_median": round(float(qoq_median) * 100, 1),
+        "qoq_rev_median": round(float(qoq_rev_median) * 100, 1),
+        "qoq_pos": qoq_pos, "qoq_n": qoq_n,
+        "qoq_rev_pos": qoq_rev_pos, "qoq_rev_n": qoq_rev_n,
+        "qoq_chart": qoq_chart,
     },
     "valuation": {
         "pe": round(PE_1030, 1), "pe_all": round(PE_ALL_1030, 1),
@@ -189,10 +238,12 @@ def fmt_pct(v, digits=1):
 top10_rows = ""
 for x in stocks[:10]:
     growth = "—" if x["growth"] is None else (f"{x['growth']:+.0f}%" if abs(x["growth"]) < 1000 else ">+1000%")
+    qoq = "—" if x["qoq"] is None else f"{x['qoq']:+.0f}%"
     pe = "亏损" if x["loss"] else f"{x['pe']:.1f}x"
     tag = "Q3" if x["period"] == "Q3" else "H1*"
     gcls = "up" if (x["growth"] or 0) > 0 else "down"
-    top10_rows += f"<tr><td class='nm'>{x['name']}</td><td>{x['weight']:.2f}%</td><td>{pe}</td><td class='{gcls}'>{growth}</td><td class='muted'>{tag}</td></tr>"
+    qcls = "up" if (x["qoq"] or 0) > 0 else ("down" if x["qoq"] is not None else "muted")
+    top10_rows += f"<tr><td class='nm'>{x['name']}</td><td>{x['weight']:.2f}%</td><td>{pe}</td><td class='{gcls}'>{growth}</td><td class='{qcls}'>{qoq}</td><td class='muted'>{tag}</td></tr>"
 
 buckets_json = json.dumps(DATA, ensure_ascii=False, separators=(",", ":"))
 html = r"""<!DOCTYPE html>
@@ -237,6 +288,7 @@ h3{font-size:16.5px;margin:24px 0 8px}
 .chart{width:100%;height:430px}
 .chart.small{height:170px}
 .chart.mid{height:360px}
+.chart.qoq{height:470px}
 .note{font-size:12px;color:var(--muted);line-height:1.65;margin:8px 0 0}
 .note b{color:var(--ink2)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -285,7 +337,7 @@ input.search{border:1px solid var(--line);background:#fff;border-radius:999px;pa
 ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:14px}
 .footer{margin-top:44px;padding-top:16px;border-top:1px solid #dfe2e6;font-size:12px;color:var(--muted)}
 @media(max-width:900px){.hero,.grid2,.plan{grid-template-columns:1fr}.scen,.grid3{grid-template-columns:1fr}h1{font-size:32px}.cards{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.wrap{padding:24px 14px 60px}h1{font-size:28px}.cards{grid-template-columns:1fr}.chart{height:360px}.tablewrap{max-height:560px}}
+@media(max-width:560px){.wrap{padding:24px 14px 60px}h1{font-size:28px}.cards{grid-template-columns:1fr}.chart{height:360px}.chart.qoq{height:420px}.tablewrap{max-height:560px}}
 </style>
 </head>
 <body>
@@ -293,21 +345,21 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 
 <div class="kicker">STAR 50 · 2026 Q3 EARNINGS &amp; VALUATION REVIEW</div>
 <h1>科创50：泡沫挤掉一半，<br><em>“便宜”还谈不上</em></h1>
-<p class="dek">4 个月跌 47%，PE 从 105x 压到 55x；Q3 盈利还在增长，但只覆盖 70% 权重、且高度集中在半导体。现在该加、该减，还是拿着不动？</p>
+<p class="dek">4 个月跌 47%，PE 从 105x 压到 55x；Q3 净利同比还在 +49%，但单季环比已经 -25%。市场杀的是边际减速，不是同比。现在该加、该减，还是拿着不动？</p>
 <div class="meta">数据截止 2026-10-30 收盘｜指数 1160.84（-5.48%）｜ETF 588000 收盘 1.228（-5.03%）｜不构成投资建议</div>
 
 <div class="hero">
   <div class="concl">
     <span class="tag">一句话结论</span>
     <p><b>这不是“盈利崩了”，是“估值崩了”。</b>6/30 高点 2207.86 → 10/30 1160.84，<span class="hl">-47.4%</span>；同期 PE 104.75x → 55.2x，指数 TTM EPS 几乎没动。</p>
-    <p>但 55x 仍在上市以来 <span class="hl">58% 分位</span>，远高于 2022/2024 年底部的 36x/23x。Q3 已披露成分股净利合计 <span class="hl">+49%</span>，但覆盖权重只有 70.3%，且半导体占指数 79.4%。</p>
+    <p>但 55x 仍在上市以来 <span class="hl">58% 分位</span>，远高于 2022/2024 年底部的 36x/23x。Q3 已披露成分股净利同比 <span class="hl">+49%</span>，但单季环比 <span class="hl">-24.7%</span>（剔除佰维 -14.3%）；覆盖权重只有 70.3%，且半导体占指数 79.4%。</p>
     <p><b>操作：4% 仓位保留，不追、不割；跌到 1000 以下再分批加，反弹到 1450 以上再分批减。</b>把它当卫星仓，不是抄底工具。</p>
   </div>
   <div class="cards">
     <div class="card"><div class="lbl">距 6/30 高点</div><div class="num red">-47.4%</div><div class="sub">2207.86 → 1160.84｜20日 -28.4%</div></div>
     <div class="card"><div class="lbl">PE-TTM（剔除亏损，估算）</div><div class="num">55.2x</div><div class="sub">整体法约 76.4x｜历史 58% 分位</div></div>
-    <div class="card"><div class="lbl">Q3 已披露净利合计</div><div class="num red">+49.2%</div><div class="sub">剔除佰维后 +36.6%｜覆盖 36/50</div></div>
-    <div class="card"><div class="lbl">RSI(14)</div><div class="num amber">22.7</div><div class="sub">深度超卖｜仍低于 MA20/60/200</div></div>
+    <div class="card"><div class="lbl">单季净利同比 / 环比</div><div class="num red">+49.2%</div><div class="sub">环比 -24.7%｜剔除佰维 -14.3%｜36/50</div></div>
+    <div class="card"><div class="lbl">Q3 营收同比 / 环比</div><div class="num amber">+9.8%</div><div class="sub">环比 -2.2%｜22/36 环比为正</div></div>
   </div>
 </div>
 
@@ -319,7 +371,7 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 <div class="note">左轴：指数收盘；右轴：中证官网 PE 序列（与“剔除亏损”口径接近，当前为估算值）。虚线为 MA20/MA60。数据：中证指数、新浪财经。</div></div>
 
 <div class="grid3">
-  <div class="card"><div class="lbl">指数收盘</div><div class="num">1160.84</div><div class="sub">10/30 -5.48%，盘中最低 1159.57</div></div>
+  <div class="card"><div class="lbl">指数收盘</div><div class="num">1160.84</div><div class="sub">10/30 -5.48%｜RSI 22.7｜20日 -28.4%</div></div>
   <div class="card"><div class="lbl">TTM EPS（价格/PE）</div><div class="num">21.03</div><div class="sub">6/30 为 21.08，几乎持平；同比约 +13%</div></div>
   <div class="card"><div class="lbl">最大回撤（2021-2024）</div><div class="num red">-62.7%</div><div class="sub">本轮 -47.4%，历史极端底部尚未触及</div></div>
 </div>
@@ -332,10 +384,10 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 
 <div class="section">
 <h2>2. Q3 成绩单：强，但强得很集中</h2>
-<p class="lead">截至 10/30，50 只成分股中 36 只已披露三季报，覆盖权重 70.3%。已披露公司 Q3 净利合计同比 <b>+49.2%</b>，剔除佰维存储后 <b>+36.6%</b>；收入合计同比 +9.8%。</p>
+<p class="lead">截至 10/30，50 只成分股中 36 只已披露三季报，覆盖权重 70.3%。已披露公司单季净利合计同比 <b>+49.2%</b>，剔除佰维存储后 <b>+36.6%</b>；收入合计同比 +9.8%。<b>但同比是后视镜：单季净利环比 Q2 为 -24.7%，见 2.5。</b></p>
 
 <div class="grid3">
-  <div class="card"><div class="lbl">Q3 净利合计同比</div><div class="num red">+49.2%</div><div class="sub">14.81B vs 9.92B｜36 家已披露</div></div>
+  <div class="card"><div class="lbl">单季净利合计同比</div><div class="num red">+49.2%</div><div class="sub">14.81B vs 9.92B｜36 家已披露</div></div>
   <div class="card"><div class="lbl">单季净利同比中位数</div><div class="num red">+34.7%</div><div class="sub">26 家有可比单季数据｜18 家为正</div></div>
   <div class="card"><div class="lbl">增长广度</div><div class="num amber">52.8%</div><div class="sub">累计净利同比为正的公司占比</div></div>
 </div>
@@ -343,8 +395,8 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 <div class="grid2" style="margin-top:14px">
   <div class="panel"><div id="cInd" class="chart mid"></div><div class="note">按申万行业分组，柱长为 Q3 净利合计同比（为展示效果，负值下限截断至 -100%），标签为指数总权重；柱长为已披露公司 Q3 净利合计同比，按 -100%~+300% 截断。半导体权重 79.4%，是绝对主角。</div></div>
   <div class="panel"><h3 style="margin-top:0">权重前十：估值与增速</h3>
-    <table><thead><tr><th>成分股</th><th>权重</th><th>PE</th><th>Q3净利同比</th><th>期</th></tr></thead><tbody>__TOP10__</tbody></table>
-    <div class="note">前十大权重合计 59.7%，前五大 39.6%。*H1 表示三季报尚未披露，增速用半年报代替；中芯国际、源杰科技、华海清科、华虹宏力等大权重仍在其中。</div>
+    <table><thead><tr><th>成分股</th><th>权重</th><th>PE</th><th>累计净利同比</th><th>单季净利环比</th><th>期</th></tr></thead><tbody>__TOP10__</tbody></table>
+    <div class="note">前十大权重合计 59.7%，前五大 39.6%。同比为累计口径（Q3=9M、H1=半年报），环比为单季 Q3/Q2；两者口径不同，只看方向。*H1 表示三季报尚未披露。</div>
   </div>
 </div>
 
@@ -356,6 +408,41 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 <li><b>弱：</b>光伏（大全能源 -87%、阿特斯 -110%、晶科能源 -6%）、医疗器械（联影医疗 -7.6%）、自动化（中控技术 -56%）、部分军工（国博电子 -68%、西部超导 -60%）。</li>
 <li><b>分化：</b>同样是半导体，华虹宏力 +437%、中芯国际 +94%，但盛美上海 -15%、晶合集成 -14%、格科微 -75%。选指数≠选对赛道。</li>
 </ul>
+</div>
+
+<div class="section">
+<h2>2.5 环比：同比是后视镜，环比才是边际</h2>
+<p class="lead">Q3 单季净利同比 <b>+49.2%</b> 很好看，但环比 Q2 <b>-24.7%</b>（剔除佰维 -14.3%），营收环比 -2.2%。<b>收入几乎持平、利润明显下滑</b>，说明毛利率/费用在恶化，或 Q2 本身是不可持续的高基数。市场杀的正是这个边际减速，而不是同比。</p>
+
+<div class="grid3">
+  <div class="card"><div class="lbl">Q3 净利合计环比</div><div class="num red">-24.7%</div><div class="sub">14.81B vs 19.68B｜36 家可比</div></div>
+  <div class="card"><div class="lbl">Q3 营收合计环比</div><div class="num amber">-2.2%</div><div class="sub">110.6B vs 113.1B｜36 家可比</div></div>
+  <div class="card"><div class="lbl">净利环比正增长</div><div class="num amber">11 / 25</div><div class="sub">44%｜营收 22/36（61%）</div></div>
+</div>
+
+<div class="grid2" style="margin-top:14px">
+  <div class="panel"><div id="cQoQ" class="chart qoq"></div><div class="note">单季同比 = 2026Q3 / 2025Q3 - 1；单季环比 = 2026Q3 / 2026Q2 - 1。佰维同比 +525% 截断至 +200%，负值柱不标数字，精确值见 tooltip 或文末全表。纵轴标签为“名称 + 指数权重”。数据：东方财富，2026-10-30。</div></div>
+  <div class="panel"><h3 style="margin-top:0">同比 vs 环比：收入还在，利润先掉</h3>
+    <table><thead><tr><th>指标</th><th>同比（单季）</th><th>环比（单季）</th><th>说明</th></tr></thead><tbody>
+      <tr><td>净利合计</td><td class="up">+49.2%</td><td class="down">-24.7%</td><td>14.81B vs 19.68B</td></tr>
+      <tr><td>营收合计</td><td class="up">+9.8%</td><td class="down">-2.2%</td><td>110.6B vs 113.1B</td></tr>
+      <tr><td>净利中位数</td><td class="up">+34.7%</td><td class="down">-12.4%</td><td>25 家可比</td></tr>
+      <tr><td>营收中位数</td><td class="up">+17.1%</td><td class="up">+4.2%</td><td>36 家可比</td></tr>
+      <tr><td>正增长家数</td><td>18/26</td><td>11/25</td><td>营收 27/36；环比 22/36</td></tr>
+    </tbody></table>
+    <div class="note">同比为 2026Q3 vs 2025Q3，环比为 2026Q3 vs 2026Q2；均为单季、未年化、未季调。净利同比/环比只统计正基数，故分母小于 36，避免负基数失真。</div>
+  </div>
+</div>
+
+<div class="quote"><b>为什么跌：</b>不是 Q3 同比差，而是环比动能断了。收入端还在（合计 -2.2%、中位数 +4.2%），利润端却环比 -24.7%；<b>佰维、金山、盛美、中微、联影五家合计减少约 64 亿</b>，超过整体 49 亿的降幅，拓荆、睿创、晶晨等增长只够部分对冲。市场提前交易的是 Q4/2027 的增速下修，而不是已经兑现的 Q3。</div>
+
+<h3>环比的冷热差：谁在失速，谁在加速</h3>
+<ul>
+<li><b>加速：</b>晶晨股份 +56.0%、拓荆科技 +40.9%、睿创微纳 +33.3%、寒武纪 +8.2%、澜起科技 +7.8%；这些是少数 Q3 环比还在改善的权重股。</li>
+<li><b>失速：</b>盛美上海 -90.8%（设备验收节奏）、联影医疗 -72.3%（收入环比 -14.8%）、金山办公 -63.0%（Q3 是软件淡季）、佰维存储 -62.4%（Q2 42.7 亿的高基数）、中微公司 -30.9%（收入仅 -3.7%，利润跌更多，毛利率承压）。</li>
+<li><b>关键差异：</b>营收环比中位数 +4.2%，但净利环比中位数 -12.4%——这不是“需求崩了”，更像“价格/毛利率/费用”在挤利润。对科技股，后者同样能杀估值，而且比收入下滑更隐蔽。</li>
+</ul>
+<div class="note">环比也有季节性：Q3 对软件是淡季、对设备是验收波动，单季不能定论。要看连续 2-3 个季度，以及营收环比是否同步转负；如果营收环比仍正、利润环比继续负，才是真正的毛利率问题。</div>
 </div>
 
 <div class="section">
@@ -464,11 +551,13 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 <div class="grid2">
   <div class="panel"><h3 style="margin-top:0" class="green">转多信号</h3><ul>
     <li>Q3 剩余 14 家（权重 29.7%）披露后，全样本净利增速仍 ≥40%，且半导体设备/算力链没有下修。</li>
+    <li>Q4 单季净利环比转正（≥0），且营收环比 &gt;0；连续两个季度不再恶化，才算拐点确认。</li>
     <li>指数收盘站上 MA20（当前 1371）并 3 个交易日不破，同时 PE 回到 60x 以上（说明是盈利驱动，不是纯情绪）。</li>
     <li>PE 回落到 45x 以下，或价格到 950 以下且盈利预期不再下修——赔率明显改善。</li>
   </ul></div>
   <div class="panel"><h3 style="margin-top:0" class="red">转空信号</h3><ul>
     <li>AI 资本开支/订单被下修，2027 年半导体盈利预期集体下调；Q4 指引低于预期。</li>
+    <li>Q4 净利环比继续为负（尤其半导体设备/存储），毛利率同步下修——从“杀估值”转向“杀盈利”。</li>
     <li>指数跌破 1000，且亏损股数量增加、成交额萎缩——从“杀估值”转向“杀盈利”。</li>
     <li>解禁/IPO 供给超预期，或 ETF 出现持续大额赎回，流动性负反馈。</li>
   </ul></div>
@@ -478,13 +567,14 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 
 <div class="section">
 <h2>8. 全部 50 只成分股</h2>
-<p class="lead">按权重排序；可搜索、筛选、点击表头排序（表格可滚动）。PE 为负/亏损的标“亏损”；增速为“—”表示无同比可比数据；期=H1 表示三季报未披露，增速用半年报。</p>
+<p class="lead">按权重排序；可搜索、筛选、点击表头排序（表格可滚动）。PE 为负/亏损的标“亏损”；增速为“—”表示无可比数据；期=H1 表示三季报未披露，增速用半年报。</p>
 <div class="toolbar">
   <input class="search" id="q" placeholder="搜索代码 / 名称">
   <button class="btn on" data-f="all">全部</button>
   <button class="btn" data-f="profit">盈利</button>
   <button class="btn" data-f="loss">亏损</button>
   <button class="btn" data-f="high">高增长 ≥50%</button>
+  <button class="btn" data-f="qoqdown">环比下降</button>
   <button class="btn" data-f="expensive">PE ≥100x</button>
   <button class="btn" data-f="cheap">PE &lt;30x</button>
   <span class="mini" id="cnt" style="margin-left:auto"></span>
@@ -494,13 +584,14 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 <thead><tr>
 <th data-k="name">成分股</th><th data-k="weight">权重</th><th data-k="industry">行业</th>
 <th data-k="price">收盘</th><th data-k="chg">今日</th><th data-k="mcap">市值(亿)</th>
-<th data-k="pe">PE-TTM</th><th data-k="pb">PB</th><th data-k="growth">Q3净利同比</th>
-<th data-k="single">单季净利同比</th><th data-k="rev">Q3营收同比</th><th data-k="period">期</th>
+<th data-k="pe">PE-TTM</th><th data-k="pb">PB</th><th data-k="growth">Q3累计净利同比</th>
+<th data-k="qoq">单季净利环比</th><th data-k="rev">Q3累计营收同比</th><th data-k="qoq_rev">单季营收环比</th>
+<th data-k="single">单季净利同比</th><th data-k="period">期</th>
 </tr></thead>
 <tbody></tbody>
 </table>
 </div>
-<div class="note">市值=总市值（亿元）；PE=总市值/TTM归母净利，亏损股不显示 PE；单季同比仅在有正的可比基数时计算。数据：东方财富（2026-10-30 收盘），权重：中证指数（2026-09-30）。</div>
+<div class="note">市值=总市值（亿元）；PE=总市值/TTM归母净利，亏损股不显示 PE；同比/环比均为单季，仅在有正的可比基数时计算。数据：东方财富（2026-10-30 收盘），权重：中证指数（2026-09-30）。</div>
 </div>
 
 <div class="section">
@@ -510,6 +601,7 @@ ul{padding-left:20px;margin:8px 0} li{margin:5px 0;color:var(--ink2);font-size:1
 <li><b>成分与权重：</b>中证指数官网 000688 成分券与权重，权重日期 2026-09-30。</li>
 <li><b>价格与估值：</b>东方财富 2026-10-30 收盘快照；指数收盘/PE 来自中证指数官网与新浪财经。官方估值文件 10/29 整体法 PE 80.82x，按 10/30 指数涨跌估算为 76.4x；用于历史分位的官网接口 PE 序列 10/29 为 58.41x，按涨跌估算 55.2x。</li>
 <li><b>Q3 财报：</b>东方财富业绩报表（RPT_LICO_FN_CPD），截至 2026-10-30 16:30；36/50 已披露，覆盖权重 70.3%。未披露公司用 2026 半年报，表内标“H1”。</li>
+<li><b>环比口径：</b>单季 = 累计差（Q3 = 9M − H1；Q2 = H1 − Q1）；环比 = 2026Q3 / 2026Q2 − 1，同比 = 2026Q3 / 2025Q3 − 1。只统计正基数，未年化、未季调；环比受季节性影响，不单独作为买卖依据。</li>
 <li><b>口径差异：</b>自下而上按总市值/TTM 归母净利合计，整体法约 89x、剔除亏损约 56x；官方整体法 76x 更低，差异来自股本/样本口径与 Q3 覆盖。页面正文以官方口径 76x 与官网 PE 序列 55x 为主，表格用自下而上个股 PE。</li>
 <li><b>指数 TTM EPS：</b>用“指数收盘 ÷ 官网 PE”反推，仅用于观察方向，不是官方 EPS。它同比约 +13%，与成分股 Q3 合计 +49% 的差异，来自权重、亏损股、季度 vs TTM、以及成分调整。</li>
 <li><b>历史分位：</b>2020-07-22 至 2026-10-29，官网接口 PE 序列；当前值为估算。分位仅代表估值在自身历史中的位置，不代表未来收益。</li>
@@ -630,6 +722,29 @@ const fmt = (v,d=1)=> v==null?'—':(v>0?'+':'')+Number(v).toFixed(d)+'%';
   window.addEventListener('resize',()=>ch.resize());
 })();
 
+/* QoQ: single-quarter YoY vs QoQ */
+(function(){
+  const el=document.getElementById('cQoQ'); if(!el) return;
+  const ch=echarts.init(el); const a=DATA.q3.qoq_chart.slice().reverse();
+  ch.setOption({
+    grid:{left:118,right:62,top:34,bottom:38},
+    legend:{top:0,right:0,itemWidth:10,itemHeight:8,textStyle:{color:C.muted,fontSize:10}},
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(24,34,46,.94)',borderWidth:0,textStyle:{color:'#fff',fontSize:12},
+      formatter:p=>{const z=a[p[0].dataIndex];return `<b>${z.name}</b><br>权重 ${z.weight.toFixed(1)}%<br>单季净利同比 ${fmt(z.single)}<br>Q3净利环比 ${fmt(z.qoq)}<br>Q3营收环比 ${fmt(z.qoq_rev)}`;}},
+    xAxis:{type:'value',min:-100,max:200,axisLabel:{color:C.muted,fontSize:10,formatter:'{value}%'},splitLine:{lineStyle:{color:'#eef0f3'}}},
+    yAxis:{type:'category',data:a.map(x=>`${x.name} ${x.weight.toFixed(1)}%`),axisLabel:{color:C.ink,fontSize:10.5},axisLine:{show:false},axisTick:{show:false}},
+    series:[
+      {name:'单季净利同比',type:'bar',barWidth:8,barGap:'25%',
+       data:a.map(x=>({value:Math.max(-100,Math.min(200,x.single))})),
+       itemStyle:{color:'#9aa9b8',borderRadius:[0,3,3,0]}},
+      {name:'Q3净利环比',type:'bar',barWidth:8,
+       data:a.map(x=>{return {value:x.qoq,itemStyle:{color:x.qoq>=0?'#c0392b':'#3d8b72',borderRadius:x.qoq>=0?[0,3,3,0]:[3,0,0,3]},
+         label:{show:x.qoq>=0,position:'right',color:'#a93226',fontSize:10,formatter:fmt(x.qoq)}};})}
+    ]
+  });
+  window.addEventListener('resize',()=>ch.resize());
+})();
+
 /* table */
 (function(){
   const tbody=document.querySelector('#stockTable tbody');
@@ -642,6 +757,7 @@ const fmt = (v,d=1)=> v==null?'—':(v>0?'+':'')+Number(v).toFixed(d)+'%';
     if(filter==='profit') return !s.loss;
     if(filter==='loss') return s.loss;
     if(filter==='high') return s.growth!=null && s.growth>=50;
+    if(filter==='qoqdown') return s.qoq!=null && s.qoq<0;
     if(filter==='expensive') return !s.loss && s.pe!=null && s.pe>=100;
     if(filter==='cheap') return !s.loss && s.pe!=null && s.pe<30;
     return true;
@@ -656,14 +772,18 @@ const fmt = (v,d=1)=> v==null?'—':(v>0?'+':'')+Number(v).toFixed(d)+'%';
     });
     tbody.innerHTML=rows.map(s=>{
       const gcls=(s.growth||0)>0?'up':((s.growth||0)<0?'down':'');
+      const qcls=s.qoq==null?'':(s.qoq>0?'up':'down');
+      const rcls=s.rev==null?'muted':(s.rev>0?'up':'down');
+      const qrcls=s.qoq_rev==null?'':(s.qoq_rev>0?'up':'down');
       const scls=(s.single||0)>0?'up':((s.single||0)<0?'down':'');
       const tag=s.loss?'<span class="badge hot">亏损</span>':(s.pe>=100?'<span class="badge hot">&gt;100x</span>':(s.pe<30?'<span class="badge cold">&lt;30x</span>':''));
       return `<tr><td class="nm">${s.name}<span class="badge">${s.code}</span>${tag}</td>
       <td>${s.weight.toFixed(2)}%</td><td style="text-align:left;color:#5b6673">${s.industry}</td>
       <td>${s.price.toFixed(2)}</td><td class="${s.chg>0?'up':'down'}">${s.chg>0?'+':''}${s.chg.toFixed(2)}%</td>
       <td>${s.mcap.toFixed(0)}</td><td>${fmtPe(s)}</td><td>${s.pb==null?'—':s.pb.toFixed(1)}</td>
-      <td class="${gcls}">${fmtGrowth(s.growth)}</td><td class="${scls}">${fmtGrowth(s.single)}</td>
-      <td class="${(s.rev||0)>0?'up':'down'}">${fmt(s.rev)}</td><td class="muted">${s.period}</td></tr>`;
+      <td class="${gcls}">${fmtGrowth(s.growth)}</td><td class="${qcls}">${fmtGrowth(s.qoq)}</td>
+      <td class="${rcls}">${fmt(s.rev)}</td><td class="${qrcls}">${fmtGrowth(s.qoq_rev)}</td>
+      <td class="${scls}">${fmtGrowth(s.single)}</td><td class="muted">${s.period}</td></tr>`;
     }).join('');
     cnt.textContent=`显示 ${rows.length} / ${DATA.stocks.length} 只`;
   }
