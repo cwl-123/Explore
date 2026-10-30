@@ -61,6 +61,15 @@ REGISTRY = [
     ),
     # —— 估值 · 持仓分析 ——
     dict(
+        title="科创50 2026Q3 体检：泡沫挤掉一半，“便宜”还谈不上",
+        path="kc50-2026q3/index.html",
+        category="valuation",
+        tags=["科创50", "Q3财报", "估值", "仓位"],
+        summary="4 个月 -47%、PE 从 105x 压到 55x 后的体检：36 家 Q3 财报拆解、盈利增速与估值分位、"
+                "历史底部对照、未来三种情景概率，以及 4% 仓位的分批加减仓计划。",
+        date="2026-10-30",
+    ),
+    dict(
         title="恒生指数 (HSI) 成分股与估值报告",
         path="hsi-valuation.html",
         category="valuation",
