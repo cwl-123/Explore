@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创业板 ETF 三季报体检 · 2026-10</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#ffffff; --ink:#17202b; --muted:#6b7686; --line:#e4e8ee;
+    --red:#d94a4a; --red-soft:#fdf0f0; --green:#2c9e63; --green-soft:#eef8f2;
+    --blue:#2f6fed; --blue-soft:#eef3fe; --amber:#d99a00; --amber-soft:#fdf6e5;
+    --purple:#7a5af8; --dark:#111827;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.65;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:26px 20px 80px;}
+  a{color:var(--blue);text-decoration:none;}
+  .hero{background:linear-gradient(135deg,#101827 0%,#182338 55%,#1d2b45 100%);color:#fff;
+    border-radius:20px;padding:30px 32px 26px;margin-bottom:18px;position:relative;overflow:hidden;}
+  .hero:after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;
+    background:radial-gradient(circle,rgba(47,111,237,.38),rgba(47,111,237,0) 68%);}
+  .hero .eyebrow{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#9fb3d9;margin-bottom:8px;}
+  .hero h1{font-size:30px;line-height:1.28;margin:0 0 10px;letter-spacing:.2px;font-weight:800;position:relative;z-index:1;}
+  .hero .sub{font-size:13.5px;color:#b9c6dd;max-width:860px;position:relative;z-index:1;}
+  .hero .verdict{margin-top:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+    border-radius:14px;padding:16px 18px;font-size:15px;line-height:1.8;position:relative;z-index:1;}
+  .hero .verdict b{color:#ffd166;}
+  .hero .verdict .tagline{display:inline-block;background:#ffd166;color:#201a05;font-weight:800;font-size:12.5px;
+    border-radius:6px;padding:2px 8px;margin-right:8px;vertical-align:2px;}
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px;}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 14px;min-width:0;}
+  .kpi .k{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .kpi .v{font-size:21px;font-weight:800;margin-top:3px;letter-spacing:-.2px;font-variant-numeric:tabular-nums;}
+  .kpi .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:18px;
+    box-shadow:0 1px 2px rgba(20,30,50,.03);}
+  h2{font-size:19px;margin:0 0 6px;display:flex;align-items:center;gap:9px;letter-spacing:.1px;}
+  h2 .no{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:8px;
+    background:var(--blue-soft);color:var(--blue);font-size:12.5px;font-weight:800;flex:none;}
+  .lede{color:var(--muted);font-size:13.5px;margin:0 0 16px;}
+  h3{font-size:15px;margin:20px 0 8px;}
+  .muted{color:var(--muted);font-size:12.5px;}
+  .small{font-size:12px;}
+  .b{font-weight:800;}
+  .r{color:var(--red);} .g{color:var(--green);} .a{color:var(--amber);} .bl{color:var(--blue);}
+  .num{font-variant-numeric:tabular-nums;}
+  .concl{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px;}
+  .concl .c{border:1px solid var(--line);border-radius:13px;padding:15px 15px 14px;background:#fbfcfd;}
+  .concl .c .t{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+  .concl .c .t i{width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block;}
+  .concl .c .h{font-size:16px;font-weight:800;margin:6px 0 5px;line-height:1.4;}
+  .concl .c p{margin:0;font-size:12.5px;color:#414c5c;line-height:1.65;}
+  .chart{width:100%;height:360px;margin:6px 0 2px;}
+  .chart.tall{height:430px;}
+  .chart.short{height:280px;}
+  .chart-note{font-size:12px;color:var(--muted);margin:2px 0 0;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .box{background:#fafbfc;border:1px solid var(--line);border-radius:12px;padding:14px 15px;}
+  .box .k{font-size:11.5px;color:var(--muted);}
+  .box .v{font-size:22px;font-weight:800;margin-top:2px;}
+  .box .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:8px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;}
+  th:first-child,td:first-child{text-align:left;}
+  th{color:var(--muted);font-weight:650;font-size:11.5px;background:#fafbfc;position:sticky;top:0;z-index:2;}
+  tr:last-child td{border-bottom:none;}
+  .tbl-wrap{max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:11px;}
+  .tbl-wrap table{font-size:12.5px;}
+  .tbl-wrap td,.tbl-wrap th{padding:7px 8px;}
+  .chip{display:inline-block;font-size:11px;line-height:1.5;padding:1px 7px;border-radius:999px;white-space:nowrap;}
+  .chip.hot{background:var(--red-soft);color:#b23b3b;}
+  .chip.cool{background:var(--blue-soft);color:#2b5fc4;}
+  .chip.good{background:var(--green-soft);color:#1f7d4d;}
+  .chip.warn{background:var(--amber-soft);color:#8a6200;}
+  .chip.gray{background:#f1f3f6;color:#5d6877;}
+  .callout{border-left:3px solid var(--amber);background:#fffaf0;border-radius:0 10px 10px 0;padding:12px 15px;
+    font-size:13px;color:#4a3a17;margin:14px 0;}
+  .callout.blue{border-left-color:var(--blue);background:#f3f7ff;color:#1f355e;}
+  .callout.red{border-left-color:var(--red);background:#fff5f5;color:#5a2222;}
+  .callout b{color:inherit;}
+  .src{font-size:11.5px;color:var(--muted);margin-top:8px;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:4px;}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px;}
+  .scen{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px;}
+  .scen .s{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fbfcfd;position:relative;}
+  .scen .s .p{font-size:26px;font-weight:800;line-height:1;}
+  .scen .s .n{font-size:12.5px;font-weight:750;margin-top:6px;}
+  .scen .s .d{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.55;}
+  .scen .s .lv{font-size:12px;margin-top:7px;font-variant-numeric:tabular-nums;}
+  .scen .s .bar{height:4px;border-radius:3px;background:#edf0f4;margin-top:9px;overflow:hidden;}
+  .scen .s .bar span{display:block;height:100%;border-radius:3px;}
+  .scen .s.a{border-top:3px solid var(--green);} .scen .s.b{border-top:3px solid var(--blue);}
+  .scen .s.c{border-top:3px solid var(--amber);} .scen .s.d{border-top:3px solid var(--red);}
+  .ladder{display:grid;grid-template-columns:120px 1fr 1fr 90px;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:12.5px;}
+  .ladder > div{padding:10px 12px;border-bottom:1px solid var(--line);background:#fff;}
+  .ladder > div:nth-last-child(-n+4){border-bottom:none;}
+  .ladder .h{background:#fafbfc;color:var(--muted);font-weight:650;font-size:11.5px;}
+  .ladder .lvl{font-weight:800;}
+  .ladder .act{font-weight:700;}
+  .rule{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px;}
+  .rule:last-child{border-bottom:none;}
+  .rule .rn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--blue-soft);color:var(--blue);
+    display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;margin-top:2px;}
+  .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 12px;}
+  .toolbar input{border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:12.5px;width:190px;outline:none;}
+  .toolbar input:focus{border-color:#b9cdf5;}
+  .toolbar button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 10px;font-size:12px;cursor:pointer;color:#44505f;}
+  .toolbar button.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+  .toolbar .sp{flex:1;}
+  .foot{font-size:11.5px;color:var(--muted);line-height:1.8;}
+  .foot b{color:#4a5666;}
+  .hlrow td{background:#fffaf0;}
+  .tick{font-size:11.5px;color:var(--muted);}
+  .bars{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
+  .barrow{display:grid;grid-template-columns:130px 1fr 135px;align-items:center;gap:10px;}
+  .barrow .nm{font-size:12.5px;font-weight:650;}
+  .barrow .nm small{display:block;font-weight:400;color:var(--muted);font-size:10.5px;}
+  .barrow .tr{height:9px;background:#f1f3f6;border-radius:6px;overflow:hidden;}
+  .barrow .tr span{display:block;height:100%;border-radius:6px;background:var(--blue);}
+  .barrow .vv{font-size:11.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;}
+  @media(max-width:980px){
+    .kpis{grid-template-columns:repeat(3,1fr);}
+    .concl{grid-template-columns:repeat(2,1fr);}
+    .scen{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:760px){
+    .wrap{padding:16px 12px 60px;}
+    .hero{padding:22px 18px;}
+    .hero h1{font-size:23px;}
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .concl,.grid2,.grid3,.scen{grid-template-columns:1fr;}
+    .card{padding:17px 15px;}
+    .chart{height:300px;} .chart.tall{height:360px;}
+    .ladder{grid-template-columns:88px 1fr 1fr 60px;font-size:11.5px;}
+    .ladder > div{padding:8px 9px;}
+    .barrow{grid-template-columns:100px 1fr;}
+    .barrow .vv{grid-column:1/3;text-align:left;}
+    table{font-size:11.5px;} th,td{padding:6px 5px;}
+    .tbl-wrap table{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="../index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+
+<div class="hero">
+  <div class="eyebrow">CHINEXT ETF · 2026 Q3 REVIEW</div>
+  <h1>创业板 ETF 三季报体检：<br>PE 23.6 倍，便宜还是陷阱？</h1>
+  <div class="sub">数据截至 2026-10-30 收盘 · 创业板指 399006 · 创业板ETF 159915 · 76 只持仓覆盖 87.5% 净值</div>
+  <div class="verdict"><span class="tagline">结论</span>估值确实便宜，但便宜集中在 3 只股票身上。Q3 净利 +32.3%，剔除宁德/中际/新易盛后是 <b>-1.1%</b>。3% 仓位：<b>持有不加</b>，跌到 2,150 / 1,850 分两档加，反弹到 3,200 以上再减。</div>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="k">创业板指</div><div class="v">2,414</div><div class="s">距 6/25 高点 -44.8%</div></div>
+  <div class="kpi"><div class="k">PE-TTM</div><div class="v">23.6x</div><div class="s">历史 2.0% 分位</div></div>
+  <div class="kpi"><div class="k">PB</div><div class="v">4.0x</div><div class="s">历史 22% 分位</div></div>
+  <div class="kpi"><div class="k">Q3 净利增速</div><div class="v g">+32.3%</div><div class="s">H1 为 +59.9%</div></div>
+  <div class="kpi"><div class="k">前三季净利增速</div><div class="v g">+49.2%</div><div class="s">营收 +59.7%</div></div>
+  <div class="kpi"><div class="k">Top3 集中度</div><div class="v">35.5%</div><div class="s">利润占比 51.4%</div></div>
+</div>
+
+
+<div class="card">
+  <h2><span class="no">1</span>先看结论</h2>
+  <p class="lede">把“估值、盈利、集中度、仓位”四件事分开看，答案会比一句“贵/便宜”清楚得多。</p>
+  
+<div class="concl">
+  <div class="c"><div class="t"><i style="background:#2f6fed"></i>贵不贵</div><div class="h">PE 便宜，PB 不便宜</div>
+    <p>PE 23.6x 是历史 2.0% 分位；但 PB 4.0x 只是 22% 分位。用 2024 年盈利算，PE 是 39.3x。低 PE 是高 ROE（17.0%）造出来的，不是资产打折。</p></div>
+  <div class="c"><div class="t"><i style="background:#2c9e63"></i>盈利</div><div class="h">真的强，但在减速</div>
+    <p>Q3 单季净利 +32.3%，H1 是 +59.9%；中位股 Q3 只有 +7.7%，40/76 正增长。Top3 贡献 32.4pp，剔除后 -1.1%。</p></div>
+  <div class="c"><div class="t"><i style="background:#d94a4a"></i>风险</div><div class="h">不是“创业板”风险<br>是“三只股票”风险</div>
+    <p>宁德 + 中际 + 新易盛 = 35.5% 权重、51.4% 利润；AI 算力链约 35.7%。三只里任何一只逻辑破了，指数 PE 会立刻变贵。</p></div>
+  <div class="c"><div class="t"><i style="background:#d99a00"></i>3% 怎么办</div><div class="h">持有不加，设三档</div>
+    <p>当前不追（低于 200 日线 31%）；2150–2200 加 1%，1850–1950 加 1%；反弹 3200–3400 减 1%。上限 6%。</p></div>
+</div>
+
+</div>
+
+<div class="card">
+  <h2><span class="no">2</span>Q3 财报：增长是真的，但只属于三家公司</h2>
+  <p class="lede">76 只 ETF 持仓 76/76 已披露三季报。单三季度 = 前三季 − 上半年，避免用累计增速掩盖 Q3 的减速。</p>
+  <div class="grid3" style="margin-bottom:6px">
+    <div class="box"><div class="k">Q3 单季营收增速</div><div class="v g">+61.8%</div><div class="s">中位股 +20.7%</div></div>
+    <div class="box"><div class="k">Q3 单季净利增速</div><div class="v g">+32.3%</div><div class="s">H1 +59.9% → Q3 +32.3%</div></div>
+    <div class="box"><div class="k">Q3 净利率</div><div class="v">15.7%</div><div class="s">H1 为 18.2%，压缩 2.5pp</div></div>
+  </div>
+  <div id="g-growth" class="chart"></div>
+  <p class="chart-note">营收增速（+61.8%）远高于净利增速（+32.3%），说明增长更多来自“量”和低毛利业务；中位股净利增速从 H1 的 +29.9% 掉到 Q3 的 +7.7%。</p>
+
+  <div class="callout red"><b>增长高度集中：</b>中际旭创贡献 +18.8pp、宁德时代 +10.1pp、新易盛 +3.5pp，三者合计 <b>+32.4pp</b>，正好等于指数的 +32.3%。其余 73 只合计 <b>-1.1%</b>。</div>
+
+  <div class="grid2">
+    <div>
+      <h3>谁在贡献增长，谁在拖后腿</h3>
+      <div id="g-contrib" class="chart tall"></div>
+      <p class="chart-note">单位：对 Q3 单季净利增速的贡献（pp）。仅列正向前 10 + 负向前 5。</p>
+    </div>
+    <div>
+      <h3>增速分布：一半公司在收缩</h3>
+      <div id="g-dist" class="chart tall"></div>
+      <p class="chart-note">40/76 家正增长（权重 67.3%），36/76 家负增长（权重 20.2%）；只有 25/76 家 Q3 增速快于 H1。</p>
+    </div>
+  </div>
+
+  <h3>前 12 大持仓：权重、增速与贡献</h3>
+  <div class="tbl-wrap" style="max-height:480px">
+    <table>
+      <thead><tr><th>持仓</th><th>权重</th><th>Q3 净利增速</th><th>H1 净利增速</th><th>PE-TTM</th><th>Q3 贡献</th></tr></thead>
+      <tbody><tr>
+      <td><b>宁德时代</b><br><span class="muted">300750</span></td>
+      <td>13.85%</td>
+      <td class="num g"><b>+14.5%</b></td>
+      <td class="num g">+42.0%</td>
+      <td class="num">12.3</td>
+      <td class="num g">+10.1pp</td>
+    </tr><tr>
+      <td><b>中际旭创</b><br><span class="muted">300308</span></td>
+      <td>12.78%</td>
+      <td class="num g"><b>+173.7%</b></td>
+      <td class="num g">+241.7%</td>
+      <td class="num">25.1</td>
+      <td class="num g">+18.8pp</td>
+    </tr><tr>
+      <td><b>新易盛</b><br><span class="muted">300502</span></td>
+      <td>8.85%</td>
+      <td class="num g"><b>+61.2%</b></td>
+      <td class="num g">+91.0%</td>
+      <td class="num">18.8</td>
+      <td class="num g">+3.5pp</td>
+    </tr><tr>
+      <td><b>东方财富</b><br><span class="muted">300059</span></td>
+      <td>4.17%</td>
+      <td class="num g"><b>+8.9%</b></td>
+      <td class="num g">+44.8%</td>
+      <td class="num">18.7</td>
+      <td class="num g">+0.4pp</td>
+    </tr><tr>
+      <td><b>天孚通信</b><br><span class="muted">300394</span></td>
+      <td>2.96%</td>
+      <td class="num g"><b>+55.3%</b></td>
+      <td class="num g">+33.9%</td>
+      <td class="num">61.3</td>
+      <td class="num g">+0.3pp</td>
+    </tr><tr>
+      <td><b>三环集团</b><br><span class="muted">300408</span></td>
+      <td>2.68%</td>
+      <td class="num g"><b>+168.0%</b></td>
+      <td class="num g">+56.2%</td>
+      <td class="num">35.0</td>
+      <td class="num g">+0.9pp</td>
+    </tr><tr>
+      <td><b>胜宏科技</b><br><span class="muted">300476</span></td>
+      <td>2.34%</td>
+      <td class="num r"><b>-52.2%</b></td>
+      <td class="num g">+33.3%</td>
+      <td class="num">30.7</td>
+      <td class="num r">-0.4pp</td>
+    </tr><tr>
+      <td><b>阳光电源</b><br><span class="muted">300274</span></td>
+      <td>2.23%</td>
+      <td class="num r"><b>-67.7%</b></td>
+      <td class="num r">-32.0%</td>
+      <td class="num">16.6</td>
+      <td class="num r">-1.7pp</td>
+    </tr><tr>
+      <td><b>长川科技</b><br><span class="muted">300604</span></td>
+      <td>1.98%</td>
+      <td class="num g"><b>+82.7%</b></td>
+      <td class="num g">+125.7%</td>
+      <td class="num">49.0</td>
+      <td class="num g">+0.2pp</td>
+    </tr><tr>
+      <td><b>汇川技术</b><br><span class="muted">300124</span></td>
+      <td>1.90%</td>
+      <td class="num g"><b>+23.6%</b></td>
+      <td class="num r">-5.4%</td>
+      <td class="num">28.9</td>
+      <td class="num g">+0.2pp</td>
+    </tr><tr>
+      <td><b>迈瑞医疗</b><br><span class="muted">300760</span></td>
+      <td>1.78%</td>
+      <td class="num r"><b>-4.6%</b></td>
+      <td class="num r">-5.4%</td>
+      <td class="num">28.4</td>
+      <td class="num r">-0.1pp</td>
+    </tr><tr>
+      <td><b>协创数据</b><br><span class="muted">300857</span></td>
+      <td>1.44%</td>
+      <td class="num g"><b>+360.3%</b></td>
+      <td class="num g">+325.5%</td>
+      <td class="num">20.3</td>
+      <td class="num g">+0.4pp</td>
+    </tr></tbody>
+    </table>
+  </div>
+  <p class="src">注：Q3 单季 = 2026 前三季 − 2026 上半年；增速为单季同比。权重为 159915 2026 Q3 披露的占净值比例，合计 87.5%（其余为现金/其他资产）。</p>
+
+  <h3 style="margin-top:24px">全部 76 只持仓（可搜索 / 排序）</h3>
+  <div class="toolbar">
+    <input id="q" placeholder="搜索名称或代码" autocomplete="off">
+    <button data-sort="weight" class="on">按权重</button>
+    <button data-sort="q3">按 Q3 增速</button>
+    <button data-sort="pe">按 PE</button>
+    <span class="sp"></span><span id="stock-count" class="tick">76 / 76 只</span>
+  </div>
+  <div class="tbl-wrap" style="max-height:620px">
+    <table style="min-width:980px">
+      <thead><tr>
+        <th>#</th><th>名称 / 代码</th><th>行业</th><th data-sort="weight">权重</th>
+        <th data-sort="pe">PE</th><th>PB</th><th data-sort="q3">Q3 增速</th>
+        <th data-sort="m9">前三季</th><th>PEG*</th><th data-sort="contrib">Q3 贡献</th><th>标签</th>
+      </tr></thead>
+      <tbody id="stock-rows"></tbody>
+    </table>
+  </div>
+  <p class="src">PE 为 TTM；亏损公司 PE 显示“亏损”。PEG* = PE / Q3 增速（仅对正增长公司计算，上限 9.99；单季增速波动大，PEG 仅供参考）。点击表头或上方按钮切换排序。</p>
+</div>
+
+<div class="card">
+  <h2><span class="no">3</span>估值：PE 很低，但 PB 和“正常化盈利”不低</h2>
+  <p class="lede">同一个指数，四个估值镜头给出的答案并不一样。低 PE 不是没有原因。</p>
+  <div class="grid2">
+    <div class="box"><div class="k">TTM PE（官方 399006）</div><div class="v bl">23.6x</div><div class="s">2010 年以来 2.0% 分位 · 近 5 年 6.7% 分位</div></div>
+    <div class="box"><div class="k">PB（官方 399006）</div><div class="v">4.0x</div><div class="s">历史 22% 分位 · 2024 低点 3.18x</div></div>
+    <div class="box"><div class="k">正常化 PE（当前价 / 2024 年利润）</div><div class="v a">39.3x</div><div class="s">用 2025 年利润算 30.0x；用 TTM 算 24.7x</div></div>
+    <div class="box"><div class="k">成分股 PE 中位数</div><div class="v r">35.3x</div><div class="s">等权 PE 48.8x；指数 PE 被三只巨头拉低</div></div>
+  </div>
+  <div id="g-pe" class="chart"></div>
+  <p class="chart-note">PE-TTM 月度序列，2010-06 至 2026-10-30。绿色区域为 PE&lt;30；当前 23.6x 仅高于 2024 年的 22.1–22.7x 低点区域。</p>
+
+  <div class="grid2" style="margin-top:10px">
+    <div>
+      <h3>PE = PB / ROE：低 PE 是高 ROE 造出来的</h3>
+      <div id="g-pbroe" class="chart"></div>
+      <p class="chart-note">每个点是一个月。现在 ROE 17.0%（历史最高），PB 4.0x；2024 低点是 ROE 14.4%、PB 3.18x。ROE 回到 14%，同样的 PB 对应 PE 约 29x。</p>
+    </div>
+    <div>
+      <h3>相对沪深300：1.93x，历史 0.5% 分位</h3>
+      <div id="g-relative" class="chart"></div>
+      <p class="chart-note">创业板 PE / 沪深300 PE 当前 1.93x，历史中位数 3.51x。这是“相对便宜”的最强证据，也说明市场不再给创业板成长溢价。</p>
+    </div>
+  </div>
+
+  <h3>估值分位：不同口径，差异很大</h3>
+  <div class="tbl-wrap" style="max-height:none">
+    <table>
+      <thead><tr><th>指标</th><th>当前</th><th>全历史</th><th>近 10 年</th><th>近 5 年</th><th>读法</th></tr></thead>
+      <tbody>
+        <tr><td><b>PE-TTM（市值加权）</b></td><td>23.6x</td><td class="g">2.0%</td><td class="g">3.3%</td><td class="g">6.7%</td><td>历史级便宜</td></tr>
+        <tr><td><b>PB（市值加权）</b></td><td>4.0x</td><td>22.3%</td><td>18.2%</td><td>23.3%</td><td>不贵，但离地板还有距离</td></tr>
+        <tr><td><b>PE / 2024 年盈利</b></td><td>39.3x</td><td>—</td><td>—</td><td>—</td><td>盈利正常化后并不便宜</td></tr>
+        <tr><td><b>成分股 PE 中位数</b></td><td>35.3x</td><td>—</td><td>—</td><td>—</td><td>典型成分股 30 倍以上</td></tr>
+        <tr><td><b>创业板 / 沪深300 PE</b></td><td>1.93x</td><td class="g">0.5%</td><td>—</td><td>—</td><td>相对大盘历史级便宜</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout blue"><b>把四个数字放在一起：</b>PE 23.6x 是“权重股便宜”，PB 4.0x 是“资产不便宜”，正常化 PE 39.3x 是“盈利在周期高位”，中位股 35.3x 是“典型股票不便宜”。所以不是全面便宜，而是<b>三只低估值巨头 + 一群 30–50 倍小盘</b>的加权平均。</div>
+  <p class="src">Top3（宁德/中际/新易盛）权重 35.5%、TTM 利润占比 51.4%，PE 15.6x；其余 73 只 PE 34.2x。</p>
+</div>
+
+<div class="card">
+  <h2><span class="no">4</span>便宜是怎么来的：股价没涨，盈利把估值消化了</h2>
+  <p class="lede">这不是“杀资产”，是“杀估值 + 盈利兑现”。但市场杀的是未来的盈利，不是过去的盈利。</p>
+  <div id="g-price-eps" class="chart"></div>
+  <div class="grid3" style="margin-top:6px">
+    <div class="box"><div class="k">2024 年底 → 现在</div><div class="v g">+12.7%</div><div class="s">指数涨幅；隐含 EPS +52.4%，PE 31.9x → 23.6x</div></div>
+    <div class="box"><div class="k">6/25 高点 → 现在</div><div class="v r">-44.8%</div><div class="s">127 天；PE 48.0x → 23.6x（-50.8%）</div></div>
+    <div class="box"><div class="k">盈利（TTM，76 只持仓）</div><div class="v">2,495 亿</div><div class="s">2024 年 1,566 亿 → 2025 年 2,050 亿 → TTM 2,495 亿</div></div>
+  </div>
+  <div class="callout"><b>关键差别：</b>2024 年底到现在，指数只涨了 12.7%，但隐含 EPS 涨了 52.4%，PE 从 31.9x 降到 23.6x。6 月高点以来则相反：指数 -44.8%，EPS 还在涨（+13.0%），跌的全是估值。</div>
+</div>
+
+<div class="card">
+  <h2><span class="no">5</span>历史经验：低 PE 之后发生过什么</h2>
+  <p class="lede">把过去 16 年几次“低 PE / 深回撤”拉出来对照。结论不是“这次一定涨”，而是“赔率站在你这边，但需要时间”。</p>
+  <div class="tbl-wrap" style="max-height:none">
+    <table>
+      <thead><tr><th>时点</th><th>指数</th><th>PE</th><th>PB</th><th>隐含 ROE</th><th>之后 12 个月</th></tr></thead>
+      <tbody><tr class="">
+      <td>2012-11</td><td class="num">607</td><td class="num">28.2x</td>
+      <td class="num">2.63x</td><td class="num">9.3%</td>
+      <td class="num g">+125.3%</td></tr><tr class="">
+      <td>2015-05</td><td class="num">3,543</td><td class="num">122.3x</td>
+      <td class="num">13.40x</td><td class="num">11.0%</td>
+      <td class="num r">-39.0%</td></tr><tr class="">
+      <td>2018-12</td><td class="num">1,251</td><td class="num">26.6x</td>
+      <td class="num">3.25x</td><td class="num">12.2%</td>
+      <td class="num g">+43.8%</td></tr><tr class="">
+      <td>2022-10</td><td class="num">2,265</td><td class="num">34.1x</td>
+      <td class="num">4.98x</td><td class="num">14.6%</td>
+      <td class="num r">-13.1%</td></tr><tr class="">
+      <td>2024-01</td><td class="num">1,573</td><td class="num">22.1x</td>
+      <td class="num">3.18x</td><td class="num">14.4%</td>
+      <td class="num g">+31.2%</td></tr><tr class="hlrow">
+      <td>2026-06</td><td class="num">4,343</td><td class="num">48.0x</td>
+      <td class="num">7.40x</td><td class="num">15.4%</td>
+      <td class="num r">-44.4%</td></tr><tr class="hlrow">
+  <td><b>现在</b></td><td class="num"><b>2,414</b></td><td class="num"><b>23.6x</b></td>
+  <td class="num"><b>4.00x</b></td><td class="num"><b>17.0%</b></td><td class="num">?</td></tr></tbody>
+    </table>
+  </div>
+  <div id="g-forward" class="chart short"></div>
+  <p class="chart-note">按月末 PE 分组，统计之后 12 个月收益中位数与胜率；样本为 2010-06 至 2026-10 的月度数据，存在重叠，不是独立样本。</p>
+  <div class="rule"><div class="rn">1</div><div><b>低 PE 不等于马上涨。</b>2012-11、2018-12、2024-01 三次低点后，都先磨了几个月，12 个月才兑现；当前 20 日线还在 2,800，趋势没转。</div></div>
+  <div class="rule"><div class="rn">2</div><div><b>PB 比 PE 更诚实。</b>2022-10 PE 34.1x 看着不高，但 PB 4.98x、ROE 14.6%，之后 12 个月 -13%；现在 PB 4.0x 比那时低，但比 2024 年的 3.18x 高。</div></div>
+  <div class="rule"><div class="rn">3</div><div><b>盈利方向决定一切。</b>2012/2018/2024 的低 PE 后面盈利都企稳或回升；2022 的低 PE 后面盈利继续下修。当前盈利还在增长，但 Q3 已从 +59.9% 减速到 +32.3%，这是最大的不确定。</div></div>
+  <div class="callout blue"><b>PE&lt;30 的 23 个完整月度样本里，22 次 12 个月正收益，中位 +25.2%。</b>唯一失败是 2023-08（PE 29.6x，之后盈利下修，12 个月 -24.8%）。样本少、重叠多，别把 96% 当成胜率保证；它只说明一件事：在这个估值买，长期赔率不差。</div>
+</div>
+
+<div class="card">
+  <h2><span class="no">6</span>未来 12 个月：四种情景与概率</h2>
+  <p class="lede">用“EPS × PE”做情景，不给单点预测。概率是主观赔率排序，不是精确预测。</p>
+  <div class="scen"><div class="s a">
+      <div class="p" style="color:#2c9e63">30%</div>
+      <div class="n">A. 盈利韧性 + 估值修复</div>
+      <div class="d">Q4 环比不降、AI 资本开支上修、指数站上 2800 并放量</div>
+      <div class="lv">EPS +20% · PE 28x → <b>3,440</b> 点<br>
+        <span class="g">+42.5%</span></div>
+      <div class="bar"><span style="width:30%;background:#2c9e63"></span></div>
+    </div><div class="s b">
+      <div class="p" style="color:#2f6fed">40%</div>
+      <div class="n">B. 盈利兑现 + 估值横盘</div>
+      <div class="d">Q4 增速 10–20%，指数 2400–2800 区间震荡，用时间换空间</div>
+      <div class="lv">EPS +10% · PE 24x → <b>2,703</b> 点<br>
+        <span class="g">+12.0%</span></div>
+      <div class="bar"><span style="width:40%;background:#2f6fed"></span></div>
+    </div><div class="s c">
+      <div class="p" style="color:#d99a00">20%</div>
+      <div class="n">C. 增速失速 + 杀估值</div>
+      <div class="d">Top3 Q4 增速 <10%，跌破 2200，PB 向 2024 年低点靠拢</div>
+      <div class="lv">EPS +0% · PE 18x → <b>1,843</b> 点<br>
+        <span class="r">-23.6%</span></div>
+      <div class="bar"><span style="width:20%;background:#d99a00"></span></div>
+    </div><div class="s d">
+      <div class="p" style="color:#d94a4a">10%</div>
+      <div class="n">D. AI 资本开支断崖</div>
+      <div class="d">北美云厂砍单，中际/新易盛单季环比 -30%，盈利与估值双杀</div>
+      <div class="lv">EPS -20% · PE 15x → <b>1,229</b> 点<br>
+        <span class="r">-49.1%</span></div>
+      <div class="bar"><span style="width:10%;background:#d94a4a"></span></div>
+    </div></div>
+  <div class="grid3" style="margin-top:14px">
+    <div class="box"><div class="k">概率加权期望</div><div class="v g">+7.9%</div><div class="s">12 个月，按上表概率加权</div></div>
+    <div class="box"><div class="k">正收益概率</div><div class="v g">70%</div><div class="s">A+B；但 B 只有 +12% 左右</div></div>
+    <div class="box"><div class="k">再探底概率</div><div class="v a">30%</div><div class="s">C+D；D 概率低但损失大</div></div>
+  </div>
+  <div class="callout"><b>短期（1–3 个月）：</b>10/30 放量 2.5 倍、单日 -4.1%，超跌反弹概率约 60%；但 20 日线 2,800 没站上之前，反弹都先按“下跌中继”处理。不要用“PE 低”去接飞刀，等价格给确认。</div>
+</div>
+
+<div class="card">
+  <h2><span class="no">7</span>3% 仓位怎么办：一套可执行的规则</h2>
+  <p class="lede">3% 是很小的仓位。最大的风险不是这点仓位亏钱，而是“因为便宜”把它加成重仓。</p>
+  <div class="callout blue"><b>当前判断：</b>持有 3%，不加。理由：估值便宜（PE 23.6x / 2.0% 分位），但趋势没止跌（低于 200 日线 31%）、Q3 增速腰斩、Top3 占 35.5%。现在加仓是“猜底”，不是“配置”。</div>
+  
+<div class="ladder">
+  <div class="h">位置</div><div class="h">触发</div><div class="h">动作</div><div class="h">仓位</div>
+  <div class="lvl">现在</div><div>2,414 点 / ETF 2.435</div><div class="act">持有，不追</div><div>3%</div>
+  <div class="lvl">左侧一档</div><div>2,150–2,200 点（PE≈21，ETF 2.17–2.22）</div><div class="act g">加 1%</div><div>4%</div>
+  <div class="lvl">左侧二档</div><div>1,850–1,950 点（PE≈18，ETF 1.87–1.97）</div><div class="act g">加 1%</div><div>5%</div>
+  <div class="lvl">右侧确认</div><div>站上 20 日线（≈2,800）且 5 日不破</div><div class="act g">加 1%</div><div>6%</div>
+  <div class="lvl">减仓一档</div><div>3,200–3,400 点（PE 31–33，ETF 3.23–3.43）</div><div class="act r">减 1%</div><div>2–3%</div>
+  <div class="lvl">减仓二档</div><div>3,800 点以上（PE≈37）</div><div class="act r">减到 1–2%</div><div>1–2%</div>
+  <div class="lvl">暂停/复盘</div><div>跌破 2,200 且 Q4 Top3 增速 &lt;10%</div><div class="act a">暂停加仓，减 1%</div><div>2%</div>
+</div>
+
+  <h3 style="margin-top:18px">为什么不在 -45% 割，也不现在满仓</h3>
+  <div class="rule"><div class="rn">1</div><div><b>不在 -45% 割：</b>3% 仓位即使再跌 30%，对总组合只有 -0.9%；但在 PE 历史 2.0% 分位割掉，失去的是未来 12 个月 70% 概率的正收益。除非 thesis 破了（见下），否则割在这里是情绪操作。</div></div>
+  <div class="rule"><div class="rn">2</div><div><b>不现在满仓：</b>指数低于 200 日线 31%、20 日线还在往下、Q3 增速从 +59.9% 掉到 +32.3%。估值便宜可以让你“不卖”，但不能让你“买在下跌趋势里”。</div></div>
+  <div class="rule"><div class="rn">3</div><div><b>加仓只加两档：</b>2,150–2,200（PE≈21，接近 2024 低点估值）和 1,850–1,950（PE≈18，PB 接近 2024 低点 3.1x）。每档 1%，上限 6%。</div></div>
+  <div class="rule"><div class="rn">4</div><div><b>减仓看估值，不看成本：</b>反弹到 3,200–3,400（PE 31–33）减 1%；3,800 点以上（PE≈37）减到 1–2%。不要因为“回本了”就卖，也不要因为“还亏”就不卖。</div></div>
+  <h3>什么情况说明 thesis 破了（无条件减仓）</h3>
+  <div class="rule"><div class="rn">!</div><div>中际/新易盛 Q4 单季净利环比下滑 &gt;20%，或北美云厂 2027 capex guidance 明显下修；</div></div>
+  <div class="rule"><div class="rn">!</div><div>宁德时代毛利率跌破 20%，或出现明确价格战；</div></div>
+  <div class="rule"><div class="rn">!</div><div>指数跌破 2,200 后 2 周内收不回来，且 Q4 Top3 增速 &lt;10%；</div></div>
+  <div class="rule"><div class="rn">!</div><div>AI 硬件出口/贸易限制直接冲击光模块订单。</div></div>
+  <h3>不要做的事</h3>
+  <div class="rule"><div class="rn">×</div><div>不要因为“PE 历史最低”一次加到 10% 以上——指数 PE 低是因为 Top3 利润占一半，不是整个创业板便宜。</div></div>
+  <div class="rule"><div class="rn">×</div><div>不要用杠杆/融资盘去接；-45% 之后波动率仍在高位，杠杆会先把你洗出去。</div></div>
+  <div class="rule"><div class="rn">×</div><div>不要把“反弹 10%”当成反转；先看能否站上 2,800（20 日线）和 3,220（60 日线）。</div></div>
+</div>
+
+<div class="card">
+  <h2><span class="no">8</span>数据与口径</h2>
+  <div class="foot">
+    <p><b>指数：</b>创业板指 399006，收盘/成交额来自国证指数（cnindex），2026-10-30 收盘 2,413.63；ETF 为易方达创业板ETF 159915，10/30 收盘 2.435，规模约 886 亿元（腾讯行情口径），距 52 周高点 -44.6%。</p>
+    <p><b>成分/持仓：</b>ETF 2026 Q3 披露持仓 76 只，合计占净值 87.5%；权重为占净值比例，未归一化。指数前 10 权重来自国证指数 2026-10-29 样本数据。</p>
+    <p><b>财务：</b>2026 三季报、2026 半年报、2025 三季报/半年报、2025 年报、2024 年报，东方财富业绩报表；单三季度 = 前三季 − 上半年；TTM = 2025 年报 + 2026 前三季 − 2025 前三季。76/76 持仓均已披露 2026 三季报。</p>
+    <p><b>估值：</b>PE-TTM / PB 为乐咕乐股 399006 月度序列（2010-06 起）；10/30 PE/PB 按指数当日涨跌从 10/29 折算，为估算值。分位为“历史序列中 ≤ 当前值的比例”，含当前点。PE/2024 盈利、PE/2025 盈利为“当前总市值 ÷ 对应年度净利润”，与官方加权 PE 口径略有差异。</p>
+    <p><b>行情/个股：</b>个股 PE-TTM、PB、市值来自腾讯行情 2026-10-30 收盘；历史条件收益用月度收盘，2010-06 至 2026-10，样本存在重叠，仅供赔率参考。</p>
+    <p><b>局限：</b>① ETF 持仓为 Q3 末披露，10 月价格变动后实际权重已变化；② 单季增速在低基数/亏损转正时会被放大，表内已用“亏损/负增长”标注；③ 历史只有 16 年、两轮半牛熊，条件样本小；④ 本文是数据研究，不构成投资建议。</p>
+  </div>
+</div>
+
+</div>
+<script src="echarts.min.js"></script>
+<script>
+if (!window.echarts) document.write('<script src="https://unpkg.com/echarts@5/dist/echarts.min.js"><\/script>');
+</script>
+<script>
+const D = {"growth":{"cats":["2026 H1","2026 Q3","2026 前三季"],"rev":[58.5,61.8,59.7],"np":[59.9,32.3,49.2],"med":[29.9,7.7,16.6]},"contrib":[{"name":"阳光电源","v":-1.7},{"name":"润泽科技","v":-0.7},{"name":"胜宏科技","v":-0.4},{"name":"蓝思科技","v":-0.3},{"name":"昆仑万维","v":-0.2},{"name":"君正股份","v":0.3},{"name":"亿纬锂能","v":0.3},{"name":"天孚通信","v":0.3},{"name":"香农芯创","v":0.4},{"name":"协创数据","v":0.4},{"name":"东方财富","v":0.4},{"name":"三环集团","v":0.9},{"name":"新易盛","v":3.5},{"name":"宁德时代","v":10.1},{"name":"中际旭创","v":18.8}],"dist":{"cats":["<-50%","-50~-20%","-20~0%","0~20%","20~50%","50~100%",">100%"],"count":[21,9,6,9,9,8,12],"weight":[12.9,2.6,4.7,21.3,4.9,18.0,21.8]},"pe":[{"d":"2010-06-30","pe":63.69},{"d":"2010-07-30","pe":64.6},{"d":"2010-08-31","pe":66.49},{"d":"2010-09-30","pe":61.01},{"d":"2010-10-29","pe":66.26},{"d":"2010-11-30","pe":73.67},{"d":"2010-12-31","pe":70.73},{"d":"2011-01-31","pe":63.16},{"d":"2011-02-28","pe":62.93},{"d":"2011-03-31","pe":58.11},{"d":"2011-04-29","pe":49.22},{"d":"2011-05-31","pe":45.42},{"d":"2011-06-30","pe":45.28},{"d":"2011-07-29","pe":48.42},{"d":"2011-08-31","pe":47.58},{"d":"2011-09-30","pe":40.93},{"d":"2011-10-31","pe":43.16},{"d":"2011-11-30","pe":42.42},{"d":"2011-12-30","pe":36.89},{"d":"2012-01-31","pe":32.41},{"d":"2012-02-29","pe":36.75},{"d":"2012-03-30","pe":33.91},{"d":"2012-04-27","pe":33.72},{"d":"2012-05-31","pe":36.16},{"d":"2012-06-29","pe":35.73},{"d":"2012-07-31","pe":32.99},{"d":"2012-08-31","pe":33.34},{"d":"2012-09-28","pe":32.41},{"d":"2012-10-31","pe":31.77},{"d":"2012-11-30","pe":28.18},{"d":"2012-12-31","pe":32.99},{"d":"2013-01-31","pe":36.2},{"d":"2013-02-28","pe":39.08},{"d":"2013-03-29","pe":39.28},{"d":"2013-04-26","pe":39.97},{"d":"2013-05-31","pe":48.06},{"d":"2013-06-28","pe":44.78},{"d":"2013-07-31","pe":49.81},{"d":"2013-08-30","pe":50.42},{"d":"2013-09-30","pe":58.31},{"d":"2013-10-31","pe":51.74},{"d":"2013-11-29","pe":57.28},{"d":"2013-12-31","pe":55.04},{"d":"2014-01-30","pe":63.79},{"d":"2014-02-28","pe":58.52},{"d":"2014-03-31","pe":53.9},{"d":"2014-04-30","pe":50.17},{"d":"2014-05-30","pe":51.62},{"d":"2014-06-30","pe":55.29},{"d":"2014-07-31","pe":52.24},{"d":"2014-08-29","pe":53.66},{"d":"2014-09-30","pe":57.88},{"d":"2014-10-31","pe":56.08},{"d":"2014-11-28","pe":57.73},{"d":"2014-12-31","pe":53.84},{"d":"2015-01-30","pe":60.98},{"d":"2015-02-27","pe":67.36},{"d":"2015-03-31","pe":80.05},{"d":"2015-04-30","pe":98.85},{"d":"2015-05-29","pe":122.28},{"d":"2015-06-30","pe":98.03},{"d":"2015-07-31","pe":84.25},{"d":"2015-08-31","pe":61.04},{"d":"2015-09-30","pe":63.35},{"d":"2015-10-30","pe":71.77},{"d":"2015-11-30","pe":68.57},{"d":"2015-12-31","pe":70.59},{"d":"2016-01-29","pe":54.11},{"d":"2016-02-29","pe":47.88},{"d":"2016-03-31","pe":56.44},{"d":"2016-04-29","pe":50.24},{"d":"2016-05-31","pe":51.01},{"d":"2016-06-30","pe":51.97},{"d":"2016-07-29","pe":51.34},{"d":"2016-08-31","pe":48.06},{"d":"2016-09-30","pe":46.99},{"d":"2016-10-31","pe":44.64},{"d":"2016-11-30","pe":45.11},{"d":"2016-12-30","pe":40.85},{"d":"2017-01-26","pe":39.4},{"d":"2017-02-28","pe":39.34},{"d":"2017-03-31","pe":39.05},{"d":"2017-04-28","pe":39.48},{"d":"2017-05-31","pe":37.55},{"d":"2017-06-30","pe":39.06},{"d":"2017-07-31","pe":38.03},{"d":"2017-08-31","pe":41.6},{"d":"2017-09-29","pe":41.78},{"d":"2017-10-31","pe":41.16},{"d":"2017-11-30","pe":38.9},{"d":"2017-12-29","pe":38.55},{"d":"2018-01-31","pe":39.14},{"d":"2018-02-28","pe":36.32},{"d":"2018-03-30","pe":39.4},{"d":"2018-04-27","pe":36.95},{"d":"2018-05-31","pe":35.66},{"d":"2018-06-29","pe":32.82},{"d":"2018-07-31","pe":33.26},{"d":"2018-08-31","pe":29.77},{"d":"2018-09-28","pe":29.22},{"d":"2018-10-31","pe":27.0},{"d":"2018-11-30","pe":28.27},{"d":"2018-12-28","pe":26.58},{"d":"2019-01-31","pe":27.05},{"d":"2019-02-28","pe":39.93},{"d":"2019-03-29","pe":43.52},{"d":"2019-04-30","pe":42.66},{"d":"2019-05-31","pe":39.46},{"d":"2019-06-28","pe":41.05},{"d":"2019-07-31","pe":42.26},{"d":"2019-08-30","pe":41.92},{"d":"2019-09-30","pe":42.17},{"d":"2019-10-31","pe":40.54},{"d":"2019-11-29","pe":40.76},{"d":"2019-12-31","pe":44.08},{"d":"2020-01-23","pe":48.01},{"d":"2020-02-28","pe":45.55},{"d":"2020-03-31","pe":42.15},{"d":"2020-04-30","pe":46.11},{"d":"2020-05-29","pe":47.07},{"d":"2020-06-30","pe":56.42},{"d":"2020-07-31","pe":64.19},{"d":"2020-08-31","pe":56.27},{"d":"2020-09-30","pe":54.01},{"d":"2020-10-30","pe":52.85},{"d":"2020-11-30","pe":51.65},{"d":"2020-12-31","pe":59.42},{"d":"2021-01-29","pe":63.32},{"d":"2021-02-26","pe":62.59},{"d":"2021-03-31","pe":55.64},{"d":"2021-04-30","pe":53.41},{"d":"2021-05-31","pe":57.48},{"d":"2021-06-30","pe":60.29},{"d":"2021-07-30","pe":57.69},{"d":"2021-08-31","pe":53.21},{"d":"2021-09-30","pe":54.06},{"d":"2021-10-29","pe":54.41},{"d":"2021-11-30","pe":56.68},{"d":"2021-12-31","pe":55.23},{"d":"2022-01-28","pe":48.06},{"d":"2022-02-28","pe":48.45},{"d":"2022-03-31","pe":43.79},{"d":"2022-04-29","pe":37.82},{"d":"2022-05-31","pe":39.69},{"d":"2022-06-30","pe":46.67},{"d":"2022-07-29","pe":44.19},{"d":"2022-08-31","pe":40.38},{"d":"2022-09-30","pe":36.29},{"d":"2022-10-31","pe":34.06},{"d":"2022-11-30","pe":35.3},{"d":"2022-12-30","pe":35.81},{"d":"2023-01-31","pe":39.24},{"d":"2023-02-28","pe":36.9},{"d":"2023-03-31","pe":35.03},{"d":"2023-04-28","pe":32.54},{"d":"2023-05-31","pe":30.53},{"d":"2023-06-30","pe":31.41},{"d":"2023-07-31","pe":31.01},{"d":"2023-08-31","pe":29.63},{"d":"2023-09-28","pe":28.28},{"d":"2023-10-31","pe":27.32},{"d":"2023-11-30","pe":26.63},{"d":"2023-12-29","pe":26.35},{"d":"2024-01-31","pe":22.12},{"d":"2024-02-29","pe":24.3},{"d":"2024-03-29","pe":24.39},{"d":"2024-04-30","pe":26.11},{"d":"2024-05-31","pe":25.29},{"d":"2024-06-28","pe":23.77},{"d":"2024-07-31","pe":23.53},{"d":"2024-08-30","pe":22.68},{"d":"2024-09-30","pe":31.06},{"d":"2024-10-31","pe":31.17},{"d":"2024-11-29","pe":32.42},{"d":"2024-12-31","pe":31.88},{"d":"2025-01-27","pe":30.81},{"d":"2025-02-28","pe":33.24},{"d":"2025-03-31","pe":31.61},{"d":"2025-04-30","pe":26.41},{"d":"2025-05-30","pe":27.32},{"d":"2025-06-30","pe":29.78},{"d":"2025-07-31","pe":31.08},{"d":"2025-08-29","pe":37.11},{"d":"2025-09-30","pe":41.23},{"d":"2025-10-31","pe":37.71},{"d":"2025-11-28","pe":35.84},{"d":"2025-12-31","pe":37.76},{"d":"2026-01-30","pe":39.27},{"d":"2026-02-27","pe":39.97},{"d":"2026-03-31","pe":36.16},{"d":"2026-04-30","pe":38.93},{"d":"2026-05-29","pe":42.5},{"d":"2026-06-30","pe":47.95},{"d":"2026-07-31","pe":36.98},{"d":"2026-08-31","pe":34.71},{"d":"2026-09-30","pe":31.31},{"d":"2026-10-30","pe":23.57}],"pbroe":[{"d":"2010-06-30","roe":7.22,"pb":4.6,"pe":63.69},{"d":"2010-07-30","roe":7.04,"pb":4.55,"pe":64.6},{"d":"2010-08-31","roe":7.17,"pb":4.77,"pe":66.49},{"d":"2010-09-30","roe":7.18,"pb":4.38,"pe":61.01},{"d":"2010-10-29","roe":7.32,"pb":4.85,"pe":66.26},{"d":"2010-11-30","roe":7.3,"pb":5.38,"pe":73.67},{"d":"2010-12-31","roe":7.31,"pb":5.17,"pe":70.73},{"d":"2011-01-31","roe":7.49,"pb":4.73,"pe":63.16},{"d":"2011-02-28","roe":7.8,"pb":4.91,"pe":62.93},{"d":"2011-03-31","roe":7.8,"pb":4.53,"pe":58.11},{"d":"2011-04-29","roe":8.55,"pb":4.21,"pe":49.22},{"d":"2011-05-31","roe":8.63,"pb":3.92,"pe":45.42},{"d":"2011-06-30","roe":8.66,"pb":3.92,"pe":45.28},{"d":"2011-07-29","roe":8.67,"pb":4.2,"pe":48.42},{"d":"2011-08-31","roe":8.76,"pb":4.17,"pe":47.58},{"d":"2011-09-30","roe":8.77,"pb":3.59,"pe":40.93},{"d":"2011-10-31","roe":8.64,"pb":3.73,"pe":43.16},{"d":"2011-11-30","roe":8.65,"pb":3.67,"pe":42.42},{"d":"2011-12-30","roe":8.65,"pb":3.19,"pe":36.89},{"d":"2012-01-31","roe":8.76,"pb":2.84,"pe":32.41},{"d":"2012-02-29","roe":8.57,"pb":3.15,"pe":36.75},{"d":"2012-03-30","roe":8.58,"pb":2.91,"pe":33.91},{"d":"2012-04-27","roe":8.87,"pb":2.99,"pe":33.72},{"d":"2012-05-31","roe":9.02,"pb":3.26,"pe":36.16},{"d":"2012-06-29","roe":9.04,"pb":3.23,"pe":35.73},{"d":"2012-07-31","roe":9.12,"pb":3.01,"pe":32.99},{"d":"2012-08-31","roe":9.36,"pb":3.12,"pe":33.34},{"d":"2012-09-28","roe":9.32,"pb":3.02,"pe":32.41},{"d":"2012-10-31","roe":9.38,"pb":2.98,"pe":31.77},{"d":"2012-11-30","roe":9.33,"pb":2.63,"pe":28.18},{"d":"2012-12-31","roe":9.46,"pb":3.12,"pe":32.99},{"d":"2013-01-31","roe":9.53,"pb":3.45,"pe":36.2},{"d":"2013-02-28","roe":9.49,"pb":3.71,"pe":39.08},{"d":"2013-03-29","roe":9.47,"pb":3.72,"pe":39.28},{"d":"2013-04-26","roe":9.73,"pb":3.89,"pe":39.97},{"d":"2013-05-31","roe":9.88,"pb":4.75,"pe":48.06},{"d":"2013-06-28","roe":9.96,"pb":4.46,"pe":44.78},{"d":"2013-07-31","roe":10.08,"pb":5.02,"pe":49.81},{"d":"2013-08-30","roe":10.23,"pb":5.16,"pe":50.42},{"d":"2013-09-30","roe":10.07,"pb":5.87,"pe":58.31},{"d":"2013-10-31","roe":10.42,"pb":5.39,"pe":51.74},{"d":"2013-11-29","roe":10.39,"pb":5.95,"pe":57.28},{"d":"2013-12-31","roe":10.37,"pb":5.71,"pe":55.04},{"d":"2014-01-30","roe":10.41,"pb":6.64,"pe":63.79},{"d":"2014-02-28","roe":10.63,"pb":6.22,"pe":58.52},{"d":"2014-03-31","roe":10.5,"pb":5.66,"pe":53.9},{"d":"2014-04-30","roe":10.94,"pb":5.49,"pe":50.17},{"d":"2014-05-30","roe":10.89,"pb":5.62,"pe":51.62},{"d":"2014-06-30","roe":10.82,"pb":5.98,"pe":55.29},{"d":"2014-07-31","roe":10.83,"pb":5.66,"pe":52.24},{"d":"2014-08-29","roe":10.92,"pb":5.86,"pe":53.66},{"d":"2014-09-30","roe":10.88,"pb":6.3,"pe":57.88},{"d":"2014-10-31","roe":11.27,"pb":6.32,"pe":56.08},{"d":"2014-11-28","roe":11.09,"pb":6.4,"pe":57.73},{"d":"2014-12-31","roe":11.07,"pb":5.96,"pe":53.84},{"d":"2015-01-30","roe":11.35,"pb":6.92,"pe":60.98},{"d":"2015-02-27","roe":11.24,"pb":7.57,"pe":67.36},{"d":"2015-03-31","roe":10.98,"pb":8.79,"pe":80.05},{"d":"2015-04-30","roe":10.95,"pb":10.82,"pe":98.85},{"d":"2015-05-29","roe":10.96,"pb":13.4,"pe":122.28},{"d":"2015-06-30","roe":10.99,"pb":10.77,"pe":98.03},{"d":"2015-07-31","roe":11.2,"pb":9.44,"pe":84.25},{"d":"2015-08-31","roe":11.24,"pb":6.86,"pe":61.04},{"d":"2015-09-30","roe":11.05,"pb":7.0,"pe":63.35},{"d":"2015-10-30","roe":11.68,"pb":8.38,"pe":71.77},{"d":"2015-11-30","roe":12.85,"pb":8.81,"pe":68.57},{"d":"2015-12-31","roe":12.21,"pb":8.62,"pe":70.59},{"d":"2016-01-29","roe":11.85,"pb":6.41,"pe":54.11},{"d":"2016-02-29","roe":12.3,"pb":5.89,"pe":47.88},{"d":"2016-03-31","roe":11.91,"pb":6.72,"pe":56.44},{"d":"2016-04-29","roe":12.86,"pb":6.46,"pe":50.24},{"d":"2016-05-31","roe":12.49,"pb":6.37,"pe":51.01},{"d":"2016-06-30","roe":12.49,"pb":6.49,"pe":51.97},{"d":"2016-07-29","roe":12.15,"pb":6.24,"pe":51.34},{"d":"2016-08-31","roe":12.48,"pb":6.0,"pe":48.06},{"d":"2016-09-30","roe":12.39,"pb":5.82,"pe":46.99},{"d":"2016-10-31","roe":12.66,"pb":5.65,"pe":44.64},{"d":"2016-11-30","roe":12.64,"pb":5.7,"pe":45.11},{"d":"2016-12-30","roe":12.61,"pb":5.15,"pe":40.85},{"d":"2017-01-26","roe":12.56,"pb":4.95,"pe":39.4},{"d":"2017-02-28","roe":12.46,"pb":4.9,"pe":39.34},{"d":"2017-03-31","roe":12.47,"pb":4.87,"pe":39.05},{"d":"2017-04-28","roe":11.93,"pb":4.71,"pe":39.48},{"d":"2017-05-31","roe":12.09,"pb":4.54,"pe":37.55},{"d":"2017-06-30","roe":12.03,"pb":4.7,"pe":39.06},{"d":"2017-07-31","roe":11.81,"pb":4.49,"pe":38.03},{"d":"2017-08-31","roe":11.11,"pb":4.62,"pe":41.6},{"d":"2017-09-29","roe":11.2,"pb":4.68,"pe":41.78},{"d":"2017-10-31","roe":11.18,"pb":4.6,"pe":41.16},{"d":"2017-11-30","roe":11.16,"pb":4.34,"pe":38.9},{"d":"2017-12-29","roe":11.15,"pb":4.3,"pe":38.55},{"d":"2018-01-31","roe":11.11,"pb":4.35,"pe":39.14},{"d":"2018-02-28","roe":11.62,"pb":4.22,"pe":36.32},{"d":"2018-03-30","roe":11.55,"pb":4.55,"pe":39.4},{"d":"2018-04-27","roe":11.77,"pb":4.35,"pe":36.95},{"d":"2018-05-31","roe":11.86,"pb":4.23,"pe":35.66},{"d":"2018-06-29","roe":11.91,"pb":3.91,"pe":32.82},{"d":"2018-07-31","roe":11.79,"pb":3.92,"pe":33.26},{"d":"2018-08-31","roe":12.33,"pb":3.67,"pe":29.77},{"d":"2018-09-28","roe":12.29,"pb":3.59,"pe":29.22},{"d":"2018-10-31","roe":12.3,"pb":3.32,"pe":27.0},{"d":"2018-11-30","roe":12.27,"pb":3.47,"pe":28.27},{"d":"2018-12-28","roe":12.23,"pb":3.25,"pe":26.58},{"d":"2019-01-31","roe":12.72,"pb":3.44,"pe":27.05},{"d":"2019-02-28","roe":11.17,"pb":4.46,"pe":39.93},{"d":"2019-03-29","roe":11.14,"pb":4.85,"pe":43.52},{"d":"2019-04-30","roe":11.04,"pb":4.71,"pe":42.66},{"d":"2019-05-31","roe":11.02,"pb":4.35,"pe":39.46},{"d":"2019-06-28","roe":11.38,"pb":4.67,"pe":41.05},{"d":"2019-07-31","roe":11.48,"pb":4.85,"pe":42.26},{"d":"2019-08-30","roe":12.21,"pb":5.12,"pe":41.92},{"d":"2019-09-30","roe":12.21,"pb":5.15,"pe":42.17},{"d":"2019-10-31","roe":12.38,"pb":5.02,"pe":40.54},{"d":"2019-11-29","roe":12.34,"pb":5.03,"pe":40.76},{"d":"2019-12-31","roe":12.68,"pb":5.59,"pe":44.08},{"d":"2020-01-23","roe":12.62,"pb":6.06,"pe":48.01},{"d":"2020-02-28","roe":14.09,"pb":6.42,"pe":45.55},{"d":"2020-03-31","roe":14.07,"pb":5.93,"pe":42.15},{"d":"2020-04-30","roe":13.68,"pb":6.31,"pe":46.11},{"d":"2020-05-29","roe":13.75,"pb":6.47,"pe":47.07},{"d":"2020-06-30","roe":14.11,"pb":7.96,"pe":56.42},{"d":"2020-07-31","roe":14.18,"pb":9.1,"pe":64.19},{"d":"2020-08-31","roe":14.73,"pb":8.29,"pe":56.27},{"d":"2020-09-30","roe":14.44,"pb":7.8,"pe":54.01},{"d":"2020-10-30","roe":14.95,"pb":7.9,"pe":52.85},{"d":"2020-11-30","roe":14.83,"pb":7.66,"pe":51.65},{"d":"2020-12-31","roe":14.71,"pb":8.74,"pe":59.42},{"d":"2021-01-29","roe":14.4,"pb":9.12,"pe":63.32},{"d":"2021-02-26","roe":13.13,"pb":8.22,"pe":62.59},{"d":"2021-03-31","roe":13.7,"pb":7.62,"pe":55.64},{"d":"2021-04-30","roe":15.17,"pb":8.1,"pe":53.41},{"d":"2021-05-31","roe":15.22,"pb":8.75,"pe":57.48},{"d":"2021-06-30","roe":15.96,"pb":9.62,"pe":60.29},{"d":"2021-07-30","roe":16.03,"pb":9.25,"pe":57.69},{"d":"2021-08-31","roe":15.41,"pb":8.2,"pe":53.21},{"d":"2021-09-30","roe":15.35,"pb":8.3,"pe":54.06},{"d":"2021-10-29","roe":15.66,"pb":8.52,"pe":54.41},{"d":"2021-11-30","roe":15.53,"pb":8.8,"pe":56.68},{"d":"2021-12-31","roe":15.34,"pb":8.47,"pe":55.23},{"d":"2022-01-28","roe":15.33,"pb":7.37,"pe":48.06},{"d":"2022-02-28","roe":15.09,"pb":7.31,"pe":48.45},{"d":"2022-03-31","roe":15.07,"pb":6.6,"pe":43.79},{"d":"2022-04-29","roe":14.57,"pb":5.51,"pe":37.82},{"d":"2022-05-31","roe":14.54,"pb":5.77,"pe":39.69},{"d":"2022-06-30","roe":14.89,"pb":6.95,"pe":46.67},{"d":"2022-07-29","roe":14.19,"pb":6.27,"pe":44.19},{"d":"2022-08-31","roe":14.83,"pb":5.99,"pe":40.38},{"d":"2022-09-30","roe":14.8,"pb":5.37,"pe":36.29},{"d":"2022-10-31","roe":14.62,"pb":4.98,"pe":34.06},{"d":"2022-11-30","roe":14.5,"pb":5.12,"pe":35.3},{"d":"2022-12-30","roe":14.44,"pb":5.17,"pe":35.81},{"d":"2023-01-31","roe":14.37,"pb":5.64,"pe":39.24},{"d":"2023-02-28","roe":13.93,"pb":5.14,"pe":36.9},{"d":"2023-03-31","roe":14.13,"pb":4.95,"pe":35.03},{"d":"2023-04-28","roe":14.11,"pb":4.59,"pe":32.54},{"d":"2023-05-31","roe":14.31,"pb":4.37,"pe":30.53},{"d":"2023-06-30","roe":14.58,"pb":4.58,"pe":31.41},{"d":"2023-07-31","roe":15.09,"pb":4.68,"pe":31.01},{"d":"2023-08-31","roe":14.28,"pb":4.23,"pe":29.63},{"d":"2023-09-28","roe":14.25,"pb":4.03,"pe":28.28},{"d":"2023-10-31","roe":14.02,"pb":3.83,"pe":27.32},{"d":"2023-11-30","roe":14.08,"pb":3.75,"pe":26.63},{"d":"2023-12-29","roe":14.38,"pb":3.79,"pe":26.35},{"d":"2024-01-31","roe":14.38,"pb":3.18,"pe":22.12},{"d":"2024-02-29","roe":14.9,"pb":3.62,"pe":24.3},{"d":"2024-03-29","roe":14.68,"pb":3.58,"pe":24.39},{"d":"2024-04-30","roe":13.63,"pb":3.56,"pe":26.11},{"d":"2024-05-31","roe":13.8,"pb":3.49,"pe":25.29},{"d":"2024-06-28","roe":14.14,"pb":3.36,"pe":23.77},{"d":"2024-07-31","roe":14.15,"pb":3.33,"pe":23.53},{"d":"2024-08-30","roe":13.71,"pb":3.11,"pe":22.68},{"d":"2024-09-30","roe":13.78,"pb":4.28,"pe":31.06},{"d":"2024-10-31","roe":12.99,"pb":4.05,"pe":31.17},{"d":"2024-11-29","roe":12.92,"pb":4.19,"pe":32.42},{"d":"2024-12-31","roe":12.95,"pb":4.13,"pe":31.88},{"d":"2025-01-27","roe":13.02,"pb":4.01,"pe":30.81},{"d":"2025-02-28","roe":12.85,"pb":4.27,"pe":33.24},{"d":"2025-03-31","roe":12.91,"pb":4.08,"pe":31.61},{"d":"2025-04-30","roe":13.48,"pb":3.56,"pe":26.41},{"d":"2025-05-30","roe":13.29,"pb":3.63,"pe":27.32},{"d":"2025-06-30","roe":13.5,"pb":4.02,"pe":29.78},{"d":"2025-07-31","roe":13.61,"pb":4.23,"pe":31.08},{"d":"2025-08-29","roe":13.93,"pb":5.17,"pe":37.11},{"d":"2025-09-30","roe":13.99,"pb":5.77,"pe":41.23},{"d":"2025-10-31","roe":14.4,"pb":5.43,"pe":37.71},{"d":"2025-11-28","roe":14.4,"pb":5.16,"pe":35.84},{"d":"2025-12-31","roe":14.78,"pb":5.58,"pe":37.76},{"d":"2026-01-30","roe":14.8,"pb":5.81,"pe":39.27},{"d":"2026-02-27","roe":14.41,"pb":5.76,"pe":39.97},{"d":"2026-03-31","roe":14.91,"pb":5.39,"pe":36.16},{"d":"2026-04-30","roe":15.31,"pb":5.96,"pe":38.93},{"d":"2026-05-29","roe":15.11,"pb":6.42,"pe":42.5},{"d":"2026-06-30","roe":15.43,"pb":7.4,"pe":47.95},{"d":"2026-07-31","roe":15.58,"pb":5.76,"pe":36.98},{"d":"2026-08-31","roe":16.83,"pb":5.84,"pe":34.71},{"d":"2026-09-30","roe":16.83,"pb":5.27,"pe":31.31},{"d":"2026-10-30","roe":16.96,"pb":4.0,"pe":23.57}],"pbroe_now":{"roe":16.96,"pb":4.0,"d":"2026-10-30","pe":23.57},"price_eps":[{"d":"2024-01-31","price":73.5,"eps":105.9,"pe":22.1},{"d":"2024-02-29","price":84.4,"eps":110.7,"pe":24.3},{"d":"2024-03-29","price":84.9,"eps":111.0,"pe":24.4},{"d":"2024-04-30","price":86.8,"eps":106.0,"pe":26.1},{"d":"2024-05-31","price":84.3,"eps":106.3,"pe":25.3},{"d":"2024-06-28","price":78.6,"eps":105.4,"pe":23.8},{"d":"2024-07-31","price":78.8,"eps":106.8,"pe":23.5},{"d":"2024-08-30","price":73.8,"eps":103.7,"pe":22.7},{"d":"2024-09-30","price":101.6,"eps":104.2,"pe":31.1},{"d":"2024-10-31","price":101.1,"eps":103.4,"pe":31.2},{"d":"2024-11-29","price":103.8,"eps":102.1,"pe":32.4},{"d":"2024-12-31","price":100.0,"eps":100.0,"pe":31.9},{"d":"2025-01-27","price":96.4,"eps":99.7,"pe":30.8},{"d":"2025-02-28","price":101.3,"eps":97.2,"pe":33.2},{"d":"2025-03-31","price":98.2,"eps":99.1,"pe":31.6},{"d":"2025-04-30","price":91.0,"eps":109.8,"pe":26.4},{"d":"2025-05-30","price":93.1,"eps":108.6,"pe":27.3},{"d":"2025-06-30","price":100.5,"eps":107.6,"pe":29.8},{"d":"2025-07-31","price":108.7,"eps":111.5,"pe":31.1},{"d":"2025-08-29","price":135.0,"eps":115.9,"pe":37.1},{"d":"2025-09-30","price":151.2,"eps":116.9,"pe":41.2},{"d":"2025-10-31","price":148.8,"eps":125.8,"pe":37.7},{"d":"2025-11-28","price":142.5,"eps":126.8,"pe":35.8},{"d":"2025-12-31","price":149.6,"eps":126.3,"pe":37.8},{"d":"2026-01-30","price":156.3,"eps":126.9,"pe":39.3},{"d":"2026-02-27","price":154.6,"eps":123.3,"pe":40.0},{"d":"2026-03-31","price":148.7,"eps":131.1,"pe":36.2},{"d":"2026-04-30","price":171.7,"eps":140.6,"pe":38.9},{"d":"2026-05-29","price":188.5,"eps":141.4,"pe":42.5},{"d":"2026-06-30","price":202.8,"eps":134.8,"pe":48.0},{"d":"2026-07-31","price":156.1,"eps":134.6,"pe":37.0},{"d":"2026-08-31","price":160.6,"eps":147.5,"pe":34.7},{"d":"2026-09-30","price":146.4,"eps":149.1,"pe":31.3},{"d":"2026-10-30","price":112.7,"eps":152.4,"pe":23.6}],"forward":[{"label":"PE<25","med":29.5,"win":100,"n":6},{"label":"25–30","med":15.7,"win":94,"n":17},{"label":"30–40","med":-0.4,"win":49,"n":57},{"label":"40–60","med":2.5,"win":51,"n":79},{"label":">60","med":-14.5,"win":19,"n":26}],"relative":[{"d":"2010-06-30","ratio":4.389},{"d":"2010-07-30","ratio":4.065},{"d":"2010-08-31","ratio":4.523},{"d":"2010-09-30","ratio":4.15},{"d":"2010-10-29","ratio":4.136},{"d":"2010-11-30","ratio":4.971},{"d":"2010-12-31","ratio":4.718},{"d":"2011-01-31","ratio":4.202},{"d":"2011-02-28","ratio":4.073},{"d":"2011-03-31","ratio":3.869},{"d":"2011-04-29","ratio":3.476},{"d":"2011-05-31","ratio":3.402},{"d":"2011-06-30","ratio":3.372},{"d":"2011-07-29","ratio":3.674},{"d":"2011-08-31","ratio":3.968},{"d":"2011-09-30","ratio":3.677},{"d":"2011-10-31","ratio":3.847},{"d":"2011-11-30","ratio":3.987},{"d":"2011-12-30","ratio":3.596},{"d":"2012-01-31","ratio":2.995},{"d":"2012-02-29","ratio":3.238},{"d":"2012-03-30","ratio":3.16},{"d":"2012-04-27","ratio":3.003},{"d":"2012-05-31","ratio":3.336},{"d":"2012-06-29","ratio":3.503},{"d":"2012-07-31","ratio":3.329},{"d":"2012-08-31","ratio":3.521},{"d":"2012-09-28","ratio":3.348},{"d":"2012-10-31","ratio":3.358},{"d":"2012-11-30","ratio":3.073},{"d":"2012-12-31","ratio":3.145},{"d":"2013-01-31","ratio":3.261},{"d":"2013-02-28","ratio":3.582},{"d":"2013-03-29","ratio":3.889},{"d":"2013-04-26","ratio":4.099},{"d":"2013-05-31","ratio":4.782},{"d":"2013-06-28","ratio":5.159},{"d":"2013-07-31","ratio":5.686},{"d":"2013-08-30","ratio":5.756},{"d":"2013-09-30","ratio":6.465},{"d":"2013-10-31","ratio":5.988},{"d":"2013-11-29","ratio":6.443},{"d":"2013-12-31","ratio":6.385},{"d":"2014-01-30","ratio":7.779},{"d":"2014-02-28","ratio":7.145},{"d":"2014-03-31","ratio":6.646},{"d":"2014-04-30","ratio":6.303},{"d":"2014-05-30","ratio":6.436},{"d":"2014-06-30","ratio":6.784},{"d":"2014-07-31","ratio":5.991},{"d":"2014-08-29","ratio":6.35},{"d":"2014-09-30","ratio":6.622},{"d":"2014-10-31","ratio":6.38},{"d":"2014-11-28","ratio":5.873},{"d":"2014-12-31","ratio":4.226},{"d":"2015-01-30","ratio":4.894},{"d":"2015-02-27","ratio":5.258},{"d":"2015-03-31","ratio":5.536},{"d":"2015-04-30","ratio":5.962},{"d":"2015-05-29","ratio":7.483},{"d":"2015-06-30","ratio":6.085},{"d":"2015-07-31","ratio":6.096},{"d":"2015-08-31","ratio":5.222},{"d":"2015-09-30","ratio":5.646},{"d":"2015-10-30","ratio":5.769},{"d":"2015-11-30","ratio":5.525},{"d":"2015-12-31","ratio":5.426},{"d":"2016-01-29","ratio":5.168},{"d":"2016-02-29","ratio":4.667},{"d":"2016-03-31","ratio":4.934},{"d":"2016-04-29","ratio":4.438},{"d":"2016-05-31","ratio":4.49},{"d":"2016-06-30","ratio":4.571},{"d":"2016-07-29","ratio":4.388},{"d":"2016-08-31","ratio":3.888},{"d":"2016-09-30","ratio":3.9},{"d":"2016-10-31","ratio":3.695},{"d":"2016-11-30","ratio":3.538},{"d":"2016-12-30","ratio":3.318},{"d":"2017-01-26","ratio":3.083},{"d":"2017-02-28","ratio":3.033},{"d":"2017-03-31","ratio":3.039},{"d":"2017-04-28","ratio":3.111},{"d":"2017-05-31","ratio":2.922},{"d":"2017-06-30","ratio":2.917},{"d":"2017-07-31","ratio":2.76},{"d":"2017-08-31","ratio":2.997},{"d":"2017-09-29","ratio":3.021},{"d":"2017-10-31","ratio":2.974},{"d":"2017-11-30","ratio":2.817},{"d":"2017-12-29","ratio":2.744},{"d":"2018-01-31","ratio":2.577},{"d":"2018-02-28","ratio":2.572},{"d":"2018-03-30","ratio":2.947},{"d":"2018-04-27","ratio":2.9},{"d":"2018-05-31","ratio":2.841},{"d":"2018-06-29","ratio":2.779},{"d":"2018-07-31","ratio":2.788},{"d":"2018-08-31","ratio":2.684},{"d":"2018-09-28","ratio":2.523},{"d":"2018-10-31","ratio":2.547},{"d":"2018-11-30","ratio":2.708},{"d":"2018-12-28","ratio":2.634},{"d":"2019-01-31","ratio":2.519},{"d":"2019-02-28","ratio":3.311},{"d":"2019-03-29","ratio":3.482},{"d":"2019-04-30","ratio":3.477},{"d":"2019-05-31","ratio":3.437},{"d":"2019-06-28","ratio":3.359},{"d":"2019-07-31","ratio":3.481},{"d":"2019-08-30","ratio":3.583},{"d":"2019-09-30","ratio":3.598},{"d":"2019-10-31","ratio":3.474},{"d":"2019-11-29","ratio":3.557},{"d":"2019-12-31","ratio":3.584},{"d":"2020-01-23","ratio":4.014},{"d":"2020-02-28","ratio":3.937},{"d":"2020-03-31","ratio":3.885},{"d":"2020-04-30","ratio":3.918},{"d":"2020-05-29","ratio":4.058},{"d":"2020-06-30","ratio":4.557},{"d":"2020-07-31","ratio":4.696},{"d":"2020-08-31","ratio":3.894},{"d":"2020-09-30","ratio":3.894},{"d":"2020-10-30","ratio":3.797},{"d":"2020-11-30","ratio":3.511},{"d":"2020-12-31","ratio":3.794},{"d":"2021-01-29","ratio":3.97},{"d":"2021-02-26","ratio":3.944},{"d":"2021-03-31","ratio":3.808},{"d":"2021-04-30","ratio":3.95},{"d":"2021-05-31","ratio":4.079},{"d":"2021-06-30","ratio":4.21},{"d":"2021-07-30","ratio":4.397},{"d":"2021-08-31","ratio":4.288},{"d":"2021-09-30","ratio":4.287},{"d":"2021-10-29","ratio":4.294},{"d":"2021-11-30","ratio":4.627},{"d":"2021-12-31","ratio":4.131},{"d":"2022-01-28","ratio":3.863},{"d":"2022-02-28","ratio":3.854},{"d":"2022-03-31","ratio":3.736},{"d":"2022-04-29","ratio":3.374},{"d":"2022-05-31","ratio":3.506},{"d":"2022-06-30","ratio":3.791},{"d":"2022-07-29","ratio":3.863},{"d":"2022-08-31","ratio":3.664},{"d":"2022-09-30","ratio":3.466},{"d":"2022-10-31","ratio":3.544},{"d":"2022-11-30","ratio":3.34},{"d":"2022-12-30","ratio":3.381},{"d":"2023-01-31","ratio":3.485},{"d":"2023-02-28","ratio":3.303},{"d":"2023-03-31","ratio":3.108},{"d":"2023-04-28","ratio":2.837},{"d":"2023-05-31","ratio":2.793},{"d":"2023-06-30","ratio":2.863},{"d":"2023-07-31","ratio":2.73},{"d":"2023-08-31","ratio":2.696},{"d":"2023-09-28","ratio":2.602},{"d":"2023-10-31","ratio":2.568},{"d":"2023-11-30","ratio":2.541},{"d":"2023-12-29","ratio":2.539},{"d":"2024-01-31","ratio":2.177},{"d":"2024-02-29","ratio":2.227},{"d":"2024-03-29","ratio":2.176},{"d":"2024-04-30","ratio":2.245},{"d":"2024-05-31","ratio":2.186},{"d":"2024-06-28","ratio":2.071},{"d":"2024-07-31","ratio":2.079},{"d":"2024-08-30","ratio":2.088},{"d":"2024-09-30","ratio":2.455},{"d":"2024-10-31","ratio":2.676},{"d":"2024-11-29","ratio":2.759},{"d":"2024-12-31","ratio":2.615},{"d":"2025-01-27","ratio":2.624},{"d":"2025-02-28","ratio":2.812},{"d":"2025-03-31","ratio":2.683},{"d":"2025-04-30","ratio":2.299},{"d":"2025-05-30","ratio":2.329},{"d":"2025-06-30","ratio":2.413},{"d":"2025-07-31","ratio":2.498},{"d":"2025-08-29","ratio":2.805},{"d":"2025-09-30","ratio":3.095},{"d":"2025-10-31","ratio":2.859},{"d":"2025-11-28","ratio":2.748},{"d":"2025-12-31","ratio":2.831},{"d":"2026-01-30","ratio":2.937},{"d":"2026-02-27","ratio":2.998},{"d":"2026-03-31","ratio":2.719},{"d":"2026-04-30","ratio":2.811},{"d":"2026-05-29","ratio":3.08},{"d":"2026-06-30","ratio":3.482},{"d":"2026-07-31","ratio":2.703},{"d":"2026-08-31","ratio":2.662},{"d":"2026-09-30","ratio":2.509},{"d":"2026-10-30","ratio":1.933}],"stocks":[{"code":"300750","name":"宁德时代","industry":"工业","weight":13.85,"pe":12.29,"pb":2.79,"q3":14.5,"h1":42.0,"m9":31.6,"peg":0.85,"contrib":10.1},{"code":"300308","name":"中际旭创","industry":"电信业务","weight":12.78,"pe":25.15,"pb":6.9,"q3":173.7,"h1":241.7,"m9":211.8,"peg":0.14,"contrib":18.8},{"code":"300502","name":"新易盛","industry":"电信业务","weight":8.85,"pe":18.75,"pb":9.78,"q3":61.2,"h1":91.0,"m9":79.7,"peg":0.31,"contrib":3.5},{"code":"300059","name":"东方财富","industry":"金融","weight":4.17,"pe":18.7,"pb":2.72,"q3":8.9,"h1":44.8,"m9":30.9,"peg":2.11,"contrib":0.4},{"code":"300394","name":"天孚通信","industry":"电信业务","weight":2.96,"pe":61.26,"pb":24.54,"q3":55.3,"h1":33.9,"m9":42.2,"peg":1.11,"contrib":0.3},{"code":"300408","name":"三环集团","industry":"信息技术","weight":2.68,"pe":34.96,"pb":5.36,"q3":168.0,"h1":56.2,"m9":97.4,"peg":0.21,"contrib":0.9},{"code":"300476","name":"胜宏科技","industry":"信息技术","weight":2.34,"pe":30.7,"pb":3.57,"q3":-52.2,"h1":33.3,"m9":4.3,"peg":null,"contrib":-0.4},{"code":"300274","name":"阳光电源","industry":"工业","weight":2.23,"pe":16.55,"pb":2.77,"q3":-67.7,"h1":-32.0,"m9":-44.5,"peg":null,"contrib":-1.7},{"code":"300604","name":"长川科技","industry":"信息技术","weight":1.98,"pe":48.95,"pb":11.57,"q3":82.7,"h1":125.7,"m9":103.9,"peg":0.59,"contrib":0.2},{"code":"300124","name":"汇川技术","industry":"工业","weight":1.9,"pe":28.91,"pb":3.9,"q3":23.6,"h1":-5.4,"m9":3.4,"peg":1.23,"contrib":0.2},{"code":"300760","name":"迈瑞医疗","industry":"医药卫生","weight":1.78,"pe":28.42,"pb":5.35,"q3":-4.6,"h1":-5.4,"m9":-5.1,"peg":null,"contrib":-0.1},{"code":"300857","name":"协创数据","industry":"信息技术","weight":1.44,"pe":20.26,"pb":9.83,"q3":360.3,"h1":325.5,"m9":338.8,"peg":0.06,"contrib":0.4},{"code":"300014","name":"亿纬锂能","industry":"工业","weight":1.3,"pe":15.51,"pb":1.98,"q3":60.2,"h1":105.7,"m9":86.1,"peg":0.26,"contrib":0.3},{"code":"300433","name":"蓝思科技","industry":"信息技术","weight":1.14,"pe":52.04,"pb":2.54,"q3":-50.4,"h1":-49.5,"m9":-50.1,"peg":null,"contrib":-0.3},{"code":"300033","name":"同花顺","industry":"信息技术","weight":1.02,"pe":35.6,"pb":16.71,"q3":54.0,"h1":89.8,"m9":68.9,"peg":0.66,"contrib":0.1},{"code":"300757","name":"罗博特科","industry":"信息技术","weight":1.01,"pe":763.94,"pb":8.91,"q3":-232.6,"h1":-119.7,"m9":-182.3,"peg":null,"contrib":0.0},{"code":"300285","name":"国瓷材料","industry":"原材料","weight":0.97,"pe":55.82,"pb":4.97,"q3":15.8,"h1":9.4,"m9":11.4,"peg":3.54,"contrib":0.0},{"code":"300475","name":"香农芯创","industry":"信息技术","weight":0.94,"pe":7.99,"pb":5.03,"q3":743.0,"h1":2207.2,"m9":1386.1,"peg":0.01,"contrib":0.4},{"code":"300054","name":"鼎龙股份","industry":"信息技术","weight":0.86,"pe":48.98,"pb":8.78,"q3":54.7,"h1":70.2,"m9":64.0,"peg":0.89,"contrib":0.0},{"code":"300223","name":"君正股份","industry":"信息技术","weight":0.84,"pe":20.63,"pb":3.23,"q3":2595.5,"h1":489.6,"m9":922.9,"peg":0.01,"contrib":0.3},{"code":"300661","name":"圣邦股份","industry":"信息技术","weight":0.84,"pe":59.35,"pb":5.16,"q3":123.8,"h1":109.3,"m9":115.3,"peg":0.48,"contrib":0.0},{"code":"300058","name":"蓝色光标","industry":"可选消费","weight":0.81,"pe":123.02,"pb":5.15,"q3":-3.8,"h1":119.3,"m9":56.9,"peg":null,"contrib":-0.0},{"code":"300442","name":"润泽科技","industry":"信息技术","weight":0.81,"pe":38.92,"pb":5.8,"q3":-84.3,"h1":36.4,"m9":-61.7,"peg":null,"contrib":-0.7},{"code":"300136","name":"信维通信","industry":"电信业务","weight":0.75,"pe":59.6,"pb":4.94,"q3":-2.2,"h1":-7.0,"m9":-3.8,"peg":null,"contrib":-0.0},{"code":"300395","name":"菲利华","industry":"原材料","weight":0.74,"pe":56.39,"pb":6.17,"q3":62.3,"h1":33.0,"m9":42.8,"peg":0.9,"contrib":0.0},{"code":"300450","name":"先导智能","industry":"工业","weight":0.7,"pe":25.93,"pb":2.74,"q3":41.7,"h1":29.2,"m9":33.9,"peg":0.62,"contrib":0.0},{"code":"300015","name":"爱尔眼科","industry":"医药卫生","weight":0.65,"pe":32.63,"pb":3.54,"q3":-11.6,"h1":-33.8,"m9":-26.2,"peg":null,"contrib":-0.0},{"code":"300418","name":"昆仑万维","industry":"信息技术","weight":0.64,"pe":-46.2,"pb":3.11,"q3":-670.6,"h1":-227.2,"m9":-100.4,"peg":null,"contrib":-0.2},{"code":"300620","name":"光库科技","industry":"电信业务","weight":0.64,"pe":146.2,"pb":21.42,"q3":124.3,"h1":186.1,"m9":152.1,"peg":1.18,"contrib":0.0},{"code":"300037","name":"新宙邦","industry":"工业","weight":0.59,"pe":19.09,"pb":3.14,"q3":111.4,"h1":103.3,"m9":106.2,"peg":0.17,"contrib":0.0},{"code":"300017","name":"网宿科技","industry":"信息技术","weight":0.59,"pe":47.41,"pb":3.51,"q3":-5.9,"h1":-6.6,"m9":-6.3,"peg":null,"contrib":-0.0},{"code":"301526","name":"国际复材","industry":"原材料","weight":0.55,"pe":54.56,"pb":7.46,"q3":1452.6,"h1":176.6,"m9":371.2,"peg":0.04,"contrib":0.1},{"code":"300207","name":"欣旺达","industry":"信息技术","weight":0.54,"pe":111.96,"pb":1.2,"q3":-98.1,"h1":-29.6,"m9":-56.4,"peg":null,"contrib":-0.1},{"code":"300803","name":"指南针","industry":"信息技术","weight":0.53,"pe":233.97,"pb":10.86,"q3":243.0,"h1":-12.2,"m9":-70.6,"peg":0.96,"contrib":-0.0},{"code":"300346","name":"南大光电","industry":"信息技术","weight":0.53,"pe":66.83,"pb":7.03,"q3":11.3,"h1":23.1,"m9":19.4,"peg":5.93,"contrib":0.0},{"code":"300390","name":"天华新能","industry":"工业","weight":0.51,"pe":9.93,"pb":2.02,"q3":15.7,"h1":-2622.9,"m9":2446.7,"peg":0.63,"contrib":0.0},{"code":"300866","name":"安克创新","industry":"信息技术","weight":0.51,"pe":22.19,"pb":3.96,"q3":-27.0,"h1":45.9,"m9":17.0,"peg":null,"contrib":-0.0},{"code":"300751","name":"迈为股份","industry":"工业","weight":0.5,"pe":96.41,"pb":4.18,"q3":-87.4,"h1":-36.0,"m9":-56.9,"peg":null,"contrib":-0.0},{"code":"300339","name":"润和软件","industry":"信息技术","weight":0.47,"pe":238.98,"pb":5.95,"q3":-130.6,"h1":38.2,"m9":-2.1,"peg":null,"contrib":-0.0},{"code":"300001","name":"特锐德","industry":"工业","weight":0.45,"pe":21.4,"pb":3.28,"q3":6.6,"h1":30.7,"m9":18.1,"peg":3.23,"contrib":0.0},{"code":"300373","name":"扬杰科技","industry":"信息技术","weight":0.44,"pe":25.2,"pb":3.65,"q3":24.2,"h1":28.2,"m9":26.7,"peg":1.04,"contrib":0.0},{"code":"301217","name":"铜冠铜箔","industry":"信息技术","weight":0.43,"pe":165.32,"pb":9.84,"q3":345.3,"h1":514.7,"m9":439.7,"peg":0.48,"contrib":0.0},{"code":"300458","name":"全志科技","industry":"信息技术","weight":0.42,"pe":38.27,"pb":6.71,"q3":44.1,"h1":204.2,"m9":136.8,"peg":0.87,"contrib":0.0},{"code":"301236","name":"软通动力","industry":"信息技术","weight":0.4,"pe":-4169.08,"pb":2.45,"q3":-38.0,"h1":85.6,"m9":-216.2,"peg":null,"contrib":-0.0},{"code":"301536","name":"星宸科技","industry":"信息技术","weight":0.4,"pe":21.11,"pb":7.63,"q3":752.8,"h1":619.5,"m9":673.7,"peg":0.03,"contrib":0.1},{"code":"300316","name":"晶盛机电","industry":"工业","weight":0.4,"pe":152.68,"pb":2.37,"q3":-80.8,"h1":-63.7,"m9":-68.6,"peg":null,"contrib":-0.0},{"code":"300677","name":"英科医疗","industry":"医药卫生","weight":0.39,"pe":94.51,"pb":1.54,"q3":-392.2,"h1":17.9,"m9":-77.0,"peg":null,"contrib":-0.1},{"code":"300115","name":"长盈精密","industry":"信息技术","weight":0.39,"pe":561.18,"pb":4.22,"q3":-151.9,"h1":-94.2,"m9":-114.2,"peg":null,"contrib":-0.0},{"code":"300012","name":"华测检测","industry":"工业","weight":0.35,"pe":22.33,"pb":3.09,"q3":14.5,"h1":20.6,"m9":18.0,"peg":1.54,"contrib":0.0},{"code":"300496","name":"中科创达","industry":"信息技术","weight":0.34,"pe":44.69,"pb":2.33,"q3":27.4,"h1":55.0,"m9":46.5,"peg":1.63,"contrib":0.0},{"code":"300628","name":"亿联网络","industry":"电信业务","weight":0.34,"pe":16.01,"pb":5.01,"q3":4.7,"h1":22.9,"m9":16.3,"peg":3.38,"contrib":0.0},{"code":"300474","name":"景嘉微","industry":"信息技术","weight":0.32,"pe":-85.0,"pb":3.51,"q3":-608.4,"h1":23.2,"m9":154.5,"peg":null,"contrib":-0.0},{"code":"300748","name":"金力永磁","industry":"原材料","weight":0.3,"pe":34.2,"pb":4.44,"q3":41.6,"h1":51.6,"m9":47.5,"peg":0.82,"contrib":0.0},{"code":"302132","name":"中航成飞","industry":"工业","weight":0.29,"pe":78.6,"pb":7.97,"q3":-86.8,"h1":-22.3,"m9":-59.7,"peg":null,"contrib":-0.1},{"code":"300919","name":"中伟新材","industry":"工业","weight":0.29,"pe":14.25,"pb":1.4,"q3":32.2,"h1":77.8,"m9":62.2,"peg":0.44,"contrib":0.0},{"code":"300073","name":"当升科技","industry":"工业","weight":0.29,"pe":22.9,"pb":1.17,"q3":-36.0,"h1":67.3,"m9":27.9,"peg":null,"contrib":-0.0},{"code":"300251","name":"光线传媒","industry":"可选消费","weight":0.28,"pe":-53.66,"pb":3.45,"q3":-83.9,"h1":-98.5,"m9":-97.9,"peg":null,"contrib":-0.0},{"code":"300255","name":"常山药业","industry":"医药卫生","weight":0.28,"pe":-49.96,"pb":15.03,"q3":34.4,"h1":-42.4,"m9":-15.4,"peg":null,"contrib":-0.0},{"code":"300383","name":"光环新网","industry":"信息技术","weight":0.28,"pe":-19.45,"pb":1.38,"q3":-99.5,"h1":-47.1,"m9":-57.5,"peg":null,"contrib":-0.0},{"code":"300024","name":"机器人","industry":"工业","weight":0.28,"pe":-36.02,"pb":5.06,"q3":101.6,"h1":98.3,"m9":99.6,"peg":null,"contrib":-0.0},{"code":"300002","name":"神州泰岳","industry":"信息技术","weight":0.27,"pe":24.26,"pb":1.96,"q3":-26.1,"h1":-25.0,"m9":-25.4,"peg":null,"contrib":-0.0},{"code":"300724","name":"捷佳伟创","industry":"工业","weight":0.26,"pe":31.94,"pb":1.32,"q3":-69.9,"h1":-79.5,"m9":-76.5,"peg":null,"contrib":-0.0},{"code":"301165","name":"锐捷网络","industry":"电信业务","weight":0.25,"pe":64.77,"pb":12.3,"q3":69.4,"h1":53.5,"m9":58.9,"peg":0.93,"contrib":0.0},{"code":"300003","name":"乐普医疗","industry":"医药卫生","weight":0.25,"pe":33.75,"pb":1.36,"q3":-38.6,"h1":-27.7,"m9":-30.9,"peg":null,"contrib":-0.0},{"code":"300432","name":"富临精工","industry":"可选消费","weight":0.25,"pe":31.23,"pb":4.51,"q3":141.0,"h1":61.6,"m9":98.4,"peg":0.22,"contrib":0.0},{"code":"300999","name":"金龙鱼","industry":"主要消费","weight":0.25,"pe":42.17,"pb":1.39,"q3":-46.4,"h1":30.7,"m9":2.8,"peg":null,"contrib":-0.0},{"code":"300413","name":"芒果超媒","industry":"可选消费","weight":0.24,"pe":98.27,"pb":1.8,"q3":-95.4,"h1":-73.6,"m9":-79.0,"peg":null,"contrib":-0.0},{"code":"300953","name":"震裕科技","industry":"工业","weight":0.23,"pe":26.8,"pb":3.98,"q3":23.6,"h1":100.3,"m9":62.9,"peg":1.14,"contrib":0.0},{"code":"300253","name":"卫宁健康","industry":"信息技术","weight":0.22,"pe":-37.82,"pb":2.62,"q3":-48.0,"h1":49.5,"m9":-0.3,"peg":null,"contrib":0.0},{"code":"300699","name":"光威复材","industry":"原材料","weight":0.22,"pe":43.85,"pb":3.11,"q3":-99.6,"h1":-26.2,"m9":-51.9,"peg":null,"contrib":-0.0},{"code":"300763","name":"锦浪科技","industry":"工业","weight":0.21,"pe":39.84,"pb":1.82,"q3":-48.4,"h1":-29.7,"m9":-35.4,"peg":null,"contrib":-0.0},{"code":"300144","name":"宋城演艺","industry":"可选消费","weight":0.16,"pe":23.08,"pb":1.84,"q3":-46.4,"h1":-14.4,"m9":-29.4,"peg":null,"contrib":-0.0},{"code":"300718","name":"长盛轴承","industry":"工业","weight":0.13,"pe":58.8,"pb":8.52,"q3":10.1,"h1":1.2,"m9":4.2,"peg":5.8,"contrib":0.0},{"code":"300888","name":"稳健医疗","industry":"可选消费","weight":0.1,"pe":21.8,"pb":1.49,"q3":-5.2,"h1":4.4,"m9":1.2,"peg":null,"contrib":-0.0},{"code":"301301","name":"川宁生物","industry":"医药卫生","weight":0.1,"pe":32.93,"pb":2.01,"q3":-64.9,"h1":-39.0,"m9":-45.6,"peg":null,"contrib":-0.0},{"code":"301498","name":"乖宝宠物","industry":"主要消费","weight":0.06,"pe":36.75,"pb":3.01,"q3":-83.0,"h1":-49.6,"m9":-58.4,"peg":null,"contrib":-0.0}]};
+const C = {blue:'#2f6fed',green:'#2c9e63',red:'#d94a4a',amber:'#d99a00',purple:'#7a5af8',ink:'#17202b',muted:'#6b7686',line:'#e4e8ee'};
+const FONT = '-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif';
+function pct(v,d=1){return (v>=0?'+':'')+Number(v).toFixed(d)+'%';}
+function fmt(v,d=1){return Number(v).toFixed(d);}
+function mk(id,opt){
+  const el=document.getElementById(id); if(!el||!window.echarts) return null;
+  const ch=echarts.init(el); ch.setOption(opt); return ch;
+}
+const base={
+  textStyle:{fontFamily:FONT},
+  grid:{left:52,right:24,top:44,bottom:38},
+  tooltip:{trigger:'axis',backgroundColor:'rgba(17,24,39,.94)',borderWidth:0,textStyle:{color:'#fff',fontSize:12},
+    axisPointer:{type:'line',lineStyle:{color:'#c9d2df'}}},
+  legend:{top:8,textStyle:{fontSize:11.5,color:C.muted},itemWidth:14,itemHeight:8},
+  xAxis:{axisLine:{lineStyle:{color:C.line}},axisTick:{show:false},axisLabel:{color:C.muted,fontSize:10.5}},
+  yAxis:{axisLine:{show:false},axisTick:{show:false},axisLabel:{color:C.muted,fontSize:10.5},splitLine:{lineStyle:{color:'#f0f2f5'}}}
+};
+
+mk('g-growth',{
+  ...base,
+  grid:{left:52,right:26,top:54,bottom:34},
+  legend:{...base.legend,data:['营收增速','净利增速','中位股净利增速']},
+  tooltip:{...base.tooltip,valueFormatter:v=>v==null?'—':v.toFixed(1)+'%'},
+  xAxis:{...base.xAxis,type:'category',data:D.growth.cats,axisLabel:{color:C.muted,fontSize:11.5}},
+  yAxis:{...base.yAxis,type:'value',axisLabel:{...base.yAxis.axisLabel,formatter:'{value}%'},max:70},
+  series:[
+    {name:'营收增速',type:'bar',data:D.growth.rev,barWidth:18,itemStyle:{color:'#8fb1f7',borderRadius:[4,4,0,0]},
+      },
+    {name:'净利增速',type:'bar',data:D.growth.np,barWidth:18,itemStyle:{color:C.blue,borderRadius:[4,4,0,0]},
+      label:{show:true,position:'top',fontSize:10.5,color:C.blue,fontWeight:700,formatter:p=>p.value.toFixed(1)+'%'}},
+    {name:'中位股净利增速',type:'line',data:D.growth.med,symbol:'circle',symbolSize:7,lineStyle:{width:2.5,color:C.amber},
+      itemStyle:{color:C.amber}}
+  ]
+});
+
+mk('g-contrib',{
+  ...base,
+  grid:{left:92,right:56,top:24,bottom:34},
+  tooltip:{...base.tooltip,trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:v=>v==null?'—':v.toFixed(1)+'pp'},
+  xAxis:{...base.xAxis,type:'value',axisLabel:{...base.xAxis.axisLabel,formatter:'{value}pp'},splitLine:{lineStyle:{color:'#f0f2f5'}}},
+  yAxis:{...base.yAxis,type:'category',data:D.contrib.map(x=>x.name),axisLabel:{color:C.ink,fontSize:11}},
+  series:[{
+    type:'bar',data:D.contrib.map(x=>({value:x.v,itemStyle:{color:x.v>=0?C.green:C.red,borderRadius:x.v>=0?[0,4,4,0]:[4,0,0,4]}})),
+    barWidth:16,
+    label:{show:true,position:'right',fontSize:10.5,color:'#4d5968',formatter:p=>(p.value>0?'+':'')+p.value.toFixed(1)+'pp'}
+  }]
+});
+
+mk('g-dist',{
+  ...base,
+  grid:{left:48,right:44,top:48,bottom:42},
+  legend:{...base.legend,data:['家数','权重占比']},
+  tooltip:{...base.tooltip,valueFormatter:v=>v==null?'—':v},
+  xAxis:{...base.xAxis,type:'category',data:D.dist.cats,axisLabel:{color:C.muted,fontSize:11}},
+  yAxis:[
+    {...base.yAxis,type:'value',name:'家数',nameTextStyle:{color:C.muted,fontSize:10.5},axisLabel:{...base.yAxis.axisLabel,formatter:'{value}'}},
+    {...base.yAxis,type:'value',name:'权重 %',nameTextStyle:{color:C.muted,fontSize:10.5},axisLabel:{...base.yAxis.axisLabel,formatter:'{value}%'},splitLine:{show:false}}
+  ],
+  series:[
+    {name:'家数',type:'bar',data:D.dist.count,barWidth:26,itemStyle:{color:'#b9cdf5',borderRadius:[4,4,0,0]},
+      label:{show:true,position:'top',fontSize:10.5,color:'#5d6b7f',formatter:'{c}'}},
+    {name:'权重占比',type:'line',yAxisIndex:1,data:D.dist.weight,symbol:'circle',symbolSize:7,lineStyle:{width:2.5,color:C.amber},itemStyle:{color:C.amber},
+      }
+  ]
+});
+
+mk('g-pe',{
+  ...base,
+  grid:{left:54,right:30,top:54,bottom:52},
+  tooltip:{...base.tooltip,trigger:'axis',formatter:p=>{const x=p[0];return x.axisValue+'<br/>PE-TTM <b>'+x.value[1].toFixed(1)+'x</b>';}},
+  xAxis:{...base.xAxis,type:'time',axisLabel:{...base.xAxis.axisLabel,formatter:'{yyyy}'}},
+  yAxis:{...base.yAxis,type:'value',name:'PE-TTM',nameTextStyle:{color:C.muted,fontSize:10.5},max:130},
+  dataZoom:[{type:'inside',xAxisIndex:0,filterMode:'none'}],
+  series:[{
+    type:'line',data:D.pe.map(x=>[x.d,x.pe]),showSymbol:false,smooth:.1,lineStyle:{width:2.2,color:C.blue},
+    areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(47,111,237,.16)'},{offset:1,color:'rgba(47,111,237,.01)'}]}},
+    markLine:{silent:true,symbol:'none',label:{fontSize:10,color:C.muted,position:'insideStartTop',backgroundColor:'rgba(255,255,255,.86)',padding:[2,4],borderRadius:3},lineStyle:{type:'dashed',width:1},
+      data:[
+        {yAxis:28.8,lineStyle:{color:'#9bb7ef'},label:{formatter:'10% 分位 28.8'}},
+        {yAxis:41.6,lineStyle:{color:'#b9c6dd'},label:{formatter:'中位 41.6'}},
+        {yAxis:63.0,lineStyle:{color:'#d7b26a'},label:{formatter:'90% 分位 63.0'}}
+      ]},
+    markArea:{silent:true,itemStyle:{color:'rgba(44,158,99,.06)'},data:[[{yAxis:0},{yAxis:30}]]},
+    markPoint:{symbolSize:9,label:{fontSize:10,color:'#fff',backgroundColor:'rgba(17,24,39,.8)',padding:[3,6],borderRadius:4},
+      data:[
+        {coord:['2015-05-29',122.28],value:'2015 顶部 122x',label:{offset:[0,-14]}},
+        {coord:['2024-01-31',22.12],value:'2024 低点 22.1x',label:{position:'left',offset:[-6,0]}},
+        {coord:[D.pe[D.pe.length-1].d,D.pe[D.pe.length-1].pe],value:'现在 '+D.pe[D.pe.length-1].pe.toFixed(1)+'x',label:{position:'left',offset:[-8,0]},itemStyle:{color:C.red}}
+      ]}
+  }]
+});
+
+mk('g-pbroe',{
+  ...base,
+  grid:{left:52,right:26,top:46,bottom:44},
+  legend:{...base.legend,data:['月度','现在','PE=15','PE=25','PE=40','PE=60']},
+  tooltip:{trigger:'item',backgroundColor:'rgba(17,24,39,.94)',borderWidth:0,textStyle:{color:'#fff',fontSize:12},
+    formatter:p=>{if(p.seriesType==='line')return p.seriesName;const a=p.data;return a[2]+'<br/>ROE '+(+a[0]).toFixed(1)+'% · PB '+(+a[1]).toFixed(2)+'x<br/>PE '+(+a[3]).toFixed(1)+'x';}},
+  xAxis:{...base.xAxis,type:'value',name:'隐含 ROE（PB/PE）',nameLocation:'middle',nameGap:28,nameTextStyle:{color:C.muted,fontSize:10.5},
+    min:4,max:18,interval:2,axisLabel:{...base.xAxis.axisLabel,formatter:'{value}%'}},
+  yAxis:{...base.yAxis,type:'value',name:'PB',nameTextStyle:{color:C.muted,fontSize:10.5},min:0,max:14},
+  series:[
+    {name:'月度',type:'scatter',data:D.pbroe.map(x=>[x.roe,x.pb,x.d,x.pe]),symbolSize:6,
+      itemStyle:{color:'rgba(47,111,237,.38)',borderColor:'rgba(47,111,237,.55)'}},
+    {name:'现在',type:'scatter',data:[[D.pbroe_now.roe,D.pbroe_now.pb,D.pbroe_now.d,D.pbroe_now.pe]],symbolSize:15,
+      itemStyle:{color:C.red,borderColor:'#fff',borderWidth:2},label:{show:true,position:'top',color:C.red,fontSize:11,fontWeight:700,formatter:'现在'}},
+    ...[[15,'PE=15','#b7c6df'],[25,'PE=25','#8fb1f7'],[40,'PE=40','#e0a300'],[60,'PE=60','#d94a4a']].map(([pe,nm,col])=>({
+      name:nm,type:'line',showSymbol:false,data:[[4,pe*4/100],[18,pe*18/100]],lineStyle:{width:1,type:'dashed',color:col},silent:true
+    }))
+  ]
+});
+
+mk('g-price-eps',{
+  ...base,
+  grid:{left:52,right:54,top:52,bottom:38},
+  legend:{...base.legend,data:['指数（归一）','隐含 EPS（归一）','PE（右）']},
+  tooltip:{...base.tooltip,valueFormatter:v=>v==null?'—':(+v).toFixed(1)},
+  xAxis:{...base.xAxis,type:'time',axisLabel:{...base.xAxis.axisLabel,formatter:'{yyyy}-{MM}'}},
+  yAxis:[
+    {...base.yAxis,type:'value',name:'2024-12-31=100',nameTextStyle:{color:C.muted,fontSize:10.5},min:60,max:210},
+    {...base.yAxis,type:'value',name:'PE',nameTextStyle:{color:C.muted,fontSize:10.5},min:15,max:60,splitLine:{show:false}}
+  ],
+  series:[
+    {name:'指数（归一）',type:'line',data:D.price_eps.map(x=>[x.d,x.price]),showSymbol:false,smooth:.15,lineStyle:{width:2.6,color:C.blue}},
+    {name:'隐含 EPS（归一）',type:'line',data:D.price_eps.map(x=>[x.d,x.eps]),showSymbol:false,smooth:.15,lineStyle:{width:2.6,color:C.green}},
+    {name:'PE（右）',type:'line',yAxisIndex:1,data:D.price_eps.map(x=>[x.d,x.pe]),showSymbol:false,smooth:.15,lineStyle:{width:1.6,type:'dashed',color:C.amber}}
+  ]
+});
+
+mk('g-forward',{
+  ...base,
+  grid:{left:52,right:26,top:36,bottom:38},
+  tooltip:{...base.tooltip,valueFormatter:v=>v==null?'—':v.toFixed(1)+'%'},
+  xAxis:{...base.xAxis,type:'category',data:D.forward.map(x=>x.label),axisLabel:{color:C.muted,fontSize:11}},
+  yAxis:{...base.yAxis,type:'value',axisLabel:{...base.yAxis.axisLabel,formatter:'{value}%'}},
+  series:[{
+    type:'bar',data:D.forward.map(x=>({value:x.med,itemStyle:{color:x.med>=0?C.green:C.red,borderRadius:[4,4,0,0]}})),barWidth:34,
+    label:{show:true,position:'top',fontSize:10.5,color:'#4d5968',
+      formatter:p=>{const it=D.forward[p.dataIndex];return p.value.toFixed(1)+'% · 胜率'+it.win+'%';}}
+  }]
+});
+
+mk('g-relative',{
+  ...base,
+  grid:{left:48,right:24,top:34,bottom:38},
+  tooltip:{...base.tooltip,valueFormatter:v=>v==null?'—':(+v).toFixed(2)+'x'},
+  xAxis:{...base.xAxis,type:'time',axisLabel:{...base.xAxis.axisLabel,formatter:'{yyyy}'}},
+  yAxis:{...base.yAxis,type:'value',name:'创业板 PE / 沪深300 PE',nameTextStyle:{color:C.muted,fontSize:10.5},min:1,max:7},
+  series:[{
+    type:'line',data:D.relative.map(x=>[x.d,x.ratio]),showSymbol:false,smooth:.1,lineStyle:{width:2,color:C.purple},
+    markLine:{silent:true,symbol:'none',label:{fontSize:10,color:C.muted,formatter:'中位 3.51x'},lineStyle:{type:'dashed',color:'#b9a8ff'},
+      data:[{yAxis:3.51}]},
+    markPoint:{symbolSize:8,label:{fontSize:10,color:'#fff',backgroundColor:'rgba(17,24,39,.8)',padding:[3,6],borderRadius:4},
+      data:[{coord:[D.relative[D.relative.length-1].d,D.relative[D.relative.length-1].ratio],value:'现在 '+D.relative[D.relative.length-1].ratio.toFixed(2)+'x',label:{offset:[0,-14]},itemStyle:{color:C.red}}]}
+  }]
+});
+
+// ---------- 持仓表 ----------
+const stocks = D.stocks;
+let sortKey='weight', sortDir=-1;
+function tagOf(s){
+  if(s.pe<0) return '<span class="chip cool">亏损</span>';
+  if(s.q3<0) return '<span class="chip warn">负增长</span>';
+  if(s.q3>=50) return '<span class="chip hot">高增长</span>';
+  if(s.q3>s.h1+10) return '<span class="chip hot">加速</span>';
+  if(s.q3<s.h1) return '<span class="chip gray">减速</span>';
+  if(s.pe>60) return '<span class="chip cool">高估值</span>';
+  return '<span class="chip good">稳健</span>';
+}
+function fmtPct(v,d=1){ if(v==null||isNaN(v)) return '—'; return (v>=0?'+':'')+Number(v).toFixed(d)+'%'; }
+function fmtPe(v){ if(v==null||isNaN(v)) return '—'; if(v<0) return '亏损'; return Number(v).toFixed(1); }
+function renderStocks(){
+  const q=(document.getElementById('q').value||'').trim().toLowerCase();
+  let arr=stocks.filter(s=>!q||s.name.toLowerCase().includes(q)||s.code.includes(q));
+  arr=arr.slice().sort((a,b)=>{const x=a[sortKey],y=b[sortKey]; if(x==null)return 1; if(y==null)return -1; return (x-y)*sortDir;});
+  const tb=document.getElementById('stock-rows');
+  tb.innerHTML=arr.map((s,i)=>`<tr>
+    <td class="num">${i+1}</td>
+    <td><b>${s.name}</b><br><span class="muted">${s.code}</span></td>
+    <td><span class="chip gray">${s.industry}</span></td>
+    <td class="num"><b>${s.weight.toFixed(2)}%</b></td>
+    <td class="num">${fmtPe(s.pe)}</td>
+    <td class="num">${s.pb==null?'—':s.pb.toFixed(1)}</td>
+    <td class="num ${s.q3>=0?'g':'r'}"><b>${fmtPct(s.q3)}</b></td>
+    <td class="num ${s.m9>=0?'g':'r'}">${fmtPct(s.m9)}</td>
+    <td class="num">${s.peg==null?'—':s.peg.toFixed(1)}</td>
+    <td class="num ${s.contrib>=0?'g':'r'}">${s.contrib>=0?'+':''}${s.contrib.toFixed(1)}pp</td>
+    <td>${tagOf(s)}</td>
+  </tr>`).join('');
+  document.getElementById('stock-count').textContent=`${arr.length} / ${stocks.length} 只`;
+}
+document.getElementById('q').addEventListener('input',renderStocks);
+document.querySelectorAll('[data-sort]').forEach(th=>{
+  th.style.cursor='pointer';
+  th.addEventListener('click',()=>{
+    const k=th.dataset.sort;
+    if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;}
+    document.querySelectorAll('[data-sort]').forEach(x=>x.classList.remove('on'));
+    th.classList.add('on'); renderStocks();
+  });
+});
+renderStocks();
+window.addEventListener('resize',()=>{document.querySelectorAll('.chart').forEach(el=>{const c=echarts.getInstanceByDom(el);if(c)c.resize();});});
+</script>
+</body>
+</html>

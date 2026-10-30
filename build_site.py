@@ -70,6 +70,16 @@ REGISTRY = [
         date="2026-10-30",
     ),
     dict(
+        title="创业板 ETF 三季报体检：PE 23.6 倍，便宜还是陷阱？",
+        path="cyb-2026-10/index.html",
+        category="valuation",
+        tags=["创业板", "ETF", "三季报", "估值", "情景分析"],
+        summary="76 只持仓 Q3 财报拆解：净利 +32.3% 但剔除宁德/中际/新易盛后 -1.1%；PE 23.6x 为历史 2% 分位、"
+                "PB 4.0x 仅 22% 分位，用 2024 年盈利算 PE 39.3x。历史同位置 12 个月胜率、四种情景概率，"
+                "以及 3% 仓位的分批加减仓规则。",
+        date="2026-10-30",
+    ),
+    dict(
         title="恒生指数 (HSI) 成分股与估值报告",
         path="hsi-valuation.html",
         category="valuation",
