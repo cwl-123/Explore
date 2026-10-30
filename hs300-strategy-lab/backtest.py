@@ -1,7 +1,9 @@
+import io
 import json
 import os
 import re
 import sys
+import time
 import types
 from datetime import datetime
 from hashlib import md5
@@ -521,12 +523,12 @@ STOCK_DESC = {
 LESSONS = {
     "沪深300": "牛短熊长——PE 过高（分位>90%）一定要逃顶，但卖出别太灵敏，绝大部分涨幅都在极端高估（≥90% 分位档贡献 +116%）的位置取得。买入可以稍早抄底，分位 <50% 就够（实测 30% 买回与 50% 买回相差仅 0.2pp/年）；如果非要等深度低估（<20%）再买，反而会踏空机会、空仓时间过长（本项目最长达 4.7 年），非常反人性。",
     "中证A500": "2024-09 才发布的宽基，**只用发布后的真实数据**（价格与官方 PE 均 2024-09 起，不采用回填历史），窗口约 2 年、样本短。分位用上市以来 expanding（约 250 个交易日后才出信号），故前半段估值策略基本等同躺平；结论是「早期行为画像」，不可外推。行业更均衡、风格介于沪深300 与中证500 之间，可当作「A 股核心资产」的另一把尺子。",
-    "恒生科技": "盈利高波动的科技指数，PE 估值择时在这里几乎失效——本窗口 expanding 分位被早年极端 PE 钉死、从未越 80% 卖出线，估值类策略全部 0 交易=躺平；**纯价格趋势「破线卖·深跌买」才是效果最好的**（累计 +71% vs 躺平 +12%，年化 20% / 回撤 -23%）：连续拉升后跌破 20 日均线就走、从高点回撤 20% 再接。注意它只在恒生科技这类高波动趋势指数成立，沪深300/纳指会被反复假突破打脸。",
-    "纳斯达克100": "盈利驱动型市场——躺平 + 坚持定投完胜所有择时（普通定投 XIRR 15.5%）；估值不是卖的理由（2009-2021 主升浪绝大多数时间标普分位 >80%，择时长期空仓踏空）；控仓只降回撤、择时拖后腿。",
+    "恒生科技": "盈利高波动的科技指数，PE 估值择时在这里几乎失效——本窗口 expanding 分位被早年极端 PE 钉死、从未越 80% 卖出线，估值类策略全部 0 交易=躺平；**纯价格趋势「破线卖·深跌买」才是效果最好的**（累计 +57% vs 躺平 +2.7%，年化 16.3% / 回撤 -29.5%）：连续拉升后跌破 20 日均线就走、从高点回撤 20% 再接。注意它只在恒生科技这类高波动趋势指数成立，沪深300/纳指会被反复假突破打脸。",
+    "纳斯达克100": "盈利驱动型市场——躺平 + 坚持定投完胜所有择时（普通定投 XIRR 15.2%）；估值不是卖的理由（2009-2021 主升浪绝大多数时间标普分位 >80%，择时长期空仓踏空）；控仓只降回撤、择时拖后腿。",
     "标普500": "美股成熟宽基：结论与纳指一致但更极致——躺平+定投最优，择时（含 PE 分位/趋势）在长牛市里全是拖后腿；估值信号天然滞后，股价先于 PE 定价。",
     "恒生指数": "港股宽基，估值信号仅 2019 起可回测（窗口短）；低股息率+盈利波动，PE 择时区分度有限，控仓/再平衡仍是主要风险工具。",
     "创业板指": "A股成长风格：弹性大、牛熊切换急，PE 分位择时比沪深300 更有效（成长股估值回归猛烈）；但本页用市场整体 PE 近似 399006，交叉口径需打折。",
-    "科创50": "2020 起的高波动成长指数，回测窗口 2021-07 起（约 5 年，起点分位 27%）：起点正好在高位回落前，**躺平 5 年小幅转负（-1.7%、回撤 -60%）**；纯价格趋势「破线卖·深跌买」再次最优（+54% / 年化 8.9%）——高波动成长指数，趋势追踪 > PE 择时 > 躺平。",
+    "科创50": "2020 起的高波动成长指数，回测窗口 2021-07 起（约 5 年，起点分位 27%）：起点正好在高位回落前，**躺平 5 年转负（-5.0%、回撤 -60%）**；纯价格趋势「破线卖·深跌买」再次最优（+30% / 年化 5.3%）——高波动成长指数，趋势追踪 > PE 择时 > 躺平。",
     "红利低波": "低波动红利风格，2018 起：天然抗跌（回撤小）、熊市里是避风港，估值分位择时收益有限——特征是'慢涨抗跌'而非'高弹性'。",
     "黄金": "黄金没有 PE，估值择时先天不可用——涨跌只能靠价格自身：200 日单均线/双均线吃主升段、抄底网格在长牛里左侧上车、波动率目标自动降仓防回撤。26 年里黄金'牛长熊短但熊市很磨人'（2012-2016、2020-2022 高位横盘回撤 20-40%），纯躺平波动大；趋势型策略跑赢与否取决于区间里有多少段'沿之势'可吃。",
 }
@@ -727,7 +729,9 @@ def load_hstech():
     return df
 
 
-def fetch_yahoo_daily(symbol, cache_path, start_year=1995):
+def _yahoo_daily(symbol, start_year=1995):
+    """Yahoo chart 日线。大陆网络自 2026-10-30 起被整体 403（返回同意页而非 JSON），
+    故此处只返回数据、不落盘，由 fetch_or_fallback 决定是否切备用源"""
     import datetime as _dt
     p1 = int(_dt.datetime(start_year, 1, 1).timestamp())
     p2 = int(_dt.datetime(2027, 1, 1).timestamp())
@@ -739,9 +743,94 @@ def fetch_yahoo_daily(symbol, cache_path, start_year=1995):
     closes = res["indicators"]["quote"][0]["close"]
     dates = [_dt.datetime.utcfromtimestamp(t).date() for t in ts]
     df = pd.DataFrame({"date": pd.to_datetime(dates), "close": pd.to_numeric(closes, errors="coerce")})
-    df = df.dropna().sort_values("date").reset_index(drop=True)
+    return df.dropna().sort_values("date").reset_index(drop=True)
+
+
+# ---------- Yahoo 不可达时的备用日线源（2026-10-30 起） ----------
+
+def sina_us_index_daily(symbol):
+    """新浪美股指数日线：.NDX（2014 起）/ .INX（2004 起），够增量更新尾部"""
+    r = requests.get("https://stock.finance.sina.com.cn/usstock/api/jsonp.php/var%20_x=/US_MinKService.getDailyK",
+                     params={"symbol": symbol, "___qn": 3},
+                     headers={"User-Agent": _UA, "Referer": "https://finance.sina.com.cn"}, timeout=30)
+    rows = json.loads(re.search(r"=\s*\((\[.*\])\)", r.text, re.S).group(1))
+    df = pd.DataFrame({"date": pd.to_datetime([x["d"] for x in rows]),
+                       "close": pd.to_numeric([x["c"] for x in rows], errors="coerce")})
+    return df.dropna().sort_values("date").reset_index(drop=True)
+
+
+def sina_global_futures_daily(symbol="GC"):
+    """新浪外盘期货日线：GC = COMEX 黄金连续（2016-10 起）"""
+    r = requests.get("https://stock.finance.sina.com.cn/futures/api/jsonp.php/var%20_x=/GlobalFuturesService.getGlobalFuturesDailyKLine",
+                     params={"symbol": symbol},
+                     headers={"User-Agent": _UA, "Referer": "https://finance.sina.com.cn"}, timeout=30)
+    rows = json.loads(re.search(r"=\s*\((\[.*\])\)", r.text, re.S).group(1))
+    df = pd.DataFrame({"date": pd.to_datetime([x["date"] for x in rows]),
+                       "close": pd.to_numeric([x["close"] for x in rows], errors="coerce")})
+    # 外盘期货近 24h 交易，最后一根常是「今日进行中」的临时价，按收盘口径剔除
+    df = df[df["date"] < pd.Timestamp.today().normalize()]
+    return df.dropna().sort_values("date").reset_index(drop=True)
+
+
+def treasury_10y_daily(year=None):
+    """美国财政部官方日频国债收益率曲线 CSV，取 10 Yr 列（%，天然无前视）。
+    该站响应常要 20s+，故放宽超时并重试"""
+    y = year or datetime.now().year
+    url = f"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/{y}/all"
+    last = None
+    for _ in range(3):
+        try:
+            r = requests.get(url, params={"type": "daily_treasury_yield_curve",
+                                          "field_tdr_date_value": str(y), "page": "", "_format": "csv"},
+                             headers={"User-Agent": _UA}, timeout=60)
+            raw = pd.read_csv(io.StringIO(r.text))
+            df = pd.DataFrame({"date": pd.to_datetime(raw["Date"], format="%m/%d/%Y"),
+                               "close": pd.to_numeric(raw["10 Yr"], errors="coerce")})
+            return df.dropna().sort_values("date").reset_index(drop=True)
+        except Exception as e:  # noqa
+            last = e
+            time.sleep(3)
+    raise last
+
+
+def fetch_yahoo_daily(symbol, cache_path, start_year=1995):
+    df = _yahoo_daily(symbol, start_year)
     df.to_csv(cache_path, index=False)
     return df
+
+
+def fetch_or_fallback(cache_path, yahoo_symbol, start_year=1995, fallback=None):
+    """先试 Yahoo；失败则用备用源增量并入旧缓存（旧值优先、只补新日期）。
+    备用源历史普遍更短，若缓存丢失则只能拿到备用源覆盖的区间（会打印提示）。
+    返回 (df, 数据源标签)"""
+    try:
+        df = _yahoo_daily(yahoo_symbol, start_year)
+        df.to_csv(cache_path, index=False)
+        return df, "yahoo"
+    except Exception as e:
+        if fallback is None:
+            raise
+        new = fallback()
+        new = new.assign(date=pd.to_datetime(new["date"]))  # sina 返回 datetime.date，统一成 Timestamp 再合并
+        if os.path.exists(cache_path):
+            # 只补缓存尾部之后的日期：备用源历史/休市日口径与主源不同，不覆盖也不回填历史
+            old = pd.read_csv(cache_path, parse_dates=["date"])
+            new = new[new["date"] > old["date"].max()]
+            if new.empty:
+                return old, "已最新"
+            df = _merge_cache(cache_path, new)
+        else:
+            print(f"    ! {os.path.basename(cache_path)} 无缓存，仅使用备用源区间 {new['date'].iloc[0].date()} 起")
+            new.to_csv(cache_path, index=False)
+            df = new
+        return df, f"备用源({type(e).__name__})"
+
+
+def load_quotes(cache_path, yahoo_symbol, start_year=1995, fallback=None):
+    """读日线缓存；缓存缺失时才联网（走 fetch_or_fallback）"""
+    if os.path.exists(cache_path):
+        return pd.read_csv(cache_path, parse_dates=["date"])
+    return fetch_or_fallback(cache_path, yahoo_symbol, start_year, fallback)[0]
 
 
 def multpl_monthly_pe(cache_path, slug):
@@ -761,7 +850,7 @@ def load_ndx():
     px_path = os.path.join(DATA_DIR, "ndx_price.csv")
     pe_path = os.path.join(DATA_DIR, "ndx_pe.csv")  # 信号 = 标普500 市盈率
     cape_path = os.path.join(DATA_DIR, "ndx_cape.csv")  # 参考 = 标普500 席勒CAPE
-    px = fetch_yahoo_daily("%5ENDX", px_path) if not os.path.exists(px_path) else pd.read_csv(px_path, parse_dates=["date"])
+    px = load_quotes(px_path, "%5ENDX", 1995, lambda: sina_us_index_daily(".NDX"))
     pe = multpl_monthly_pe(pe_path, "s-p-500-pe-ratio") if not os.path.exists(pe_path) else pd.read_csv(pe_path, parse_dates=["date"])
     cape = multpl_monthly_pe(cape_path, "shiller-pe") if not os.path.exists(cape_path) else pd.read_csv(cape_path, parse_dates=["date"])
     px = px.sort_values("date").drop_duplicates("date").reset_index(drop=True)
@@ -830,7 +919,7 @@ def load_sp500():
     import datetime as _dt
     px_path = os.path.join(DATA_DIR, "sp500_price.csv")
     pe_path = os.path.join(DATA_DIR, "sp500_pe.csv")
-    px = fetch_yahoo_daily("%5EGSPC", px_path, start_year=1995) if not os.path.exists(px_path) else pd.read_csv(px_path, parse_dates=["date"])
+    px = load_quotes(px_path, "%5EGSPC", 1995, lambda: sina_us_index_daily(".INX"))
     pe = multpl_monthly_pe(pe_path, "s-p-500-pe-ratio") if not os.path.exists(pe_path) else pd.read_csv(pe_path, parse_dates=["date"])
     px = px.sort_values("date").drop_duplicates("date").reset_index(drop=True)
     daily = pd.DatetimeIndex(px["date"])
@@ -844,7 +933,7 @@ def load_hsi():
     """恒生指数：价格=Yahoo ^HSI；PE/股息率=乐咕 hsidata 官方月度(2019 起)"""
     px_path = os.path.join(DATA_DIR, "hsi_price.csv")
     pe_path = os.path.join(DATA_DIR, "hsi_pe.csv")
-    px = fetch_yahoo_daily("%5EHSI", px_path, start_year=1986) if not os.path.exists(px_path) else pd.read_csv(px_path, parse_dates=["date"])
+    px = load_quotes(px_path, "%5EHSI", 1986, lambda: sina_hk_daily("HSI"))
     if not os.path.exists(pe_path):
         raw = legu_hsidata("HSI")
         raw.to_csv(pe_path, index=False)
@@ -861,11 +950,9 @@ def load_hsi():
 
 
 def load_ust10y():
-    """美国 10 年期国债名义收益率（%）：Yahoo ^TNX 日频"""
+    """美国 10 年期国债名义收益率（%）：Yahoo ^TNX 日频（不可达时切财政部官方 CSV）"""
     path = os.path.join(DATA_DIR, "ust10y.csv")
-    if not os.path.exists(path):
-        return fetch_yahoo_daily("%5ETNX", path, start_year=2000)
-    return pd.read_csv(path, parse_dates=["date"])
+    return load_quotes(path, "%5ETNX", 2000, lambda: treasury_10y_daily())
 
 
 def load_cpi():
@@ -880,7 +967,7 @@ def load_gold():
     """黄金：COMEX 期货连续（GC=F，美元/盎司）。无 PE/股息，价格策略专用。
     额外并入 y10（名义 10Y 收益率）、cpi（月频水平）两列，供美债轮动策略做实际利率近似"""
     px_path = os.path.join(DATA_DIR, "gold_price.csv")
-    px = fetch_yahoo_daily("GC%3DF", px_path, start_year=2000) if not os.path.exists(px_path) else pd.read_csv(px_path, parse_dates=["date"])
+    px = load_quotes(px_path, "GC%3DF", 2000, lambda: sina_global_futures_daily("GC"))
     px = px.sort_values("date").drop_duplicates("date").reset_index(drop=True)
     df = px.assign(pe=float("nan"), div_yield=0.0)
     y10 = load_ust10y()[["date", "close"]].rename(columns={"close": "y10"})
@@ -1668,11 +1755,16 @@ def refresh_all():
 
     def step(name, fn):
         try:
-            df = fn()
+            res = fn()
+            src = ""
+            if isinstance(res, tuple):  # fetch_or_fallback 返回 (df, 数据源)
+                res, src = res
+                src = f"  src={src}"
+            df = res
             report[name] = df
             col = "date" if "date" in df.columns else "日期"
             last = pd.to_datetime(df[col]).max()
-            print(f"  [{name}] ok  last={last.date()}")
+            print(f"  [{name}] ok  last={last.date()}{src}")
         except Exception as e:
             report[name] = None
             print(f"  [{name}] FAIL {type(e).__name__}: {e}")
@@ -1697,18 +1789,23 @@ def refresh_all():
     step("a500", lambda: save(_P("a500.csv"), csindex_raw("000510", "20240923")))
     step("hstech_price", lambda: save(_P("hstech_price.csv"), sina_hk_daily("HSTECH")))
     step("hstech_pe(月度)", lambda: save(_P("hstech_pe.csv"), legu_hsidata("HSTECH")))
-    step("ndx_price", lambda: fetch_yahoo_daily("%5ENDX", _P("ndx_price.csv")))
+    step("ndx_price", lambda: fetch_or_fallback(_P("ndx_price.csv"), "%5ENDX", 1995,
+                                                lambda: sina_us_index_daily(".NDX")))
     step("ndx_pe(标普500/月度)", lambda: multpl_monthly_pe(_P("ndx_pe.csv"), "s-p-500-pe-ratio"))
     step("ndx_cape", lambda: multpl_monthly_pe(_P("ndx_cape.csv"), "shiller-pe"))
-    step("sp500_price", lambda: fetch_yahoo_daily("%5EGSPC", _P("sp500_price.csv")))
+    step("sp500_price", lambda: fetch_or_fallback(_P("sp500_price.csv"), "%5EGSPC", 1995,
+                                                  lambda: sina_us_index_daily(".INX")))
     step("sp500_pe", lambda: multpl_monthly_pe(_P("sp500_pe.csv"), "s-p-500-pe-ratio"))
-    step("hsi_price", lambda: fetch_yahoo_daily("%5EHSI", _P("hsi_price.csv"), start_year=1986))
+    step("hsi_price", lambda: fetch_or_fallback(_P("hsi_price.csv"), "%5EHSI", 1986,
+                                                lambda: sina_hk_daily("HSI")))
     step("hsi_pe(月度)", lambda: save(_P("hsi_pe.csv"), legu_hsidata("HSI")))
     step("cyb_price", lambda: save(_P("cyb_price.csv"), sina_index_daily("sz399006")))
     step("cyb_pe(月度)", lambda: save(_P("cyb_pe.csv"), legu_market_pe("4", "https://legulegu.com/stockdata/cybPE")))
     step("kcb50", lambda: save(_P("kcb50.csv"), csindex_raw("000688", "20190101")))
-    step("gold_price", lambda: fetch_yahoo_daily("GC%3DF", _P("gold_price.csv"), start_year=2000))
-    step("ust10y", lambda: fetch_yahoo_daily("%5ETNX", _P("ust10y.csv"), start_year=2000))
+    step("gold_price", lambda: fetch_or_fallback(_P("gold_price.csv"), "GC%3DF", 2000,
+                                                 lambda: sina_global_futures_daily("GC")))
+    step("ust10y", lambda: fetch_or_fallback(_P("ust10y.csv"), "%5ETNX", 2000,
+                                             lambda: treasury_10y_daily()))
     step("cpi(月)", lambda: multpl_monthly_pe(_P("cpi.csv"), "cpi"))
     step("hldb", lambda: save(_P("hldb.csv"), csindex_raw("H30269", "20180101")))
 
@@ -1728,7 +1825,7 @@ def refresh_all():
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    if "--update-data" in args or "--update" in args:
+    if "--update-data" in args or "--update" in args or "--update-only" in args:
         refresh_all()
         if "--update-only" in args:
             sys.exit(0)
