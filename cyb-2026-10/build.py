@@ -57,6 +57,27 @@ m["m9_yoy"] = m["np_202609"] / m["np_202509"] - 1
 m["revq26"] = m["rev_202609"] - m["rev_202606"]
 m["revq25"] = m["rev_202509"] - m["rev_202506"]
 m["revq_yoy"] = m["revq26"] / m["revq25"] - 1
+
+# 环比：Q2 单季 = H1 - Q1；Q3 单季 = 9M - H1
+q1 = pd.read_csv(os.path.join(DATA, "q1_2026.csv"), dtype={"code": str})
+m["rev_q1"] = m["code"].map(q1.set_index("code")["rev_q1"])
+m["np_q1"] = m["code"].map(q1.set_index("code")["np_q1"])
+m["gm_q1_pct"] = m["code"].map(q1.set_index("code")["gm_q1"])
+m["rev_q2"] = m["rev_202606"] - m["rev_q1"]
+m["np_q2"] = m["np_202606"] - m["np_q1"]
+m["rev_q3"] = m["revq26"]
+m["np_q3"] = m["npq26"]
+m["rev_qoq"] = m["rev_q3"] / m["rev_q2"] - 1
+m["np_qoq"] = np.where(m["np_q2"] > 0, m["np_q3"] / m["np_q2"] - 1, np.nan)
+m["gp_q1"] = m["rev_q1"] * m["gm_q1_pct"] / 100
+m["gp_q2"] = m["rev_202606"] * m["gm_202606"] / 100 - m["gp_q1"]
+m["gp_q3"] = m["rev_202609"] * m["gm_202609"] / 100 - m["rev_202606"] * m["gm_202606"] / 100
+m["gm_q2_single"] = m["gp_q2"] / m["rev_q2"] * 100
+m["gm_q3_single"] = m["gp_q3"] / m["rev_q3"] * 100
+m["gm_qoq"] = m["gm_q3_single"] - m["gm_q2_single"]
+m["nm_q2_single"] = m["np_q2"] / m["rev_q2"] * 100
+m["nm_q3_single"] = m["np_q3"] / m["rev_q3"] * 100
+m["nm_qoq"] = m["nm_q3_single"] - m["nm_q2_single"]
 m["contrib"] = m["weight"] * (m["npq26"] - m["npq25"])
 base_np = (m["weight"] * m["npq25"]).sum()
 m["contrib"] = m["contrib"] / base_np
@@ -88,6 +109,28 @@ pos_w = float(m.loc[m["npq_yoy"] > 0, "weight"].sum())
 neg_w = float(m.loc[m["npq_yoy"] < 0, "weight"].sum())
 q3_margin = float((W * m["npq26"]).sum() / (W * m["revq26"]).sum())
 h1_margin = float((W * m["np_202606"]).sum() / (W * m["rev_202606"]).sum())
+
+# 环比聚合
+q2_np_qoq = agg("np_q2", "np_q1")
+q3_np_qoq = agg("np_q3", "np_q2")
+q2_rev_qoq = agg("rev_q2", "rev_q1")
+q3_rev_qoq = agg("rev_q3", "rev_q2")
+q2_np_qoq_top3 = agg("np_q2", "np_q1", m["top3"])
+q2_np_qoq_ex3 = agg("np_q2", "np_q1", ~m["top3"])
+q3_np_qoq_top3 = agg("np_q3", "np_q2", m["top3"])
+q3_np_qoq_ex3 = agg("np_q3", "np_q2", ~m["top3"])
+qoq_med = float(m["np_qoq"].median())
+qoq_rev_med = float(m["rev_qoq"].median())
+qoq_pos = int((m["np_qoq"] > 0).sum())
+qoq_valid = int(m["np_qoq"].notna().sum())
+qoq_rev_pos = int((m["rev_qoq"] > 0).sum())
+
+def wmargin(q):
+    return float((W * m["gp_" + q]).sum() / (W * m["rev_" + q]).sum() * 100)
+
+gm1, gm2, gm3 = wmargin("q1"), wmargin("q2"), wmargin("q3")
+nm3_single = float((W * m["np_q3"]).sum() / (W * m["rev_q3"]).sum() * 100)
+nm2_single = float((W * m["np_q2"]).sum() / (W * m["rev_q2"]).sum() * 100)
 top3_w = float(m.loc[m["top3"], "weight"].sum())
 top3_np_share = float(m.loc[m["top3"], "ttm_np"].sum() / m["ttm_np"].sum())
 top3_pe = float(m.loc[m["top3"], "total_cap"].sum() * 1e8 / m.loc[m["top3"], "ttm_np"].sum())
@@ -221,11 +264,11 @@ scen = [
     dict(key="A", name="盈利韧性 + 估值修复", prob=30, eps=20, pe=28,
          desc="Q4 环比不降、AI 资本开支上修、指数站上 2800 并放量",
          color="#2c9e63"),
-    dict(key="B", name="盈利兑现 + 估值横盘", prob=40, eps=10, pe=24,
-         desc="Q4 增速 10–20%，指数 2400–2800 区间震荡，用时间换空间",
+    dict(key="B", name="盈利兑现 + 估值横盘", prob=35, eps=10, pe=24,
+         desc="Q4 环比转正、增速 10–20%，指数 2400–2800 区间震荡",
          color="#2f6fed"),
-    dict(key="C", name="增速失速 + 杀估值", prob=20, eps=0, pe=18,
-         desc="Top3 Q4 增速 <10%，跌破 2200，PB 向 2024 年低点靠拢",
+    dict(key="C", name="增速失速 + 杀估值", prob=25, eps=0, pe=18,
+         desc="Q4 环比继续为负、Top3 增速 <10%，跌破 2200",
          color="#d99a00"),
     dict(key="D", name="AI 资本开支断崖", prob=10, eps=-20, pe=15,
          desc="北美云厂砍单，中际/新易盛单季环比 -30%，盈利与估值双杀",
@@ -242,6 +285,8 @@ def q3_tag(row):
         return "亏损"
     if row["npq_yoy"] < 0:
         return "负增长"
+    if not pd.isna(row["np_qoq"]) and row["np_qoq"] < -0.15:
+        return "环比转弱"
     if row["npq_yoy"] >= 0.5:
         return "高增长"
     if row["npq_yoy"] < row["h1_yoy"]:
@@ -261,6 +306,8 @@ for x in m.itertuples():
         "weight": round(float(x.weight), 2), "pe": round(float(x.pe_ttm), 2),
         "pb": round(float(x.pb), 2), "q3": round(float(x.npq_yoy * 100), 1),
         "h1": round(float(x.h1_yoy * 100), 1), "m9": round(float(x.m9_yoy * 100), 1),
+        "qoq": None if pd.isna(x.np_qoq) else round(float(x.np_qoq * 100), 1),
+        "gm_chg": round(float(x.gm_qoq), 1),
         "peg": None if peg is None else round(peg, 2),
         "contrib": round(float(x.contrib * 100), 1),
     })
@@ -308,7 +355,7 @@ kpis = f'''
   <div class="kpi"><div class="k">创业板指</div><div class="v">{last_close:,.0f}</div><div class="s">距 6/25 高点 {fp(dd*100)}</div></div>
   <div class="kpi"><div class="k">PE-TTM</div><div class="v">{cur_pe:.1f}x</div><div class="s">历史 {pe_pct:.1f}% 分位</div></div>
   <div class="kpi"><div class="k">PB</div><div class="v">{cur_pb:.1f}x</div><div class="s">历史 {pb_pct:.0f}% 分位</div></div>
-  <div class="kpi"><div class="k">Q3 净利增速</div><div class="v g">{fp(q3_np_g*100)}</div><div class="s">H1 为 {fp(h1_np_g*100)}</div></div>
+  <div class="kpi"><div class="k">Q3 净利增速</div><div class="v g">{fp(q3_np_g*100)}</div><div class="s">环比 {fp(q3_np_qoq*100)}，增收不增利</div></div>
   <div class="kpi"><div class="k">前三季净利增速</div><div class="v g">{fp(m9_np_g*100)}</div><div class="s">营收 {fp(m9_rev_g*100)}</div></div>
   <div class="kpi"><div class="k">Top3 集中度</div><div class="v">{top3_w:.1f}%</div><div class="s">利润占比 {top3_np_share*100:.1f}%</div></div>
 </div>
@@ -323,8 +370,8 @@ concl = f'''
 <div class="concl">
   <div class="c"><div class="t"><i style="background:#2f6fed"></i>贵不贵</div><div class="h">PE 便宜，PB 不便宜</div>
     <p>PE {cur_pe:.1f}x 是历史 {pe_pct:.1f}% 分位；但 PB {cur_pb:.1f}x 只是 {pb_pct:.0f}% 分位。用 2024 年盈利算，PE 是 {pe2024:.1f}x。低 PE 是高 ROE（{cur_roe:.1f}%）造出来的，不是资产打折。</p></div>
-  <div class="c"><div class="t"><i style="background:#2c9e63"></i>盈利</div><div class="h">真的强，但在减速</div>
-    <p>Q3 单季净利 {fp(q3_np_g*100)}，H1 是 {fp(h1_np_g*100)}；中位股 Q3 只有 {fp(q3_med*100)}，{pos_cnt}/76 正增长。Top3 贡献 {top3_contrib:.1f}pp，剔除后 {fp(q3_np_g_ex3*100)}。</p></div>
+  <div class="c"><div class="t"><i style="background:#2c9e63"></i>盈利</div><div class="h">同比还强，环比已转负</div>
+    <p>Q3 净利同比 {fp(q3_np_g*100)}，但环比 {fp(q3_np_qoq*100)}（Q2 环比 {fp(q2_np_qoq*100)}）；中位股环比 {fp(qoq_med*100)}，仅 {qoq_pos}/{qoq_valid} 可比公司正增长。Top3 贡献 {top3_contrib:.1f}pp，剔除后同比 {fp(q3_np_g_ex3*100)}。</p></div>
   <div class="c"><div class="t"><i style="background:#d94a4a"></i>风险</div><div class="h">不是“创业板”风险<br>是“三只股票”风险</div>
     <p>宁德 + 中际 + 新易盛 = {top3_w:.1f}% 权重、{top3_np_share*100:.1f}% 利润；AI 算力链约 {ai_w:.1f}%。三只里任何一只逻辑破了，指数 PE 会立刻变贵。</p></div>
   <div class="c"><div class="t"><i style="background:#d99a00"></i>3% 怎么办</div><div class="h">持有不加，设三档</div>
@@ -334,10 +381,13 @@ concl = f'''
 
 growth_rows = ""
 for x in m.nlargest(12, "weight").itertuples():
+    qoq_v = None if pd.isna(x.np_qoq) else float(x.np_qoq * 100)
+    qoq_cls = "" if qoq_v is None else cls(qoq_v)
     growth_rows += f'''<tr>
       <td><b>{x.name}</b><br><span class="muted">{x.code}</span></td>
       <td>{x.weight:.2f}%</td>
       <td class="num {cls(x.npq_yoy*100)}"><b>{fp(x.npq_yoy*100)}</b></td>
+      <td class="num {qoq_cls}">{fp(qoq_v)}</td>
       <td class="num {cls(x.h1_yoy*100)}">{fp(x.h1_yoy*100)}</td>
       <td class="num">{x.pe_ttm:.1f}</td>
       <td class="num {cls(x.contrib*100)}">{x.contrib*100:+.1f}pp</td>
@@ -385,7 +435,7 @@ content = f'''
   <div class="eyebrow">CHINEXT ETF · 2026 Q3 REVIEW</div>
   <h1>创业板 ETF 三季报体检：<br>PE 23.6 倍，便宜还是陷阱？</h1>
   <div class="sub">数据截至 2026-10-30 收盘 · 创业板指 399006 · 创业板ETF 159915 · 76 只持仓覆盖 87.5% 净值</div>
-  <div class="verdict"><span class="tagline">结论</span>估值确实便宜，但便宜集中在 3 只股票身上。Q3 净利 {fp(q3_np_g*100)}，剔除宁德/中际/新易盛后是 <b>{fp(q3_np_g_ex3*100)}</b>。3% 仓位：<b>持有不加</b>，跌到 2,150 / 1,850 分两档加，反弹到 3,200 以上再减。</div>
+  <div class="verdict"><span class="tagline">结论</span>估值确实便宜，但便宜集中在 3 只股票身上。Q3 净利 {fp(q3_np_g*100)}（环比 {fp(q3_np_qoq*100)}），剔除宁德/中际/新易盛后是 <b>{fp(q3_np_g_ex3*100)}</b>。3% 仓位：<b>持有不加</b>，跌到 2,150 / 1,850 分两档加，反弹到 3,200 以上再减。</div>
 </div>
 {kpis}
 
@@ -421,14 +471,30 @@ content = f'''
     </div>
   </div>
 
+  <h3 style="margin-top:28px">环比：营收还在涨，利润已经转负</h3>
+  <p class="lede">同比看的是 12 个月前，容易被低基数和一次性因素扭曲；环比看的是最新一个季度，对科技硬件的价格、库存、产能利用率更敏感。Q3 的问题不在“同比”，在“环比”。</p>
+  <div class="grid3">
+    <div class="box"><div class="k">Q3 净利环比</div><div class="v r">{fp(q3_np_qoq*100)}</div><div class="s">Q2 环比 {fp(q2_np_qoq*100)}；中位股 {fp(qoq_med*100)}</div></div>
+    <div class="box"><div class="k">Q3 营收环比</div><div class="v g">{fp(q3_rev_qoq*100)}</div><div class="s">中位股 {fp(qoq_rev_med*100)}，{qoq_rev_pos}/76 正增长</div></div>
+    <div class="box"><div class="k">Q3 单季毛利率</div><div class="v a">{gm3:.1f}%</div><div class="s">Q1 {gm1:.1f}% → Q2 {gm2:.1f}% → Q3 {gm3:.1f}%（环比 {gm3-gm2:+.1f}pp）</div></div>
+  </div>
+  <div id="g-qoq" class="chart"></div>
+  <p class="chart-note">Q2 净利环比还是 {fp(q2_np_qoq*100)}，Q3 直接 {fp(q3_np_qoq*100)}；营收环比 {fp(q3_rev_qoq*100)} 仍在增长，毛利率却从 {gm2:.1f}% 降到 {gm3:.1f}%。这叫“增收不增利”：量还在，价/毛利率先掉。5 家公司 Q2 亏损或基数不可比，未计入环比中位数。</p>
+  <div class="callout red"><b>为什么跌：</b>市场不是看到“同比 {fp(q3_np_g*100)}”才跌，而是看到 Q2 环比见顶、Q3 环比转负。Q3 净利环比 {fp(q3_np_qoq*100)}，营收环比 {fp(q3_rev_qoq*100)}，毛利率环比 {gm3-gm2:+.1f}pp——利润被毛利率和费用吞掉了。科技硬件对价格/产能周期最敏感，环比比同比早一个季度报警。</div>
+  <div class="grid2">
+    <div class="box"><div class="k">Top3 Q3 净利环比</div><div class="v r">{fp(q3_np_qoq_top3*100)}</div><div class="s">Q2 环比 {fp(q2_np_qoq_top3*100)}；中际 {fp(m.loc[m.code=='300308','np_qoq'].iloc[0]*100)}、新易盛 {fp(m.loc[m.code=='300502','np_qoq'].iloc[0]*100)}、宁德 {fp(m.loc[m.code=='300750','np_qoq'].iloc[0]*100)}</div></div>
+    <div class="box"><div class="k">其余 73 只 Q3 净利环比</div><div class="v r">{fp(q3_np_qoq_ex3*100)}</div><div class="s">Q2 环比 {fp(q2_np_qoq_ex3*100)}；只有 {qoq_pos}/{qoq_valid} 只环比正增长（5 家 Q2 亏损/基数不可比）</div></div>
+  </div>
+  <div class="callout"><b>结构：</b>中际 {fp(m.loc[m.code=='300308','np_qoq'].iloc[0]*100)}、天孚 {fp(m.loc[m.code=='300394','np_qoq'].iloc[0]*100)}、三环 {fp(m.loc[m.code=='300408','np_qoq'].iloc[0]*100)}、长川 {fp(m.loc[m.code=='300604','np_qoq'].iloc[0]*100)} 仍在环比增长；新易盛 {fp(m.loc[m.code=='300502','np_qoq'].iloc[0]*100)}、胜宏 {fp(m.loc[m.code=='300476','np_qoq'].iloc[0]*100)}、阳光 {fp(m.loc[m.code=='300274','np_qoq'].iloc[0]*100)}、宁德 {fp(m.loc[m.code=='300750','np_qoq'].iloc[0]*100)} 环比转负。跌的不是“整个板块”，是上一季度涨得最陡、毛利率最先松动的那一段。</div>
+
   <h3>前 12 大持仓：权重、增速与贡献</h3>
   <div class="tbl-wrap" style="max-height:480px">
     <table>
-      <thead><tr><th>持仓</th><th>权重</th><th>Q3 净利增速</th><th>H1 净利增速</th><th>PE-TTM</th><th>Q3 贡献</th></tr></thead>
+      <thead><tr><th>持仓</th><th>权重</th><th>Q3 同比</th><th>Q3 环比</th><th>H1 同比</th><th>PE-TTM</th><th>Q3 贡献</th></tr></thead>
       <tbody>{growth_rows}</tbody>
     </table>
   </div>
-  <p class="src">注：Q3 单季 = 2026 前三季 − 2026 上半年；增速为单季同比。权重为 159915 2026 Q3 披露的占净值比例，合计 87.5%（其余为现金/其他资产）。</p>
+  <p class="src">注：Q3 单季 = 2026 前三季 − 2026 上半年；同比为单季同比，环比 = Q3 单季 / Q2 单季 − 1；毛利率环比为单季毛利率变化（pp）。权重为 159915 2026 Q3 披露的占净值比例，合计 87.5%（其余为现金/其他资产）。</p>
 
   <h3 style="margin-top:24px">全部 76 只持仓（可搜索 / 排序）</h3>
   <div class="toolbar">
@@ -442,13 +508,13 @@ content = f'''
     <table style="min-width:980px">
       <thead><tr>
         <th>#</th><th>名称 / 代码</th><th>行业</th><th data-sort="weight">权重</th>
-        <th data-sort="pe">PE</th><th>PB</th><th data-sort="q3">Q3 增速</th>
-        <th data-sort="m9">前三季</th><th>PEG*</th><th data-sort="contrib">Q3 贡献</th><th>标签</th>
+        <th data-sort="pe">PE</th><th>PB</th><th data-sort="q3">Q3 同比</th>
+        <th data-sort="qoq">Q3 环比</th><th>毛利率环比</th><th data-sort="m9">前三季</th><th data-sort="contrib">Q3 贡献</th><th>标签</th>
       </tr></thead>
       <tbody id="stock-rows"></tbody>
     </table>
   </div>
-  <p class="src">PE 为 TTM；亏损公司 PE 显示“亏损”。PEG* = PE / Q3 增速（仅对正增长公司计算，上限 9.99；单季增速波动大，PEG 仅供参考）。点击表头或上方按钮切换排序。</p>
+  <p class="src">PE 为 TTM；亏损公司 PE 显示“亏损”。Q3 环比 = Q3 单季 / Q2 单季 − 1；毛利率环比为单季毛利率变化（pp）。Q2 单季 = 上半年 − 一季度，Q3 单季 = 前三季 − 上半年。点击表头或上方按钮切换排序。</p>
 </div>
 
 <div class="card">
@@ -518,7 +584,7 @@ content = f'''
   <p class="chart-note">按月末 PE 分组，统计之后 12 个月收益中位数与胜率；样本为 2010-06 至 2026-10 的月度数据，存在重叠，不是独立样本。</p>
   <div class="rule"><div class="rn">1</div><div><b>低 PE 不等于马上涨。</b>2012-11、2018-12、2024-01 三次低点后，都先磨了几个月，12 个月才兑现；当前 20 日线还在 2,800，趋势没转。</div></div>
   <div class="rule"><div class="rn">2</div><div><b>PB 比 PE 更诚实。</b>2022-10 PE 34.1x 看着不高，但 PB 4.98x、ROE 14.6%，之后 12 个月 -13%；现在 PB {cur_pb:.1f}x 比那时低，但比 2024 年的 3.18x 高。</div></div>
-  <div class="rule"><div class="rn">3</div><div><b>盈利方向决定一切。</b>2012/2018/2024 的低 PE 后面盈利都企稳或回升；2022 的低 PE 后面盈利继续下修。当前盈利还在增长，但 Q3 已从 +59.9% 减速到 +32.3%，这是最大的不确定。</div></div>
+  <div class="rule"><div class="rn">3</div><div><b>盈利方向决定一切。</b>2012/2018/2024 的低 PE 后面盈利都企稳或回升；2022 的低 PE 后面盈利继续下修。当前盈利同比还在增长，但 Q3 已从 H1 的 +59.9% 减速到 +32.3%，环比更是 {fp(q3_np_qoq*100)}，这是最大的不确定。</div></div>
   <div class="callout blue"><b>PE&lt;30 的 23 个完整月度样本里，22 次 12 个月正收益，中位 +25.2%。</b>唯一失败是 2023-08（PE 29.6x，之后盈利下修，12 个月 -24.8%）。样本少、重叠多，别把 96% 当成胜率保证；它只说明一件事：在这个估值买，长期赔率不差。</div>
 </div>
 
@@ -528,20 +594,21 @@ content = f'''
   <div class="scen">{scen_html}</div>
   <div class="grid3" style="margin-top:14px">
     <div class="box"><div class="k">概率加权期望</div><div class="v {cls(exp_ret*100)}">{fp(exp_ret*100)}</div><div class="s">12 个月，按上表概率加权</div></div>
-    <div class="box"><div class="k">正收益概率</div><div class="v g">70%</div><div class="s">A+B；但 B 只有 +12% 左右</div></div>
-    <div class="box"><div class="k">再探底概率</div><div class="v a">30%</div><div class="s">C+D；D 概率低但损失大</div></div>
+    <div class="box"><div class="k">正收益概率</div><div class="v g">65%</div><div class="s">A+B；Q3 环比转负后下调 5pp</div></div>
+    <div class="box"><div class="k">再探底概率</div><div class="v a">35%</div><div class="s">C+D；C 上调到 25%，D 仍是 10%</div></div>
   </div>
+  <div class="callout"><b>为什么把 C 上调到 25%：</b>Q3 净利环比 {fp(q3_np_qoq*100)}、毛利率环比 {gm3-gm2:+.1f}pp，说明“同比高增”已经不能线性外推。Q4 只有看到环比转正，B 情景才成立；否则估值再低，盈利也会继续被下修。</div>
   <div class="callout"><b>短期（1–3 个月）：</b>10/30 放量 2.5 倍、单日 -4.1%，超跌反弹概率约 60%；但 20 日线 2,800 没站上之前，反弹都先按“下跌中继”处理。不要用“PE 低”去接飞刀，等价格给确认。</div>
 </div>
 
 <div class="card">
   <h2><span class="no">7</span>3% 仓位怎么办：一套可执行的规则</h2>
   <p class="lede">3% 是很小的仓位。最大的风险不是这点仓位亏钱，而是“因为便宜”把它加成重仓。</p>
-  <div class="callout blue"><b>当前判断：</b>持有 3%，不加。理由：估值便宜（PE {cur_pe:.1f}x / {pe_pct:.1f}% 分位），但趋势没止跌（低于 200 日线 {abs(dist_ma200)*100:.0f}%）、Q3 增速腰斩、Top3 占 {top3_w:.1f}%。现在加仓是“猜底”，不是“配置”。</div>
+  <div class="callout blue"><b>当前判断：</b>持有 3%，不加。理由：估值便宜（PE {cur_pe:.1f}x / {pe_pct:.1f}% 分位），但趋势没止跌（低于 200 日线 {abs(dist_ma200)*100:.0f}%）、Q3 同比 +32.3% 但环比 {fp(q3_np_qoq*100)}、Top3 占 {top3_w:.1f}%。现在加仓是“猜底”，不是“配置”。</div>
   {ladder}
   <h3 style="margin-top:18px">为什么不在 -45% 割，也不现在满仓</h3>
-  <div class="rule"><div class="rn">1</div><div><b>不在 -45% 割：</b>3% 仓位即使再跌 30%，对总组合只有 -0.9%；但在 PE 历史 {pe_pct:.1f}% 分位割掉，失去的是未来 12 个月 70% 概率的正收益。除非 thesis 破了（见下），否则割在这里是情绪操作。</div></div>
-  <div class="rule"><div class="rn">2</div><div><b>不现在满仓：</b>指数低于 200 日线 {abs(dist_ma200)*100:.0f}%、20 日线还在往下、Q3 增速从 +59.9% 掉到 +32.3%。估值便宜可以让你“不卖”，但不能让你“买在下跌趋势里”。</div></div>
+  <div class="rule"><div class="rn">1</div><div><b>不在 -45% 割：</b>3% 仓位即使再跌 30%，对总组合只有 -0.9%；但在 PE 历史 {pe_pct:.1f}% 分位割掉，失去的是未来 12 个月 65% 概率的正收益。除非 thesis 破了（见下），否则割在这里是情绪操作。</div></div>
+  <div class="rule"><div class="rn">2</div><div><b>不现在满仓：</b>指数低于 200 日线 {abs(dist_ma200)*100:.0f}%、20 日线还在往下、Q3 同比从 +59.9% 掉到 +32.3% 且环比 {fp(q3_np_qoq*100)}。估值便宜可以让你“不卖”，但不能让你“买在下跌趋势里”。</div></div>
   <div class="rule"><div class="rn">3</div><div><b>加仓只加两档：</b>2,150–2,200（PE≈21，接近 2024 低点估值）和 1,850–1,950（PE≈18，PB 接近 2024 低点 3.1x）。每档 1%，上限 6%。</div></div>
   <div class="rule"><div class="rn">4</div><div><b>减仓看估值，不看成本：</b>反弹到 3,200–3,400（PE 31–33）减 1%；3,800 点以上（PE≈37）减到 1–2%。不要因为“回本了”就卖，也不要因为“还亏”就不卖。</div></div>
   <h3>什么情况说明 thesis 破了（无条件减仓）</h3>
@@ -560,7 +627,7 @@ content = f'''
   <div class="foot">
     <p><b>指数：</b>创业板指 399006，收盘/成交额来自国证指数（cnindex），2026-10-30 收盘 2,413.63；ETF 为易方达创业板ETF 159915，10/30 收盘 2.435，规模约 886 亿元（腾讯行情口径），距 52 周高点 -44.6%。</p>
     <p><b>成分/持仓：</b>ETF 2026 Q3 披露持仓 76 只，合计占净值 87.5%；权重为占净值比例，未归一化。指数前 10 权重来自国证指数 2026-10-29 样本数据。</p>
-    <p><b>财务：</b>2026 三季报、2026 半年报、2025 三季报/半年报、2025 年报、2024 年报，东方财富业绩报表；单三季度 = 前三季 − 上半年；TTM = 2025 年报 + 2026 前三季 − 2025 前三季。76/76 持仓均已披露 2026 三季报。</p>
+    <p><b>财务：</b>2026 三季报、2026 半年报、2026 一季报、2025 三季报/半年报、2025 年报、2024 年报，东方财富业绩报表；Q2 单季 = 上半年 − 一季度，Q3 单季 = 前三季 − 上半年；Q3 环比 = Q3 单季 / Q2 单季 − 1；单季毛利率由累计毛利率还原。TTM = 2025 年报 + 2026 前三季 − 2025 前三季。76/76 持仓均已披露 2026 三季报。</p>
     <p><b>估值：</b>PE-TTM / PB 为乐咕乐股 399006 月度序列（2010-06 起）；10/30 PE/PB 按指数当日涨跌从 10/29 折算，为估算值。分位为“历史序列中 ≤ 当前值的比例”，含当前点。PE/2024 盈利、PE/2025 盈利为“当前总市值 ÷ 对应年度净利润”，与官方加权 PE 口径略有差异。</p>
     <p><b>行情/个股：</b>个股 PE-TTM、PB、市值来自腾讯行情 2026-10-30 收盘；历史条件收益用月度收盘，2010-06 至 2026-10，样本存在重叠，仅供赔率参考。</p>
     <p><b>局限：</b>① ETF 持仓为 Q3 末披露，10 月价格变动后实际权重已变化；② 单季增速在低基数/亏损转正时会被放大，表内已用“亏损/负增长”标注；③ 历史只有 16 年、两轮半牛熊，条件样本小；④ 本文是数据研究，不构成投资建议。</p>
@@ -576,6 +643,16 @@ growth = {
     "rev": [round(h1_rev_g * 100, 1), round(q3_rev_g * 100, 1), round(m9_rev_g * 100, 1)],
     "np": [round(h1_np_g * 100, 1), round(q3_np_g * 100, 1), round(m9_np_g * 100, 1)],
     "med": [round(h1_med * 100, 1), round(q3_med * 100, 1), round(m9_med * 100, 1)],
+}
+
+growth["qoq"] = {
+    "cats": ["2026 Q2 环比", "2026 Q3 环比"],
+    "rev": [round(q2_rev_qoq * 100, 1), round(q3_rev_qoq * 100, 1)],
+    "np": [round(q2_np_qoq * 100, 1), round(q3_np_qoq * 100, 1)],
+    "gm": [round(gm2, 1), round(gm3, 1)],
+    "gm1": round(gm1, 1),
+    "top3": [round(q2_np_qoq_top3 * 100, 1), round(q3_np_qoq_top3 * 100, 1)],
+    "ex3": [round(q2_np_qoq_ex3 * 100, 1), round(q3_np_qoq_ex3 * 100, 1)],
 }
 
 chart_data = {
@@ -605,4 +682,5 @@ with open(out, "w", encoding="utf-8") as f:
 print("written", out, round(len(html) / 1024), "KB")
 print("index", last_date.date(), last_close, "PE", round(cur_pe, 2), "PB", round(cur_pb, 2))
 print("Q3 np", round(q3_np_g * 100, 1), "H1", round(h1_np_g * 100, 1), "ex-top3", round(q3_np_g_ex3 * 100, 1))
+print("QoQ np", round(q3_np_qoq * 100, 1), "Q2", round(q2_np_qoq * 100, 1), "ex3", round(q3_np_qoq_ex3 * 100, 1), "gm", round(gm3, 2))
 print("scenarios", [(s["key"], s["prob"], round(s["ret"] * 100, 1)) for s in scen], "expected", round(exp_ret * 100, 1))

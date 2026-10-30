@@ -189,6 +189,26 @@ mk('g-growth',{
   ]
 });
 
+mk('g-qoq',{
+  ...base,
+  grid:{left:52,right:56,top:54,bottom:38},
+  legend:{...base.legend,data:['营收环比','净利环比','单季毛利率']},
+  tooltip:{...base.tooltip,valueFormatter:v=>v==null?'—':Number(v).toFixed(1)+'%'},
+  xAxis:{...base.xAxis,type:'category',data:D.growth.qoq.cats,axisLabel:{color:C.muted,fontSize:11.5}},
+  yAxis:[
+    {...base.yAxis,type:'value',name:'环比 %',nameTextStyle:{color:C.muted,fontSize:10.5},min:-10,max:25,axisLabel:{...base.yAxis.axisLabel,formatter:'{value}%'}},
+    {...base.yAxis,type:'value',name:'毛利率 %',nameTextStyle:{color:C.muted,fontSize:10.5},min:22,max:30,axisLabel:{...base.yAxis.axisLabel,formatter:'{value}%'},splitLine:{show:false}}
+  ],
+  series:[
+    {name:'营收环比',type:'bar',data:D.growth.qoq.rev,barWidth:26,itemStyle:{color:'#8fb1f7',borderRadius:[4,4,0,0]},
+      label:{show:true,position:'top',fontSize:10.5,color:'#5d6b7f',formatter:p=>p.value.toFixed(1)+'%'}},
+    {name:'净利环比',type:'bar',data:D.growth.qoq.np,barWidth:26,itemStyle:{color:C.blue,borderRadius:[4,4,0,0]},
+      label:{show:true,position:'top',fontSize:11,color:C.blue,fontWeight:700,formatter:p=>p.value.toFixed(1)+'%'}},
+    {name:'单季毛利率',type:'line',yAxisIndex:1,data:D.growth.qoq.gm,symbol:'circle',symbolSize:8,lineStyle:{width:2.5,color:C.amber},
+      itemStyle:{color:C.amber}}
+  ]
+});
+
 mk('g-contrib',{
   ...base,
   grid:{left:92,right:56,top:24,bottom:34},
@@ -317,6 +337,7 @@ let sortKey='weight', sortDir=-1;
 function tagOf(s){
   if(s.pe<0) return '<span class="chip cool">亏损</span>';
   if(s.q3<0) return '<span class="chip warn">负增长</span>';
+  if(s.qoq!=null && s.qoq<-15) return '<span class="chip warn">环比转弱</span>';
   if(s.q3>=50) return '<span class="chip hot">高增长</span>';
   if(s.q3>s.h1+10) return '<span class="chip hot">加速</span>';
   if(s.q3<s.h1) return '<span class="chip gray">减速</span>';
@@ -338,8 +359,9 @@ function renderStocks(){
     <td class="num">${fmtPe(s.pe)}</td>
     <td class="num">${s.pb==null?'—':s.pb.toFixed(1)}</td>
     <td class="num ${s.q3>=0?'g':'r'}"><b>${fmtPct(s.q3)}</b></td>
+    <td class="num ${s.qoq==null?'':(s.qoq>=0?'g':'r')}">${fmtPct(s.qoq)}</td>
+    <td class="num ${s.gm_chg==null?'':(s.gm_chg>=0?'g':'r')}">${s.gm_chg==null?'—':(s.gm_chg>=0?'+':'')+Number(s.gm_chg).toFixed(1)+'pp'}</td>
     <td class="num ${s.m9>=0?'g':'r'}">${fmtPct(s.m9)}</td>
-    <td class="num">${s.peg==null?'—':s.peg.toFixed(1)}</td>
     <td class="num ${s.contrib>=0?'g':'r'}">${s.contrib>=0?'+':''}${s.contrib.toFixed(1)}pp</td>
     <td>${tagOf(s)}</td>
   </tr>`).join('');
