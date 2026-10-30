@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>025833 复盘：清仓一个月后，哪些判断成立，哪些是我漏掉的</title>
+<style>
+:root{
+  --bg:#0b0f14;--card:#141a22;--card2:#1a212b;--line:#26303c;
+  --tx:#e6edf3;--tx2:#9aa7b4;--tx3:#6b7683;
+  --red:#f85149;--green:#3fb950;--blue:#58a6ff;--gold:#e3b341;--purple:#bc8cff;--cyan:#39c5cf;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.78;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:34px 22px 90px}
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(88,166,255,.25)}
+a:hover{border-bottom-color:var(--blue)}
+header{padding:30px 0 26px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.kicker{font-size:12px;letter-spacing:2.4px;color:var(--gold);font-weight:700;margin-bottom:12px}
+h1{font-size:31px;line-height:1.35;font-weight:800;letter-spacing:.2px}
+h1 .sub{display:block;font-size:17px;font-weight:500;color:var(--tx2);margin-top:8px;letter-spacing:0}
+.meta{color:var(--tx3);font-size:12.5px;margin-top:16px;line-height:1.9}
+.meta b{color:var(--tx2);font-weight:600}
+h2{font-size:21px;margin:56px 0 6px;display:flex;align-items:baseline;gap:12px;letter-spacing:.2px}
+h2 .no{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:1px;font-variant-numeric:tabular-nums}
+h2::after{content:"";flex:1;height:1px;background:var(--line);margin-left:4px}
+h3{font-size:16px;margin:26px 0 8px;color:var(--tx)}
+p{margin:9px 0;color:#d5dee8}
+.lead{font-size:15.5px;color:var(--tx2)}
+small,.small{font-size:12.5px;color:var(--tx2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card.tight{padding:14px 16px}
+.verdict{border-left:4px solid var(--gold);background:linear-gradient(90deg,rgba(227,179,65,.10),rgba(20,26,34,0) 62%);border-radius:0 12px 12px 0;padding:20px 24px}
+.verdict .tag{display:inline-block;background:var(--gold);color:#111;font-weight:800;font-size:11.5px;padding:2px 11px;border-radius:20px;margin-bottom:10px;letter-spacing:.6px}
+.verdict p{font-size:16px;line-height:1.85;color:#e9eff6;margin:6px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 6px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 14px;text-align:center}
+.kpi .v{font-size:25px;font-weight:800;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.kpi .k{font-size:11.5px;color:var(--tx2);margin-top:4px;line-height:1.5}
+.kpi .s{font-size:11px;color:var(--tx3);margin-top:2px}
+.up{color:var(--red)}.down{color:var(--green)}.dim{color:var(--tx3)}
+.gold{color:var(--gold)}.blue{color:var(--blue)}.cyan{color:var(--cyan)}.purple{color:var(--purple)}
+.hl{color:var(--gold);font-weight:700}
+.hlb{color:var(--blue);font-weight:700}
+.hlg{color:var(--green);font-weight:700}
+.hlr{color:var(--red);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:var(--card2);color:var(--tx2);font-weight:600;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font-size:12.5px}
+td{padding:7px 10px;text-align:right;border-bottom:1px solid #1d2530;white-space:nowrap;vertical-align:middle}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+td.num{font-variant-numeric:tabular-nums}
+tr:hover td{background:rgba(88,166,255,.04)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.timeline{margin:16px 0 0;padding-left:22px;border-left:1px solid var(--line)}
+.tl{position:relative;padding:0 0 18px 18px}
+.tl::before{content:"";position:absolute;left:-26px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--tx3);box-shadow:0 0 0 3px var(--bg)}
+.tl.key::before{background:var(--gold);box-shadow:0 0 0 3px var(--bg),0 0 0 5px rgba(227,179,65,.18)}
+.tl .d{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.5px;font-variant-numeric:tabular-nums}
+.tl .t{font-size:14px;color:var(--tx);margin-top:1px}
+.tl .t b{color:#fff}
+.tl .t span{color:var(--tx2)}
+.judge{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.jcard{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--card)}
+.jcard.ok{border-top:3px solid var(--green)}
+.jcard.no{border-top:3px solid var(--red)}
+.jcard.mid{border-top:3px solid var(--gold)}
+.jcard h4{font-size:14.5px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.jcard h4 .badge{font-size:11px;font-weight:800;padding:1px 8px;border-radius:20px;letter-spacing:.4px}
+.badge.ok{background:rgba(63,185,80,.16);color:var(--green)}
+.badge.no{background:rgba(248,81,73,.16);color:var(--red)}
+.badge.mid{background:rgba(227,179,65,.16);color:var(--gold)}
+.jcard p{font-size:13.5px;color:var(--tx2);margin:6px 0}
+.jcard p b{color:var(--tx)}
+.jcard ul{padding-left:17px;margin:6px 0}
+.jcard li{font-size:13.5px;color:var(--tx2);margin:5px 0}
+.jcard li b{color:var(--tx)}
+.quote{border-left:3px solid var(--blue);background:rgba(88,166,255,.05);padding:10px 16px;margin:14px 0;border-radius:0 8px 8px 0;color:#c8d6e6;font-size:14px}
+.quote b{color:#fff}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.num-box{background:var(--card2);border-radius:10px;padding:13px 15px;border:1px solid var(--line)}
+.num-box .t{font-size:11.5px;color:var(--tx3);letter-spacing:.4px}
+.num-box .v{font-size:20px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+.num-box .s{font-size:12px;color:var(--tx2);margin-top:2px}
+.lesson{margin:16px 0;padding:16px 18px 15px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;border-left:3px solid var(--cyan)}
+.lesson .n{font-size:11.5px;color:var(--cyan);font-weight:800;letter-spacing:1.4px}
+.lesson h4{font-size:15.5px;margin:3px 0 6px}
+.lesson p{font-size:13.5px;color:var(--tx2);margin:5px 0}
+.lesson p b{color:var(--tx)}
+.lesson .act{font-size:13px;color:#cfe6ea;background:rgba(57,197,207,.07);border-radius:7px;padding:7px 12px;margin-top:9px}
+.lesson .act b{color:var(--cyan)}
+.check{list-style:none;padding:0;margin:10px 0}
+.check li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed #222c38;font-size:13.8px;color:var(--tx2)}
+.check li:last-child{border-bottom:0}
+.check li::before{content:"";position:absolute;left:4px;top:15px;width:12px;height:12px;border:1.5px solid var(--tx3);border-radius:3px}
+.check li b{color:var(--tx)}
+.tagrow{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 0}
+.pill{display:inline-block;font-size:11.5px;padding:1px 9px;border-radius:20px;font-weight:600;letter-spacing:.2px}
+.pill.red{background:rgba(248,81,73,.14);color:var(--red)}
+.pill.green{background:rgba(63,185,80,.14);color:var(--green)}
+.pill.gold{background:rgba(227,179,65,.14);color:var(--gold)}
+.pill.blue{background:rgba(88,166,255,.14);color:var(--blue)}
+.note{font-size:12px;color:var(--tx3);margin-top:7px;line-height:1.7}
+.hr{height:1px;background:var(--line);margin:34px 0}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12.3px;color:var(--tx3);line-height:1.85}
+footer b{color:var(--tx2)}
+.src{font-size:12.3px;color:var(--tx3);line-height:1.9}
+.src a{color:#7f96ad;border-bottom-color:rgba(127,150,173,.3)}
+@media(max-width:860px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .judge,.nums{grid-template-columns:1fr}
+  h1{font-size:25px}
+  .wrap{padding:24px 16px 70px}
+  h2{font-size:19px;margin-top:44px}
+}
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="../index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+
+<header>
+  <div class="kicker">REVIEW · 025833 · 2026-10-30</div>
+  <h1>清仓一个月后，回头看那份「还能拿吗」
+    <span class="sub">哪些判断兑现了，哪些是我当时没看见的，以及你 9/29 清仓到底对不对</span>
+  </h1>
+  <div class="meta">
+    原报告：<b>2026-09-29</b>（数据截至 9/29 盘中）　｜　复盘：<b>2026-10-30</b> 收盘<br>
+    数据口径：基金净值 <b>10/29 官方</b>（10/30 未出，按跟踪 ETF 估算并标注）；指数 / 个股 / ETF 为 <b>10/30 收盘</b>；估值来自中证指数官网 PE(TTM)<br>
+    对照标的：中证电网设备主题 <b>931994</b>、中证智选电网 <b>932611</b>、电网设备ETF华夏 <b>159326</b>、沪深300、创业板指
+  </div>
+</header>
+
+<div class="card verdict">
+  <span class="tag">复盘结论</span>
+  <p><b class="hl">你清仓，是对的。</b>9/29 之后一个月，025833 官方净值从 1.0910 跌到 0.9775（<b>-10.4%</b>），10/30 再跌约 2.7%，累计约 <b>-12.9%</b>。同期沪深300 -8.3%、创业板 -23.2%——你避开的主要是"高 β 成长"，而不只是"电网设备"。</p>
+  <p>但这份报告<b class="hl">结论对、坐标系错了一半</b>：真正的顶在 <b>6/22</b>（指数 3834、PE 38.7、基金净值 1.556），而不是报告写的 9/22。报告发布时，净值已经距顶 <b>-29.9%</b>，它却用"年内仅 +3.0%"来描述位置。把"熊市反弹结束"讲成"周期顶部初现"，直接导致建议只敢"减 1/3~1/2"，而不是清仓。</p>
+  <p>最值钱的一句仍然是：<b class="hlb">"这不是一只电网基金，而是一只光纤 β。"</b> 10/12"十五五"5 万亿电网投资落地、保变电气涨停那天，这只基金跟踪的指数反而跌了 1.24%——这句话被一次免费的自然实验证实了。</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="v cyan">-12.9%</div><div class="k">你避开的跌幅（9/29→10/30 估算）</div><div class="s">10 万元 ≈ 少亏 1.29 万元</div></div>
+  <div class="kpi"><div class="v gold">-38.9%</div><div class="k">基金距 6/22 真顶</div><div class="s">1.556 → 0.9506（估算）</div></div>
+  <div class="kpi"><div class="v down">-4.6pp</div><div class="k">相对沪深300</div><div class="s">跑输：它不是避风港</div></div>
+  <div class="kpi"><div class="v up">+10.3pp</div><div class="k">相对创业板</div><div class="s">跑赢：不是最惨的那一类</div></div>
+</div>
+<p class="note">注：10/30 基金净值尚未公布，估算方法 = 10/29 净值 ×（1 + 跟踪 ETF 159326 10/30 涨跌幅 -2.75%）。误差通常在 ±0.3pp 内。</p>
+
+<h2><span class="no">01</span>这一个月，数字上发生了什么</h2>
+<p class="lead">先看结果，再看过程。所有区间收益都用 9/29 收盘为起点。</p>
+
+<div class="card tight">
+<svg viewBox="0 0 1000 390" style="width:100%;height:auto;display:block" font-family="inherit" role="img"><line x1="62" y1="348.0" x2="882" y2="348.0" stroke="#232c38" stroke-width="1"/><text x="54" y="352.0" fill="#6b7683" font-size="11" text-anchor="end">78.1</text><line x1="62" y1="285.2" x2="882" y2="285.2" stroke="#232c38" stroke-width="1"/><text x="54" y="289.2" fill="#6b7683" font-size="11" text-anchor="end">82.9</text><line x1="62" y1="222.4" x2="882" y2="222.4" stroke="#232c38" stroke-width="1"/><text x="54" y="226.4" fill="#6b7683" font-size="11" text-anchor="end">87.8</text><line x1="62" y1="159.6" x2="882" y2="159.6" stroke="#232c38" stroke-width="1"/><text x="54" y="163.6" fill="#6b7683" font-size="11" text-anchor="end">92.6</text><line x1="62" y1="96.8" x2="882" y2="96.8" stroke="#232c38" stroke-width="1"/><text x="54" y="100.8" fill="#6b7683" font-size="11" text-anchor="end">97.5</text><line x1="62" y1="34.0" x2="882" y2="34.0" stroke="#232c38" stroke-width="1"/><text x="54" y="38.0" fill="#6b7683" font-size="11" text-anchor="end">102.3</text><text x="62.0" y="368" fill="#6b7683" font-size="11" text-anchor="middle">9/29</text><line x1="62.0" y1="348" x2="62.0" y2="352" stroke="#2d3644"/><text x="335.3" y="368" fill="#6b7683" font-size="11" text-anchor="middle">10/9</text><line x1="335.3" y1="348" x2="335.3" y2="352" stroke="#2d3644"/><text x="472.0" y="368" fill="#6b7683" font-size="11" text-anchor="middle">10/14</text><line x1="472.0" y1="348" x2="472.0" y2="352" stroke="#2d3644"/><text x="526.7" y="368" fill="#6b7683" font-size="11" text-anchor="middle">10/16</text><line x1="526.7" y1="348" x2="526.7" y2="352" stroke="#2d3644"/><text x="663.3" y="368" fill="#6b7683" font-size="11" text-anchor="middle">10/21</text><line x1="663.3" y1="348" x2="663.3" y2="352" stroke="#2d3644"/><text x="800.0" y="368" fill="#6b7683" font-size="11" text-anchor="middle">10/26</text><line x1="800.0" y1="348" x2="800.0" y2="352" stroke="#2d3644"/><text x="882.0" y="368" fill="#6b7683" font-size="11" text-anchor="middle">10/29</text><line x1="882.0" y1="348" x2="882.0" y2="352" stroke="#2d3644"/><line x1="62" y1="64.2" x2="882" y2="64.2" stroke="#5b6675" stroke-width="1" stroke-dasharray="5,5" opacity=".8"/><polyline fill="none" stroke="#e3b341" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="62.0,64.2 89.3,65.4 308.0,69.6 335.3,76.7 417.3,92.3 444.7,100.0 472.0,128.6 499.3,158.7 526.7,146.0 608.7,120.2 636.0,130.3 663.3,135.2 690.7,149.0 718.0,129.7 800.0,159.3 827.3,183.2 854.7,166.9 882.0,199.0"/><circle cx="882.0" cy="199.0" r="3.4" fill="#e3b341"/><polyline fill="none" stroke="#58a6ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,64.2 89.3,65.5 308.0,69.3 335.3,76.8 417.3,92.8 444.7,101.1 472.0,131.1 499.3,162.7 526.7,149.5 608.7,122.2 636.0,132.7 663.3,138.0 690.7,152.5 718.0,132.5 800.0,163.4 827.3,189.3 854.7,172.4 882.0,205.5"/><circle cx="882.0" cy="205.5" r="3.4" fill="#58a6ff"/><polyline fill="none" stroke="#8b949e" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,64.2 89.3,60.5 308.0,74.7 335.3,72.6 417.3,81.3 444.7,85.0 472.0,102.3 499.3,117.7 526.7,116.3 608.7,115.1 636.0,121.8 663.3,133.8 690.7,156.3 718.0,135.7 800.0,136.3 827.3,152.4 854.7,142.1 882.0,154.7"/><circle cx="882.0" cy="154.7" r="3.4" fill="#8b949e"/><polyline fill="none" stroke="#bc8cff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,64.2 89.3,67.2 308.0,107.9 335.3,105.1 417.3,137.9 444.7,140.2 472.0,177.9 499.3,212.4 526.7,216.8 608.7,227.6 636.0,230.5 663.3,248.8 690.7,297.4 718.0,253.2 800.0,272.1 827.3,309.2 854.7,273.5 882.0,321.8"/><circle cx="882.0" cy="321.8" r="3.4" fill="#bc8cff"/><polyline fill="none" stroke="#39c5cf" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,64.2 89.3,60.2 308.0,66.3 335.3,70.8 417.3,79.0 444.7,93.5 472.0,119.7 499.3,145.1 526.7,130.6 608.7,99.9 636.0,115.1 663.3,123.1 690.7,129.7 718.0,110.0 800.0,128.7 827.3,152.5 854.7,141.2 882.0,166.7"/><circle cx="882.0" cy="166.7" r="3.4" fill="#39c5cf"/><line x1="62" y1="16" x2="76" y2="16" stroke="#e3b341" stroke-width="2.4"/><text x="81" y="20" fill="#9aa7b4" font-size="11.5">025833 净值</text><text x="155.0" y="20" fill="#e3b341" font-size="11.5" font-weight="700">-10.4%</text><line x1="231.20000000000005" y1="16" x2="245.20000000000005" y2="16" stroke="#58a6ff" stroke-width="2.4"/><text x="250.20000000000005" y="20" fill="#9aa7b4" font-size="11.5">931994 指数</text><text x="324.2" y="20" fill="#58a6ff" font-size="11.5" font-weight="700">-10.9%</text><line x1="400.4000000000001" y1="16" x2="414.4000000000001" y2="16" stroke="#8b949e" stroke-width="2.4"/><text x="419.4000000000001" y="20" fill="#9aa7b4" font-size="11.5">沪深300</text><text x="467.8" y="20" fill="#8b949e" font-size="11.5" font-weight="700">-7.0%</text><line x1="537.6000000000001" y1="16" x2="551.6000000000001" y2="16" stroke="#bc8cff" stroke-width="2.4"/><text x="556.6000000000001" y="20" fill="#9aa7b4" font-size="11.5">创业板指</text><text x="609.0" y="20" fill="#bc8cff" font-size="11.5" font-weight="700">-19.9%</text><line x1="685.2000000000002" y1="16" x2="699.2000000000002" y2="16" stroke="#39c5cf" stroke-width="2.4"/><text x="704.2000000000002" y="20" fill="#9aa7b4" font-size="11.5">932611 纯电网</text><text x="789.8" y="20" fill="#39c5cf" font-size="11.5" font-weight="700">-7.9%</text></svg>
+<p class="note">归一化：9/29 = 100，均截至 10/29（基金官方净值日），图例数字为 9/29→10/29 涨跌；10/30 的估算见上表。</p>
+</div>
+
+<div class="scroll">
+<table>
+<tr><th>标的</th><th>9/29</th><th>10/29</th><th>10/30</th><th>9/29→10/30</th><th>距 6/22 顶</th></tr>
+<tr><td><b>025833 基金净值</b></td><td class="num">1.0910</td><td class="num">0.9775</td><td class="num gold">≈0.9506</td><td class="num down"><b>-12.9%</b></td><td class="num down">-38.9%</td></tr>
+<tr><td>931994 电网设备指数</td><td class="num">2624.15</td><td class="num">2338.00</td><td class="num">≈2274</td><td class="num down">-13.4%</td><td class="num down">-40.7%</td></tr>
+<tr><td>932611 智选电网（纯电网）</td><td class="num">3212.54</td><td class="num">2958.42</td><td class="num dim">—</td><td class="num down">-7.9%</td><td class="num dim">—</td></tr>
+<tr><td>159326 电网设备ETF</td><td class="num">1.552</td><td class="num">1.380</td><td class="num">1.342</td><td class="num down">-13.5%</td><td class="num down">-40.6%</td></tr>
+<tr><td>沪深300</td><td class="num">4345.21</td><td class="num">4041.84</td><td class="num">3985.50</td><td class="num down">-8.3%</td><td class="num down">-21.2%</td></tr>
+<tr><td>创业板指</td><td class="num">3142.56</td><td class="num">2517.59</td><td class="num">2413.63</td><td class="num down">-23.2%</td><td class="num down">-44.8%</td></tr>
+</table>
+</div>
+<p class="note">6/22 顶：931994 收 3834.44（PE 38.7）；025833 净值 1.556；159326 收 2.258。指数/基金距顶为估值与净值口径，ETF 为价格口径。</p>
+
+<div class="quote">
+  <b>一句话读表：</b>基金跌 12.9%，指数跌 13.4%，两者几乎一致——它就是个指数基金，别指望"主动管理"帮你躲。真正值得注意的是：它比创业板少跌 <b>10.3pp</b>，比沪深300多跌 <b>4.6pp</b>。所以 10 月的下跌，一半是"AI/成长杀估值"，一半才是"光纤自己的事"。
+</div>
+
+<h2><span class="no">02</span>时间线：决定结果的六个交易日</h2>
+<div class="timeline">
+  <div class="tl key"><div class="d">09-29</div><div class="t"><b>报告发布</b>：净值 1.0910，指数 2624.15，PE 26.82（76% 分位）。结论"不清仓、不加仓，先减 1/3~1/2"。</div></div>
+  <div class="tl"><div class="d">10-08</div><div class="t">节后首日，亨通定增细节发酵，<b>亨通 -3.94%</b>、主力净流出 7.52 亿；基金 -0.32%。</div></div>
+  <div class="tl key"><div class="d">10-12</div><div class="t"><b>"十五五"电网投资超 5 万亿</b>，金冠电气 20CM 涨停、保变电气/长城电工涨停；同一天 931994 反而 <b>-1.24%</b>。亨通定增获股东会通过。<span>——"名字"与"暴露"在这一天分道扬镳。</span></div></div>
+  <div class="tl"><div class="d">10-14 ~ 10-15</div><div class="t">A 股成长股集体杀估值，创业板两日 <b>-5.9%</b>，指数 -2.38%、-2.57%，基金两日 -2.3%、-2.5%。</div></div>
+  <div class="tl"><div class="d">10-23</div><div class="t">盘中"惊天逆转"：创业板早盘一度跌 3.2%，午后直线拉升，收盘 <b>+4.16%</b>；指数 +1.66%。反弹给了最后一次体面离场的机会。</div></div>
+  <div class="tl key"><div class="d">10-28 晚</div><div class="t"><b>三季报炸裂</b>：亨通前三季净利 61.63 亿（<b>+159.4%</b>）、Q3 单季 <b>+299.1%</b>；中天前三季 40.01 亿（<b>+71.1%</b>）、Q3 单季 <b>+109%</b>。</div></div>
+  <div class="tl key"><div class="d">10-29</div><div class="t"><b>业绩最好的那天，股价跌最多</b>：亨通 -8.0%、中天 -5.6%、指数 -2.79%、基金 -2.69%。</div></div>
+  <div class="tl key"><div class="d">10-30</div><div class="t">谷歌财报后 -12%、纳指 -1.4%，"AI 投入回报"再被审视；创业板 <b>-4.13%</b>、亨通 -4.89%、中天 -7.95%，指数估算 -2.75%。</div></div>
+</div>
+
+<h2><span class="no">03</span>分析对了什么：六条，且都有事后证据</h2>
+
+<div class="judge">
+  <div class="jcard ok">
+    <h4>① 结构诊断：名字是电网，暴露是光纤 <span class="badge ok">A</span></h4>
+    <p><b>当时说：</b>"亨通+中天合计约 20% 权重，贡献了近 30 日几乎全部弹性；'电网设备'这个名字只描述了 45% 的资产，却描述了 0% 的波动来源。"</p>
+    <p><b>后来：</b>10/12 电网 5 万亿利好，保变、金冠、长城电工涨停，<b>931994 当天 -1.24%</b>。9/29 以来，南瑞 <b class="up">+4.3%</b>、东方电缆 <b class="up">+4.6%</b>、特变 <b class="up">+1.3%</b>，而亨通 <b class="down">-25.7%</b>、中天 <b class="down">-26.0%</b>、东材 <b class="down">-31.5%</b>。</p>
+    <p><b>为什么值钱：</b>它让你在"电网大利好"的日子里没有加仓，也没有因为"板块涨了"而怀疑自己。</p>
+  </div>
+
+  <div class="jcard ok">
+    <h4>② 压舱石托不住 <span class="badge ok">A</span></h4>
+    <p><b>当时说：</b>"真电网设备约 45%，便宜且稳，但今年在跌，是拖油瓶；它们只能提供安全垫，提供不了弹性。"</p>
+    <p><b>后来：</b>压舱石确实抗跌（10 只重仓里 4 只正收益/基本走平），但基金仍跌 12.9%。<b>安全垫是真的，托不住也是真的。</b></p>
+  </div>
+
+  <div class="jcard ok">
+    <h4>③ 题材尾部最先被卖 <span class="badge ok">A</span></h4>
+    <p><b>当时说：</b>"东材 PE 123x、远东 PE 332x，纯泡沫定价，退潮时跌得最快。"</p>
+    <p><b>后来：</b>东材 <b class="down">-31.5%</b>、远东 <b class="down">-20.9%</b>、特锐德 <b class="down">-15.7%</b>，全部跑输指数。高估值 + 低净利率的"算力光缆"故事，确实是第一批被清算的。</p>
+  </div>
+
+  <div class="jcard ok">
+    <h4>④ 供给重估才刚开始 <span class="badge ok">A-</span></h4>
+    <p><b>当时说：</b>"9/28 亨通定增跌停是市场第一次抢跑供给重估，这种抢跑之后还会有很多次。"</p>
+    <p><b>后来：</b>10/12 定增过会；Q3 全行业扩产约 <b>400 亿</b>；亨通从 57.1 跌到 42.4，中天从 31.3 跌到 23.2。跌停不是终点，是起点。</p>
+  </div>
+
+  <div class="jcard ok">
+    <h4>⑤ "别等基本面变坏再卖" <span class="badge ok">A-</span></h4>
+    <p><b>当时说：</b>"股价顶领先基本面；等价格转跌、业绩变脸再卖，通常已经晚了。"</p>
+    <p><b>后来：</b>9 月 G.652.D 现货 88.4 元、环比还 <b>+2.8%</b>；Q3 业绩 <b>+159%</b>。基本面一条都没坏，股价先跌了 26%。这条判断在方向上完全兑现。</p>
+  </div>
+
+  <div class="jcard ok">
+    <h4>⑥ 替代方案有效 <span class="badge ok">B+</span></h4>
+    <p><b>当时说：</b>"如果你要的是纯电网，这只基金给不了；可看 932611 或直接持有南瑞/思源。"</p>
+    <p><b>后来：</b>932611 同期 <b class="down">-7.9%</b>，比 931994 少跌 3.0pp；纯电网个股多数正收益。换仓建议有效，只是幅度不大。</p>
+  </div>
+</div>
+
+<h2><span class="no">04</span>分析错了什么：六个偏差，第一个最致命</h2>
+
+<div class="card tight">
+<svg viewBox="0 0 1000 400" style="width:100%;height:auto;display:block" font-family="inherit" role="img"><line x1="62" y1="358.0" x2="882" y2="358.0" stroke="#232c38" stroke-width="1"/><text x="54" y="362.0" fill="#6b7683" font-size="11" text-anchor="end">59.0</text><line x1="62" y1="293.2" x2="882" y2="293.2" stroke="#232c38" stroke-width="1"/><text x="54" y="297.2" fill="#6b7683" font-size="11" text-anchor="end">70.3</text><line x1="62" y1="228.4" x2="882" y2="228.4" stroke="#232c38" stroke-width="1"/><text x="54" y="232.4" fill="#6b7683" font-size="11" text-anchor="end">81.6</text><line x1="62" y1="163.6" x2="882" y2="163.6" stroke="#232c38" stroke-width="1"/><text x="54" y="167.6" fill="#6b7683" font-size="11" text-anchor="end">92.8</text><line x1="62" y1="98.8" x2="882" y2="98.8" stroke="#232c38" stroke-width="1"/><text x="54" y="102.8" fill="#6b7683" font-size="11" text-anchor="end">104.1</text><line x1="62" y1="34.0" x2="882" y2="34.0" stroke="#232c38" stroke-width="1"/><text x="54" y="38.0" fill="#6b7683" font-size="11" text-anchor="end">115.4</text><text x="62.0" y="378" fill="#6b7683" font-size="11" text-anchor="middle">6/1</text><line x1="62.0" y1="358" x2="62.0" y2="362" stroke="#2d3644"/><text x="193.2" y="378" fill="#6b7683" font-size="11" text-anchor="middle">6/25</text><line x1="193.2" y1="358" x2="193.2" y2="362" stroke="#2d3644"/><text x="329.9" y="378" fill="#6b7683" font-size="11" text-anchor="middle">7/20</text><line x1="329.9" y1="358" x2="329.9" y2="362" stroke="#2d3644"/><text x="450.1" y="378" fill="#6b7683" font-size="11" text-anchor="middle">8/11</text><line x1="450.1" y1="358" x2="450.1" y2="362" stroke="#2d3644"/><text x="575.9" y="378" fill="#6b7683" font-size="11" text-anchor="middle">9/3</text><line x1="575.9" y1="358" x2="575.9" y2="362" stroke="#2d3644"/><text x="718.0" y="378" fill="#6b7683" font-size="11" text-anchor="middle">9/29</text><line x1="718.0" y1="358" x2="718.0" y2="362" stroke="#2d3644"/><text x="882.0" y="378" fill="#6b7683" font-size="11" text-anchor="middle">10/29</text><line x1="882.0" y1="358" x2="882.0" y2="362" stroke="#2d3644"/><line x1="62" y1="122.3" x2="882" y2="122.3" stroke="#5b6675" stroke-width="1" stroke-dasharray="5,5" opacity=".8"/><polyline fill="none" stroke="#e3b341" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="62.0,122.3 67.5,119.3 72.9,114.1 78.4,113.0 83.9,123.3 100.3,137.5 105.7,116.4 111.2,133.0 116.7,141.0 122.1,140.4 138.5,121.9 144.0,103.2 149.5,100.8 154.9,98.3 176.8,70.6 182.3,87.9 187.7,88.5 193.2,80.3 198.7,116.1 215.1,122.5 220.5,115.1 226.0,133.1 231.5,154.7 236.9,151.6 253.3,160.7 258.8,177.5 264.3,195.0 269.7,189.0 275.2,195.2 291.6,219.3 297.1,209.3 302.5,220.3 308.0,237.6 313.5,257.1 329.9,257.2 335.3,243.2 340.8,252.7 346.3,231.7 351.7,247.6 368.1,233.1 373.6,251.8 379.1,245.4 384.5,256.3 390.0,249.6 406.4,242.5 411.9,233.7 417.3,223.6 422.8,225.8 428.3,219.6 444.7,217.6 450.1,222.0 455.6,216.0 461.1,220.6 466.5,215.0 482.9,202.0 488.4,204.9 493.9,229.5 499.3,225.7 504.8,221.8 521.2,230.1 526.7,225.4 532.1,222.9 537.6,218.6 543.1,224.1 559.5,225.6 564.9,230.1 570.4,233.2 575.9,231.4 581.3,233.3 597.7,230.9 603.2,233.6 608.7,225.5 614.1,233.4 619.6,233.9 636.0,236.8 641.5,238.7 646.9,233.6 652.4,233.1 657.9,227.1 674.3,220.4 679.7,223.6 685.2,228.6 690.7,237.1 712.5,255.3 718.0,258.0 723.5,258.4 767.2,259.8 772.7,262.2 789.1,267.5 794.5,270.1 800.0,279.8 805.5,290.0 810.9,285.7 827.3,276.9 832.8,280.4 838.3,282.1 843.7,286.7 849.2,280.2 865.6,290.2 871.1,298.3 876.5,292.8 882.0,303.7"/><circle cx="882.0" cy="303.7" r="3.4" fill="#e3b341"/><polyline fill="none" stroke="#58a6ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,122.3 67.5,119.5 72.9,114.3 78.4,113.4 83.9,124.3 100.3,139.2 105.7,117.4 111.2,134.5 116.7,142.8 122.1,142.3 138.5,122.9 144.0,103.5 149.5,101.0 154.9,98.5 176.8,69.9 182.3,87.8 187.7,88.4 193.2,80.2 198.7,117.2 215.1,124.0 220.5,117.1 226.0,135.4 231.5,157.8 236.9,154.6 253.3,164.6 258.8,182.1 264.3,200.5 269.7,194.5 275.2,200.9 291.6,225.8 297.1,215.5 302.5,227.2 308.0,244.9 313.5,264.9 329.9,265.1 335.3,250.7 340.8,260.5 346.3,238.7 351.7,255.2 368.1,241.3 373.6,260.7 379.1,254.1 384.5,265.4 390.0,258.4 406.4,251.1 411.9,242.0 417.3,231.5 422.8,233.9 428.3,227.5 444.7,225.3 450.1,230.0 455.6,223.8 461.1,228.6 466.5,222.9 482.9,209.6 488.4,212.6 493.9,238.2 499.3,234.3 504.8,230.3 521.2,238.7 526.7,234.0 532.1,231.3 537.6,227.1 543.1,232.6 559.5,234.1 564.9,238.8 570.4,241.9 575.9,240.0 581.3,241.9 597.7,239.4 603.2,242.3 608.7,233.9 614.1,242.0 619.6,242.6 636.0,245.6 641.5,247.6 646.9,242.3 652.4,242.0 657.9,235.8 674.3,228.9 679.7,232.3 685.2,237.5 690.7,246.2 712.5,265.0 718.0,268.0 723.5,268.4 767.2,269.7 772.7,272.2 789.1,277.5 794.5,280.3 800.0,290.2 805.5,300.7 810.9,296.3 827.3,287.3 832.8,290.7 838.3,292.5 843.7,297.3 849.2,290.7 865.6,300.9 871.1,309.5 876.5,303.9 882.0,314.9"/><circle cx="882.0" cy="314.9" r="3.4" fill="#58a6ff"/><polyline fill="none" stroke="#bc8cff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="62.0,122.3 67.5,107.0 72.9,97.3 78.4,102.2 83.9,121.3 100.3,142.6 105.7,120.7 111.2,136.3 116.7,142.6 122.1,139.9 138.5,110.3 144.0,100.2 149.5,90.8 154.9,78.4 176.8,62.8 182.3,87.2 187.7,78.6 193.2,61.0 198.7,86.9 215.1,83.6 220.5,65.3 226.0,77.2 231.5,112.6 236.9,112.3 253.3,122.6 258.8,128.0 264.3,137.7 269.7,112.5 275.2,138.1 291.6,155.4 297.1,136.8 302.5,143.6 308.0,159.9 313.5,198.4 329.9,196.2 335.3,160.9 340.8,178.2 346.3,177.0 351.7,190.7 368.1,174.7 373.6,213.1 379.1,205.6 384.5,225.1 390.0,210.7 406.4,216.7 411.9,189.6 417.3,182.8 422.8,185.7 428.3,178.8 444.7,182.5 450.1,180.8 455.6,173.1 461.1,175.4 466.5,169.6 482.9,153.0 488.4,158.0 493.9,191.8 499.3,188.6 504.8,181.3 521.2,197.9 526.7,202.9 532.1,200.4 537.6,191.8 543.1,199.0 559.5,196.9 564.9,203.5 570.4,215.3 575.9,215.3 581.3,219.0 597.7,202.7 603.2,208.4 608.7,209.1 614.1,211.5 619.6,213.9 636.0,219.2 641.5,224.7 646.9,215.4 652.4,217.3 657.9,206.5 674.3,202.6 679.7,202.5 685.2,205.5 690.7,218.7 712.5,240.4 718.0,240.0 723.5,241.1 767.2,255.4 772.7,254.5 789.1,266.0 794.5,266.8 800.0,280.2 805.5,292.3 810.9,293.9 827.3,297.7 832.8,298.7 838.3,305.2 843.7,322.4 849.2,306.8 865.6,313.4 871.1,326.6 876.5,313.9 882.0,331.0"/><circle cx="882.0" cy="331.0" r="3.4" fill="#bc8cff"/><line x1="176.8" y1="28" x2="176.8" y2="358" stroke="#f85149" stroke-width="1" stroke-dasharray="3,4" opacity=".55"/><rect x="-43.0" y="31" width="379.6" height="19" rx="4" fill="#0d1117" opacity=".82"/><text x="146.8" y="44" fill="#f85149" font-size="11.5" text-anchor="middle">6/22 真顶：指数3834 / PE38.7 / 净值1.556</text><line x1="718.0" y1="28" x2="718.0" y2="358" stroke="#9aa7b4" stroke-width="1" stroke-dasharray="3,4" opacity=".55"/><rect x="702.6" y="53" width="110.8" height="19" rx="4" fill="#0d1117" opacity=".82"/><text x="758.0" y="66" fill="#9aa7b4" font-size="11.5" text-anchor="middle">9/29 报告发布</text><line x1="679.7" y1="28" x2="679.7" y2="358" stroke="#e3b341" stroke-width="1" stroke-dasharray="3,4" opacity=".55"/><rect x="422.7" y="83" width="234.0" height="19" rx="4" fill="#0d1117" opacity=".82"/><text x="539.7" y="96" fill="#e3b341" font-size="11.5" text-anchor="middle">9/22 报告说的“顶”（实为反弹次高）</text><line x1="62" y1="16" x2="76" y2="16" stroke="#e3b341" stroke-width="2.4"/><text x="81" y="20" fill="#9aa7b4" font-size="11.5">025833 净值</text><text x="155.0" y="20" fill="#e3b341" font-size="11.5" font-weight="700">-31.5%</text><line x1="231.20000000000005" y1="16" x2="245.20000000000005" y2="16" stroke="#58a6ff" stroke-width="2.4"/><text x="250.20000000000005" y="20" fill="#9aa7b4" font-size="11.5">931994 指数</text><text x="324.2" y="20" fill="#58a6ff" font-size="11.5" font-weight="700">-33.5%</text><line x1="400.4000000000001" y1="16" x2="414.4000000000001" y2="16" stroke="#bc8cff" stroke-width="2.4"/><text x="419.4000000000001" y="20" fill="#9aa7b4" font-size="11.5">创业板指</text><text x="471.8" y="20" fill="#bc8cff" font-size="11.5" font-weight="700">-36.3%</text></svg>
+<p class="note">归一化：6/1 = 100。这张图是本次复盘最重要的证据——<b>6/22 才是顶</b>，7 月一个月指数 -24%、基金 -23%；8-9 月是反弹，9/22 只是反弹次高。报告在 9/29 把"次高"写成了"顶"。</p>
+</div>
+
+<div class="judge">
+  <div class="jcard no">
+    <h4>① 坐标系错了：真顶是 6/22，不是 9/22 <span class="badge no">D</span></h4>
+    <p><b>报告原文：</b>"亨通 9/22 见顶后 5 日回撤 -22%"、"指数年内仅 +3.0%"、"股价顶 2026-09？"</p>
+    <p><b>事实：</b>6/22 指数 3834.44、PE <b>38.7（99.6% 分位）</b>、基金净值 <b>1.556</b>；到 9/29 已回撤 <b>-31.6%</b>（基金 -29.9%）。"年内 +3.0%"是真的，但它掩盖了"从顶部跌掉三分之一"这个更重要的事实。</p>
+    <p><b>后果：</b>把"熊市反弹的次高点"误判成"周期顶部初现"，风险等级被说低了一档——所以建议是"减 1/3~1/2"，而不是"清仓"。</p>
+  </div>
+
+  <div class="jcard no">
+    <h4>② "股价顶领先商品价 2~4 个季度"本轮失效 <span class="badge no">D+</span></h4>
+    <p><b>报告原文：</b>把它当作"两条历史规律"之一，用来论证"现在就该卖"。</p>
+    <p><b>事实：</b>本轮商品价 <b>2026-04</b> 见顶（G.652.D 99~112 元），股价 <b>6/22</b> 才见顶——<b>股价滞后约 2 个月</b>，方向反了。原因是这次是全市场 AI 泡沫去杠杆，不是商品周期主导。</p>
+    <p><b>教训：</b>历史规律只能当"假设"，不能当"论据"；每一轮都要问"这次的主导变量还是它吗"。</p>
+  </div>
+
+  <div class="jcard no">
+    <h4>③ "现货价连续 5 个月不创新高 / 走平"事实不准 <span class="badge no">C+</span></h4>
+    <p><b>报告原文：</b>"G.652.D 现货 4 月见顶后，连续 5 个月没有再创新高"、"5-9 月回调→反抽→宽幅震荡"。</p>
+    <p><b>事实（瑞银 10/6 月报）：</b>9 月 G.652.D <b>88.4 元、环比 +2.8%</b>（8 月 +5.2%），<b>还在涨</b>；真正转跌的是 G.657.A1，<b>133.1 元、环比 -1.6%</b>（8 月 +3.5%）。"不创新高"成立，"走平"不成立。</p>
+    <p><b>结论没错，证据有瑕疵：</b>涨势放缓、特种纤先转弱是对的；但用"走平"描述，会让读者以为价格已经横死。</p>
+  </div>
+
+  <div class="jcard no">
+    <h4>④ 归因过度单一：把大盘 β 记到了光纤账上 <span class="badge no">C</span></h4>
+    <p><b>报告原文：</b>卖出逻辑几乎全部围绕"光纤周期 + 供给重估"。</p>
+    <p><b>事实：</b>10 月是 AI/成长系统性杀估值——创业板 <b>-23.2%</b>、沪深300 <b>-8.3%</b>、谷歌财报后 -12%、纳指回调。基金相对创业板还 <b>跑赢 10.3pp</b>，说明它不是"光纤独跌"。</p>
+    <p><b>含义：</b>你这一把躲过的，更多是"高 β 成长"的系统性风险；如果其他持仓也是 AI/成长，只清这一只并不能保住组合。</p>
+  </div>
+
+  <div class="jcard no">
+    <h4>⑤ 建议偏软：只减 1/3~1/2 <span class="badge no">C+</span></h4>
+    <p><b>报告原文：</b>"不清仓、不加仓、按计划分批降；近期先减 1/3~1/2。"理由是"短期景气不支持恐慌性清仓"。</p>
+    <p><b>事实：</b>一个月又跌 10.4%。按建议执行：留一半再亏 5.2%，留 2/3 再亏 6.9%；你全清，比建议多保住 6~9pp。</p>
+    <p><b>自相矛盾之处：</b>同一篇里既写"顶部盈利 × 低 PE 是陷阱"，又把"2026E PE 20x，不贵"放进持有理由。事实站在"陷阱"那一边。</p>
+  </div>
+
+  <div class="jcard no">
+    <h4>⑥ 没写"再入场条件" <span class="badge no">D+</span></h4>
+    <p><b>报告原文：</b>给了 4 个"减仓触发器"，但一个"什么条件下回来"都没有。</p>
+    <p><b>后果：</b>卖出变成单腿动作，很容易演化成两种结局——永久空仓，或者在反弹里追高买回。<b>这次你卖对了，但下一次买回来的规则是空的。</b></p>
+  </div>
+</div>
+
+<h2><span class="no">05</span>预估 vs 实际：偏差量化</h2>
+<div class="scroll">
+<table>
+<tr><th style="text-align:left">维度</th><th style="text-align:left">报告当时的表述 / 预估</th><th style="text-align:left">实际发生</th><th style="text-align:left">偏差</th></tr>
+<tr><td>一个月方向</td><td style="text-align:left">继续减仓（看跌）</td><td style="text-align:left">基金 -10.4%</td><td style="text-align:left"><span class="pill green">方向对</span></td></tr>
+<tr><td>跌幅量级</td><td style="text-align:left">未给目标；暗示"等基本面变脸已跌 30-50%"</td><td style="text-align:left">一个月 -12.9%</td><td style="text-align:left"><span class="pill gold">量级接近，但归因不同</span></td></tr>
+<tr><td>顶的位置</td><td style="text-align:left">9/22 见顶；"年内 +3.0%"</td><td style="text-align:left">真顶 6/22，9/29 已距顶 -31.6%</td><td style="text-align:left"><span class="pill red">晚 3 个月</span></td></tr>
+<tr><td>估值</td><td style="text-align:left">PE 27.0x / 76% 分位</td><td style="text-align:left">PE 24.0x / 69% 分位（10/29）</td><td style="text-align:left"><span class="pill green">数据准，方向对</span></td></tr>
+<tr><td>商品价</td><td style="text-align:left">"连续 5 个月不创新高 / 走平"</td><td style="text-align:left">9 月 G.652.D 环比 +2.8%，仍在涨</td><td style="text-align:left"><span class="pill gold">表述不准</span></td></tr>
+<tr><td>业绩</td><td style="text-align:left">"H1 兑现，可持续性存疑"</td><td style="text-align:left">Q3 亨通 +159%、中天 +71%，继续加速</td><td style="text-align:left"><span class="pill green">"存疑"对，但股价照跌</span></td></tr>
+<tr><td>系统性风险</td><td style="text-align:left">未讨论大盘 / AI 泡沫</td><td style="text-align:left">创业板 -23.2%，自 6 月 -44.8%</td><td style="text-align:left"><span class="pill red">漏项</span></td></tr>
+<tr><td>替代方案</td><td style="text-align:left">换 932611 / 纯电网个股</td><td style="text-align:left">932611 -7.9%，南瑞 +4.3%</td><td style="text-align:left"><span class="pill green">对</span></td></tr>
+<tr><td>建议强度</td><td style="text-align:left">先减 1/3~1/2，不清仓</td><td style="text-align:left">全清更优 6~9pp</td><td style="text-align:left"><span class="pill red">偏保守</span></td></tr>
+</table>
+</div>
+
+<h2><span class="no">06</span>你 9/29 清仓，到底对不对</h2>
+<p class="lead">分三个口径看，结论不一样。混在一起谈，就会把"运气"误认为"能力"。</p>
+
+<div class="nums">
+  <div class="num-box"><div class="t">绝对收益（避开的亏损）</div><div class="v cyan">-12.9%</div><div class="s">持有 10 万 → 8.71 万；你保住 10 万</div></div>
+  <div class="num-box"><div class="t">相对沪深300</div><div class="v down">-4.6pp</div><div class="s">如果 9/29 换成沪深300，只亏 8.3%</div></div>
+  <div class="num-box"><div class="t">相对创业板</div><div class="v up">+10.3pp</div><div class="s">如果换成创业板，要亏 23.2%</div></div>
+</div>
+
+<h3>6.1 四种做法的事后对比</h3>
+<div class="scroll">
+<table>
+<tr><th style="text-align:left">做法</th><th>一个月组合损益</th><th style="text-align:left">说明</th></tr>
+<tr><td>你：全部清仓</td><td class="num gold"><b>0.0%</b></td><td style="text-align:left">避开 12.9% 下跌；忽略赎回费（C 类持有 &gt;7 天通常为 0）</td></tr>
+<tr><td>按报告：减 1/2</td><td class="num down">-6.4%</td><td style="text-align:left">剩余一半继续跌，组合再亏约 6.4%</td></tr>
+<tr><td>按报告：减 1/3</td><td class="num down">-8.6%</td><td style="text-align:left">留 2/3 仓位，组合再亏约 8.6%</td></tr>
+<tr><td>不动</td><td class="num down"><b>-12.9%</b></td><td style="text-align:left">10 万 → 8.71 万</td></tr>
+<tr><td>换 932611（纯电网）</td><td class="num down">-7.9%</td><td style="text-align:left">少亏 3.0pp，但仍未躲过系统性下跌</td></tr>
+<tr><td>换沪深300</td><td class="num down">-8.3%</td><td style="text-align:left">比清仓差，比持有好</td></tr>
+</table>
+</div>
+<p class="note">口径：9/29 收盘等权切换，不计交易费用与赎回费；基金用 10/30 估算净值 0.9506。</p>
+
+<h3>6.2 结论：结果 9/10，过程 7.5/10</h3>
+<div class="card">
+  <p><b class="hlg">对的部分：</b>方向对，动作也比报告建议更彻底。在一个 PE 76% 分位、供给冲击刚出现、股价结构已经破坏的品种上，"先出来"的期望值明显为正。你没有因为"景气还在、订单排到 2028"这种话留下来。</p>
+  <p><b class="hl">要扣分的部分：</b>这次少亏的 12.9 个百分点里，大约 <b>六成来自大盘/AI 杀估值的 β</b>，四成来自板块自身（定增、扩产、光纤双雄）。换句话说，<b>你赢在动作，不全是赢在逻辑</b>。如果 10 月大盘反弹、只有光纤跌，基金可能只跌 4~6%，那时候"全清"看起来就不会这么英明。</p>
+  <p><b class="hlb">更值得反思的：</b>不是"9/29 该不该卖"，而是"<b>6/22 为什么没卖</b>"。6/22 净值 1.556、PE 38.7（99.6% 分位）、全市场同时见顶——那才是真正该有一份报告的日子。9/29 的清仓，本质是<b>止损</b>，不是<b>逃顶</b>；止损是对的，但它不该被记成"判断精准"。</p>
+  <p><b>还有一个没解决的问题：</b>卖出之后，你的钱去了哪里？如果转手又买入了别的 AI/成长，那这次清仓只是换了个代码。10 月创业板 -23.2%，说明系统性风险没有躲掉。</p>
+</div>
+
+<h2><span class="no">07</span>个股层面：光纤杀估值，电网在收租</h2>
+<div class="card tight">
+<svg viewBox="0 0 1000 456" style="width:100%;height:auto;display:block" font-family="inherit"><text x="990" y="16" fill="#6b7683" font-size="11" text-anchor="end">基金权重</text><line x1="754.3" y1="26" x2="754.3" y2="440" stroke="#3a4553" stroke-width="1"/><rect x="180.8" y="28" width="573.5" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="45.5" fill="#c9d3df" font-size="12" text-anchor="end">东材科技</text><text x="174.8" y="45.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-31.5%</text><text x="990" y="45.5" fill="#6b7683" font-size="11" text-anchor="end">3.4%</text><rect x="280.5" y="62" width="473.8" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="79.5" fill="#c9d3df" font-size="12" text-anchor="end">中天科技</text><text x="274.5" y="79.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-26.0%</text><text x="990" y="79.5" fill="#6b7683" font-size="11" text-anchor="end">7.6%</text><rect x="286.4" y="96" width="468.0" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="113.5" fill="#c9d3df" font-size="12" text-anchor="end">亨通光电</text><text x="280.4" y="113.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-25.7%</text><text x="990" y="113.5" fill="#6b7683" font-size="11" text-anchor="end">9.8%</text><rect x="374.9" y="130" width="379.4" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="147.5" fill="#c9d3df" font-size="12" text-anchor="end">远东股份</text><text x="368.9" y="147.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-20.9%</text><text x="990" y="147.5" fill="#6b7683" font-size="11" text-anchor="end">—</text><rect x="468.4" y="164" width="285.9" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="181.5" fill="#c9d3df" font-size="12" text-anchor="end">特锐德</text><text x="462.4" y="181.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-15.7%</text><text x="990" y="181.5" fill="#6b7683" font-size="11" text-anchor="end">2.2%</text><rect x="470.6" y="198" width="283.7" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="215.5" fill="#c9d3df" font-size="12" text-anchor="end">思源电气</text><text x="464.6" y="215.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-15.6%</text><text x="990" y="215.5" fill="#6b7683" font-size="11" text-anchor="end">6.7%</text><rect x="554.4" y="232" width="200.0" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="249.5" fill="#c9d3df" font-size="12" text-anchor="end">宏发股份</text><text x="548.4" y="249.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-11.0%</text><text x="990" y="249.5" fill="#6b7683" font-size="11" text-anchor="end">3.7%</text><rect x="623.6" y="266" width="130.7" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="283.5" fill="#c9d3df" font-size="12" text-anchor="end">中国西电</text><text x="617.6" y="283.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-7.2%</text><text x="990" y="283.5" fill="#6b7683" font-size="11" text-anchor="end">2.6%</text><rect x="749.0" y="300" width="5.3" height="27" rx="3" fill="#3fb950" opacity=".78"/><text x="98" y="317.5" fill="#c9d3df" font-size="12" text-anchor="end">正泰电器</text><text x="743.0" y="317.5" fill="#3fb950" font-size="12" font-weight="600" text-anchor="end">-0.3%</text><text x="990" y="317.5" fill="#6b7683" font-size="11" text-anchor="end">2.4%</text><rect x="754.3" y="334" width="23.3" height="27" rx="3" fill="#f85149" opacity=".78"/><text x="98" y="351.5" fill="#c9d3df" font-size="12" text-anchor="end">特变电工</text><text x="783.7" y="351.5" fill="#f85149" font-size="12" font-weight="600" text-anchor="start">+1.3%</text><text x="990" y="351.5" fill="#6b7683" font-size="11" text-anchor="end">7.8%</text><rect x="754.3" y="368" width="77.8" height="27" rx="3" fill="#f85149" opacity=".78"/><text x="98" y="385.5" fill="#c9d3df" font-size="12" text-anchor="end">国电南瑞</text><text x="838.1" y="385.5" fill="#f85149" font-size="12" font-weight="600" text-anchor="start">+4.3%</text><text x="990" y="385.5" fill="#6b7683" font-size="11" text-anchor="end">8.0%</text><rect x="754.3" y="402" width="82.9" height="27" rx="3" fill="#f85149" opacity=".78"/><text x="98" y="419.5" fill="#c9d3df" font-size="12" text-anchor="end">东方电缆</text><text x="843.2" y="419.5" fill="#f85149" font-size="12" font-weight="600" text-anchor="start">+4.6%</text><text x="990" y="419.5" fill="#6b7683" font-size="11" text-anchor="end">—</text></svg>
+<p class="note">9/29 收盘 → 10/30 收盘；右侧数字为基金 2026Q3 权重（占净值），"—"为未进前十大。红涨绿跌。</p>
+</div>
+
+<div class="scroll">
+<table>
+<tr><th>成分股</th><th>9/29</th><th>10/30</th><th>涨跌</th><th>基金权重</th><th>组合贡献</th></tr>
+<tr><td>亨通光电</td><td class="num">57.11</td><td class="num">42.42</td><td class="num down">-25.7%</td><td class="num dim">9.8%</td><td class="num down">-2.51pp</td></tr><tr><td>中天科技</td><td class="num">31.33</td><td class="num">23.17</td><td class="num down">-26.0%</td><td class="num dim">7.6%</td><td class="num down">-1.99pp</td></tr><tr><td>特变电工</td><td class="num">17.15</td><td class="num">17.37</td><td class="num up">+1.3%</td><td class="num dim">7.8%</td><td class="num up">+0.10pp</td></tr><tr><td>国电南瑞</td><td class="num">22.21</td><td class="num">23.16</td><td class="num up">+4.3%</td><td class="num dim">8.0%</td><td class="num up">+0.34pp</td></tr><tr><td>思源电气</td><td class="num">120.81</td><td class="num">101.97</td><td class="num down">-15.6%</td><td class="num dim">6.7%</td><td class="num down">-1.04pp</td></tr><tr><td>宏发股份</td><td class="num">33.48</td><td class="num">29.80</td><td class="num down">-11.0%</td><td class="num dim">3.7%</td><td class="num down">-0.40pp</td></tr><tr><td>东材科技</td><td class="num">50.53</td><td class="num">34.60</td><td class="num down">-31.5%</td><td class="num dim">3.4%</td><td class="num down">-1.08pp</td></tr><tr><td>中国西电</td><td class="num">11.41</td><td class="num">10.59</td><td class="num down">-7.2%</td><td class="num dim">2.6%</td><td class="num down">-0.19pp</td></tr><tr><td>正泰电器</td><td class="num">24.38</td><td class="num">24.31</td><td class="num down">-0.3%</td><td class="num dim">2.4%</td><td class="num down">-0.01pp</td></tr><tr><td>特锐德</td><td class="num">34.30</td><td class="num">28.91</td><td class="num down">-15.7%</td><td class="num dim">2.2%</td><td class="num down">-0.35pp</td></tr><tr><td>东方电缆</td><td class="num">35.33</td><td class="num">36.94</td><td class="num up">+4.6%</td><td class="num dim">—</td><td class="num dim">—</td></tr><tr><td>远东股份</td><td class="num">18.03</td><td class="num">14.27</td><td class="num down">-20.9%</td><td class="num dim">—</td><td class="num dim">—</td></tr>
+</table>
+</div>
+<p class="note">前十大合计贡献约 <b>-7.13pp</b>（基金整体 -12.87%），其中亨通+中天两只就贡献 <b>-4.50pp</b>。电网四只（南瑞、特变、正泰、西电）合计仅 +0.25pp——"压舱石"确实在托，但托不住光纤那 17% 的权重。</p>
+
+<h2><span class="no">08</span>收获：七条可复用的规则</h2>
+
+<div class="lesson">
+  <div class="n">LESSON 01</div>
+  <h4>先给坐标，再给结论</h4>
+  <p>任何"顶/底"判断，第一行必须是<b>"距 X 日高点 -Y%、PE 分位 Z%"</b>，而不是"年内涨跌"。这次如果第一行写的是"距 6/22 高点 -31.6%，PE 从 38.7 降到 26.8"，读者对赔率的理解会完全不同。</p>
+  <div class="act"><b>下次怎么写：</b>报告开头固定三行——① 距 3 年高点；② 距 3 年低点；③ PE/PB 分位。缺一行不发。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">LESSON 02</div>
+  <h4>名字是包装，暴露是事实</h4>
+  <p>"电网设备"这个名字在 10/12 被一次自然实验拆穿了：5 万亿投资、保变涨停，基金跟踪的指数却跌 1.24%。判断一只基金，看的是<b>波动贡献</b>，不是权重表，更不是名字。</p>
+  <div class="act"><b>下次怎么做：</b>用"近 30 日相关性 × 权重"排一张<b>波动贡献表</b>；如果前两大贡献 &gt; 50%，就按那两只股票的逻辑给它定价。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">LESSON 03</div>
+  <h4>触发器要分层：领先、同步、滞后</h4>
+  <p>现货价是<b>滞后确认</b>，不是领先指标；股价领先现货价，现货价领先财报。这次 9 月现货还在涨、Q3 业绩还在加速，股价已经跌了 26%。真正领先的是：估值分位、拥挤度、定增/解禁、股价结构（不再新高）。</p>
+  <div class="act"><b>下次怎么做：</b>每个标的列 3 个领先 + 2 个同步 + 1 个滞后；只允许"领先"触发减仓，"滞后"只用于复核。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">LESSON 04</div>
+  <h4>周期股：盈利加速 + PE 下降 + 股价滞涨 = 卖出</h4>
+  <p>亨通 Q3 单季 +299%，PE 从 26.8 降到 24.0，股价 -25.7%。这不是"便宜"，这是<b>顶部盈利把 PE 做低了</b>。报告识破了这个陷阱，却又把"2026E PE 20x 不贵"写进持有理由——<b>认知和执行打架，输的永远是执行</b>。</p>
+  <div class="act"><b>下次怎么做：</b>周期股禁止用"动态 PE"做买入理由；只看 PB、毛利率位置、供给投放节奏。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">LESSON 05</div>
+  <h4>单月涨跌不能证明逻辑，要做归因</h4>
+  <p>这次"清仓对了"，约六成归因于大盘 β。如果不拆 β / 行业 / 个股，就会把"躲过大盘"记成"看对光纤"，下一次在同样逻辑下重复下注，迟早还回去。</p>
+  <div class="act"><b>下次怎么做：</b>复盘时先算"同期沪深300、创业板、行业指数"三个基准，再谈个股选择；超额收益才算 α。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">LESSON 06</div>
+  <h4>建议要可执行：给决策树，不给模糊区间</h4>
+  <p>"先减 1/3~1/2"听起来稳健，实际是把最难的决定推回给读者。对一只已经 -30%、PE 76% 分位、供给冲击刚出现的基金，更合适的写法是："<b>若你买它的理由是电网投资 → 清仓换 932611；若你买的是光纤景气 → 设 57 元为止损，跌破无条件清</b>。"</p>
+  <div class="act"><b>下次怎么写：</b>每条建议都带"如果…就…否则…"，并给出明确比例、价位、时间窗。</div>
+</div>
+
+<div class="lesson">
+  <div class="n">LESSON 07</div>
+  <h4>卖出必须有下半场：再入场条件</h4>
+  <p>这次报告给了 4 个减仓触发器，却没给 1 个再入场条件。结果是你现在拿着一笔现金，面对一个跌了 40% 的指数，既不敢买、也不知道什么价位该买——这等于把"择时"做了一半。</p>
+  <div class="act"><b>下次怎么做：</b>卖出同时写下"估值、价格、筹码、业绩"四类再入场条件，并规定"最多等多久、否则放弃"。</div>
+</div>
+
+<h2><span class="no">09</span>现在的坐标（不是买入建议）</h2>
+<p class="lead">既然你已经空仓，问题就从"还能拿吗"变成了"什么条件下才值得重新看它"。先把坐标摆出来。</p>
+
+<div class="nums">
+  <div class="num-box"><div class="t">基金净值（10/29）</div><div class="v">0.9775</div><div class="s">已跌破 1 元面值；距顶 -38.9%</div></div>
+  <div class="num-box"><div class="t">指数 PE(TTM)</div><div class="v">24.0x</div><div class="s">2013 以来 69% 分位，中位 22.2</div></div>
+  <div class="num-box"><div class="t">距 6/22 顶</div><div class="v down">-40.7%</div><div class="s">指数 3834 → 2274（估算）</div></div>
+</div>
+
+<div class="card">
+  <p><b>① 估值：便宜了，但没到"便宜"。</b>PE 从 38.7 杀到 24.0，分位从 99.6% 降到 69.3%；历史中位数是 22.2。按 10/30 估算约 23.3（66% 分位）。<b>跌了很多 ≠ 跌到位。</b></p>
+  <p><b>② 盈利：E 在周期顶部。</b>亨通前三季 +159%、中天 +71%。Q3 财报并表后，PE 会"机械性"再降一截——看起来更便宜，实际是<b>顶部 E</b>。2027 年如果光纤价格回落，E 会反过来杀 PE。</p>
+  <p><b>③ 价格：涨势放缓，但没崩。</b>9 月 G.652.D 88.4 元（+2.8% MoM）、G.657.A1 133.1 元（-1.6% MoM）。报告期待的是"连续 2 个月环比转负"，目前只满足一半。</p>
+  <p><b>④ 供给：还没开始释放。</b>Q3 全行业约 400 亿扩产，光棒 18-24 个月周期，投放集中在 <b>2027 底~2028</b>；66 亿定增还会带来摊薄。也就是说，<b>供给冲击的"预期"已经杀了一轮，"现实"还没到。</b></p>
+  <p><b>⑤ 市场：AI 资本开支正在被重新定价。</b>谷歌 -12%、纳指回调、创业板自 6 月 -44.8%。这类系统性去杠杆，个股基本面再好也扛不住。</p>
+</div>
+
+<h3>如果以后还想碰它：一份再入场检查表</h3>
+<ul class="check">
+  <li><b>估值</b>：PE 分位回到 50% 以下（约 22.2x 以下），或 PB 回到历史 30% 分位。</li>
+  <li><b>价格</b>：G.652.D 现货连续 2 个月环比转负，<b>且</b>指数不再创新低（预期出清，而不是"跌得多"）。</li>
+  <li><b>筹码</b>：定增落地、解禁/摊薄冲击消化，成交额萎缩到 6 月高峰的 1/3 以下。</li>
+  <li><b>业绩</b>：单季毛利率见顶回落后的第一份"洗大澡"财报——不是业绩最好的那季。</li>
+  <li><b>纪律</b>：先写止损位（例如再跌 15% 无条件走），再决定仓位；不要用"景气还在"当持有理由。</li>
+</ul>
+<p class="note">以上四条不必全满足；但若只满足"跌得多"这一条，那不是再入场，是接飞刀。</p>
+
+<div class="quote">
+  <b>三个情景（主观概率，仅供讨论）：</b>超跌反弹 30%（AI 资本开支重新加速 / 光纤价格再超预期）；磨底 45%（估值在 20-24x 反复，等 2027 供给落地）；二次探底 25%（AI 开支下修 + 2027 产能提前投放，PE 与 E 双杀）。<b>三种情景里，有两种不需要现在买。</b>
+</div>
+
+<div class="hr"></div>
+
+<h2><span class="no">10</span>一句话总结</h2>
+<div class="card verdict">
+  <p><b class="hl">这份报告赢了结论，输了坐标。</b>它正确识别了"这是一只光纤 β"，也正确地让你在 9/29 离场；但它把 6 月的真顶看漏了，把一场全市场 AI 去杠杆讲成了光纤周期见顶，还在"减一半"和"全清"之间选了前者。</p>
+  <p><b class="hlg">你赢在动作，不是赢在逻辑。</b>全清比报告建议多保住 6~9 个百分点，但其中约六成是大盘帮忙。下次真正要练的，是在 6/22 那种"PE 99.6% 分位、全市场同时见顶"的位置就动手，而不是等跌了 30% 再止损。</p>
+</div>
+
+<footer>
+  <p><b>数据与口径说明</b>：基金净值为天天基金官方披露（10/29 为最新，10/30 未出，按跟踪 ETF 涨跌幅估算）；指数收盘与 PE(TTM) 来自中证指数官网；个股与 ETF 为腾讯行情前复权收盘价；个股权重为基金 2026 年三季报前十大持仓（占净值比例）。区间收益均以 2026-09-29 收盘为起点，不计交易费用。所有"估算"均已标注。</p>
+  <p style="margin-top:10px"><b>主要来源</b>：</p>
+  <p class="src">
+    ① 天天基金 025833 净值、2026Q3 持仓　｜　② 中证指数官网 931994、932611 日线与 PE(TTM)　｜　③ 腾讯行情个股 / ETF 159326 前复权日线<br>
+    ④ 瑞银《月度光纤价格追踪》2026-10-06（东方财富财富号转载）：9 月 G.652.D 88.4 元、G.657.A1 133.1 元、环比与需求数据<br>
+    ⑤ 亨通光电 66.36 亿定增预案（2026-09-24）及 2026 三季报（10-28）：前三季净利 61.63 亿、+159.4%，Q3 单季 +299.1%<br>
+    ⑥ 中天科技 2026 三季报（10-29）：前三季净利 40.01 亿、+71.1%，Q3 单季 +109%　｜　⑦ 21 世纪经济报道《5 万亿元电网投资蓝图下，电网设备板块强势大涨》（2026-10-12）<br>
+    ⑧ 联合早报、东方财富 2026-10-30 盘面：谷歌 -12%、纳指 -1.4%、创业板 -4.13%
+  </p>
+  <p style="margin-top:14px">免责声明：本页为个人研究复盘，基于公开数据整理，不构成投资建议。所有情景概率为主观判断，可能完全错误。基金有风险，决策需独立。</p>
+  <p style="margin-top:10px">生成时间：2026-10-30 16:50　｜　文件：Explore/fund-025833-review/index.html　｜　原报告：<a href="../fund-025833/index.html">fund-025833/index.html</a></p>
+</footer>
+
+</div>
+</body>
+</html>
