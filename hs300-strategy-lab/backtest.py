@@ -519,12 +519,14 @@ STOCK_DESC = {
     "货币基金": "全程只买货币基金（假设年化 2%），不碰股票。无风险基准线。",
 }
 
+M5_DESC = "来自知乎高赞『年线碰 M5 就梭哈』：年K的 MA5（含当年最新价）等价于『现价 ≤ 过去 4 个年度收盘价的均值』，价格跌破这条线才算触碰。本页按『投纳指的这一半资金全买』口径回测：首次触碰当天满仓，之后长持不卖；不触碰就一直空仓吃 2% 货基。原帖另一半留给巨无霸个股、再留 5~10% 随便玩，个股部分无法用指数复刻，此处只看择时。"
+
 # 各市场核心经验（展示在页面顶部）
 LESSONS = {
     "沪深300": "牛短熊长——PE 过高（分位>90%）一定要逃顶，但卖出别太灵敏，绝大部分涨幅都在极端高估（≥90% 分位档贡献 +116%）的位置取得。买入可以稍早抄底，分位 <50% 就够（实测 30% 买回与 50% 买回相差仅 0.2pp/年）；如果非要等深度低估（<20%）再买，反而会踏空机会、空仓时间过长（本项目最长达 4.7 年），非常反人性。",
     "中证A500": "2024-09 才发布的宽基，**只用发布后的真实数据**（价格与官方 PE 均 2024-09 起，不采用回填历史），窗口约 2 年、样本短。分位用上市以来 expanding（约 250 个交易日后才出信号），故前半段估值策略基本等同躺平；结论是「早期行为画像」，不可外推。行业更均衡、风格介于沪深300 与中证500 之间，可当作「A 股核心资产」的另一把尺子。",
     "恒生科技": "盈利高波动的科技指数，PE 估值择时在这里几乎失效——本窗口 expanding 分位被早年极端 PE 钉死、从未越 80% 卖出线，估值类策略全部 0 交易=躺平；**纯价格趋势「破线卖·深跌买」才是效果最好的**（累计 +57% vs 躺平 +2.7%，年化 16.3% / 回撤 -29.5%）：连续拉升后跌破 20 日均线就走、从高点回撤 20% 再接。注意它只在恒生科技这类高波动趋势指数成立，沪深300/纳指会被反复假突破打脸。",
-    "纳斯达克100": "盈利驱动型市场——躺平 + 坚持定投完胜所有择时（普通定投 XIRR 15.2%）；估值不是卖的理由（2009-2021 主升浪绝大多数时间标普分位 >80%，择时长期空仓踏空）；控仓只降回撤、择时拖后腿。",
+    "纳斯达克100": "盈利驱动型市场——躺平 + 坚持定投完胜所有择时（普通定投 XIRR 15.2%）；估值不是卖的理由（2009-2021 主升浪绝大多数时间标普分位 >80%，择时长期空仓踏空）；控仓只降回撤、择时拖后腿。唯一在本区间跑赢躺平的是『年K碰M5·梭哈长持』（10.6% vs 8.7%），但它只是躲过了起点后 2000-10~2001-01 的 -36%、入场后与躺平完全重合；从 1995/2015 起算分别只有 9.0%/10.2%（同期躺平 14.5%/17.9%）——本质是熊市后抄底，不是可复制的超额。",
     "标普500": "美股成熟宽基：结论与纳指一致但更极致——躺平+定投最优，择时（含 PE 分位/趋势）在长牛市里全是拖后腿；估值信号天然滞后，股价先于 PE 定价。",
     "恒生指数": "港股宽基，估值信号仅 2019 起可回测（窗口短）；低股息率+盈利波动，PE 择时区分度有限，控仓/再平衡仍是主要风险工具。",
     "创业板指": "A股成长风格：弹性大、牛熊切换急，PE 分位择时比沪深300 更有效（成长股估值回归猛烈）；但本页用市场整体 PE 近似 399006，交叉口径需打折。",
@@ -1013,6 +1015,7 @@ MARKETS = {
         "percentile": "rolling5y",
         "start_mode": "neutral",
         "start_anchor": "2000-01-03",
+        "year_m5": True,
         "loader": load_ndx,
     },
     "sp500": {
@@ -1193,6 +1196,25 @@ def strategy_cooldown(pctl, buy=0.30, sell=0.90, cooldown_days=126, cooldown_buy
                 pos, cooldown = 0.0, cooldown_days
         out.append(pos)
     return pd.Series(out, index=pctl.index)
+
+
+# ---------- 年K M5（知乎「年线碰 M5 梭哈」，仅纳指页启用） ----------
+
+def year_m5_line(df):
+    """年K 的 M5 触发线：过去 4 个完整年度的收盘均价。
+    软件里年K MA5 =（前 4 年收盘 + 当年最新价）/5，所以「现价碰 M5」等价于「现价 ≤ 前 4 年收盘均值」，
+    年内固定、只用已发生的数据，无前视偏差"""
+    year_end = df.groupby(df["date"].dt.year)["close"].last()
+    return df["date"].dt.year.map(year_end.shift(1).rolling(4).mean())
+
+
+def strategy_year_m5(df, line):
+    """年K碰 M5：首次触及触发线当天满仓梭哈，之后长持不卖；不触及则一直空仓（吃 2% 货基）"""
+    pos = pd.Series(0.0, index=df.index)
+    hit = line.notna() & (df["close"] <= line)
+    if hit.any():
+        pos.iloc[int(hit.values.argmax()):] = 1.0
+    return pos
 
 
 # ---------- 黄金专用纯价格策略（无 PE，信号都来自价格自身） ----------
@@ -1419,6 +1441,7 @@ def run_index(key, cfg):
     sell_p = SELL_PCTL
     df_full = cfg["loader"]()
     pctl_full = percentile_series(df_full["pe"], mode=cfg["percentile"])
+    m5_full = year_m5_line(df_full) if cfg.get("year_m5") else None
     anchor = df_full["date"] >= cfg.get("start_anchor", "1900-01-01")
     mode = cfg.get("start_mode", "neutral")
     if mode == "neutral":
@@ -1438,6 +1461,7 @@ def run_index(key, cfg):
     mask = df_full["date"] >= start_date
     df = df_full[mask].reset_index(drop=True)
     pctl = pctl_full[mask].reset_index(drop=True)
+    m5_line = m5_full[mask].reset_index(drop=True) if cfg.get("year_m5") else None
     df["ma250"] = df_full["close"].rolling(250).mean()[mask].reset_index(drop=True)
     df["ma60"] = df_full["close"].rolling(60).mean()[mask].reset_index(drop=True)
     start_pctl = pctl.iloc[0]
@@ -1450,6 +1474,8 @@ def run_index(key, cfg):
         "stock": {k: v.replace("指数", name).replace("沪深300", name) for k, v in STOCK_DESC.items()},
         "flow": {k: v.replace("指数", name).replace("沪深300", name) for k, v in FLOW_DESC.items()},
     }
+    if cfg.get("year_m5"):
+        desc["stock"]["年K碰M5·梭哈长持"] = M5_DESC
 
     _, nav_hold = strategy_hold(df)
     pos_t, nav_timing = strategy_timing(df, pctl)
@@ -1465,6 +1491,9 @@ def run_index(key, cfg):
     pos_v1 = strategy_break_buy(df)
     nav_v1 = backtest(df, pos_v1)
     nav_cash = pd.Series([(1 + CASH_RATE / 252) ** i for i in range(len(df))], index=df.index)
+    if cfg.get("year_m5"):
+        pos_m5 = strategy_year_m5(df, m5_line)
+        nav_m5 = backtest(df, pos_m5)
 
     one = pd.Series(1.0, index=df.index)
     flow_runs = {
@@ -1522,6 +1551,8 @@ def run_index(key, cfg):
         "破线卖·深跌买（纯价格）": metrics(nav_v1, pos_v1, nav_hold),
         "货币基金": metrics(nav_cash),
     }
+    if cfg.get("year_m5"):
+        stats["年K碰M5·梭哈长持"] = metrics(nav_m5, pos_m5, nav_hold)
 
     _extra = ""
     if "cape" in df_full.columns:
@@ -1530,6 +1561,21 @@ def run_index(key, cfg):
             _extra = f"席勒CAPE（美股整体）现值 {_c.iloc[-1]:.1f}"
     _sp_pe = df["pe"].iloc[0]
     _sp_pctl = pctl.iloc[0]
+
+    series = {
+        "满仓躺平": nav_hold.round(4).tolist(),
+        "PE·30买90卖": nav_c0.round(4).tolist(),
+        "PE·20买80卖": nav_timing.round(4).tolist(),
+        "股7债3·月再平衡": nav_sb.round(4).tolist(),
+        "阶梯仓位·越便宜越重仓": nav_a1.round(4).tolist(),
+        "趋势确认·30买90卖": nav_b1.round(4).tolist(),
+        "30买90卖·30%底仓": nav_h2.round(4).tolist(),
+        "PE·50%买90%卖": nav_e1.round(4).tolist(),
+        "破线卖·深跌买（纯价格）": nav_v1.round(4).tolist(),
+        "货币基金": nav_cash.round(4).tolist(),
+    }
+    if cfg.get("year_m5"):
+        series["年K碰M5·梭哈长持"] = nav_m5.round(4).tolist()
 
     out = {
         "name": name,
@@ -1546,18 +1592,7 @@ def run_index(key, cfg):
         "extra": _extra,
         "lesson": LESSONS.get(name, ""),
         "dates": df["date"].dt.strftime("%Y-%m-%d").tolist(),
-        "series": {
-            "满仓躺平": nav_hold.round(4).tolist(),
-            "PE·30买90卖": nav_c0.round(4).tolist(),
-            "PE·20买80卖": nav_timing.round(4).tolist(),
-            "股7债3·月再平衡": nav_sb.round(4).tolist(),
-            "阶梯仓位·越便宜越重仓": nav_a1.round(4).tolist(),
-            "趋势确认·30买90卖": nav_b1.round(4).tolist(),
-            "30买90卖·30%底仓": nav_h2.round(4).tolist(),
-            "PE·50%买90%卖": nav_e1.round(4).tolist(),
-            "破线卖·深跌买（纯价格）": nav_v1.round(4).tolist(),
-            "货币基金": nav_cash.round(4).tolist(),
-        },
+        "series": series,
         "flow": {
             "curves": flow_curves,
             "income": [round(v, 2) for v in cum_income],
