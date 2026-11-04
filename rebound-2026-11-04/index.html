@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11·04 大奇迹日：追不追？一份按点位执行的加仓单</title>
+<script src="https://unpkg.com/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f7f5; --card:#ffffff; --ink:#1c1c1e; --sub:#6b6b70; --line:#e6e4df;
+    --up:#d9363e; --down:#1a9c5b; --accent:#1f4fd8; --warn:#b8791a;
+    --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 24px 80px}
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:32px}
+  .kicker{font-size:13px;letter-spacing:.18em;color:var(--sub);text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:34px;line-height:1.3;margin:0 0 12px;letter-spacing:-.01em}
+  .lede{font-size:17px;color:var(--sub);margin:0;max-width:820px}
+  .meta{font-size:13px;color:var(--sub);margin-top:14px;font-family:var(--mono)}
+  h2{font-size:23px;margin:56px 0 6px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:12px}
+  h2 .no{font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.06em}
+  h2 + .sub{color:var(--sub);font-size:15px;margin:0 0 20px}
+  h3{font-size:17px;margin:26px 0 8px}
+  p{margin:10px 0}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 8px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .tile .name{font-size:13px;color:var(--sub)}
+  .tile .px{font-family:var(--mono);font-size:26px;font-weight:600;line-height:1.25}
+  .tile .chg{font-family:var(--mono);font-size:14px}
+  .up{color:var(--up)} .down{color:var(--down)}
+  .note{font-size:13px;color:var(--sub);margin-top:10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:18px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid2 .card{margin:0}
+  .verdict{border-left:4px solid var(--accent);background:#f2f5fe;border-radius:0 12px 12px 0;padding:18px 22px;margin:22px 0}
+  .verdict ol{margin:8px 0 0;padding-left:22px}
+  .verdict li{margin:8px 0}
+  .glance{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  .glance div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px}
+  .glance b{display:block;font-size:13px;color:var(--sub);font-weight:500;margin-bottom:2px}
+  .chart{width:100%;height:330px}
+  .chart.tall{height:380px}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font-size:13px;color:var(--sub);font-weight:600;background:#fbfaf8}
+  td.num,th.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:#eef1f8;color:#39508f;font-family:var(--mono)}
+  .tag.red{background:#fdecec;color:#b0252c}
+  .tag.green{background:#e9f6ef;color:#147a46}
+  .qa{margin:18px 0}
+  .qa .q{font-weight:600;font-size:17px;margin-bottom:6px}
+  .qa .a{color:#333}
+  .timeline{border-left:2px solid var(--line);margin:18px 0 6px;padding-left:20px}
+  .timeline .item{position:relative;padding:0 0 18px}
+  .timeline .item:before{content:"";position:absolute;left:-27px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--up);border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .timeline .t{font-family:var(--mono);font-size:13px;color:var(--sub)}
+  .timeline .d{font-size:15px}
+  .rule{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .rule:last-child{border-bottom:none}
+  .rule .n{font-family:var(--mono);font-size:22px;color:#c9c5bb;font-weight:600;line-height:1.2}
+  .rule .h{font-weight:600;margin-bottom:2px}
+  .rule .b{font-size:14.5px;color:#3a3a3d}
+  .quote{border-left:3px solid var(--warn);padding:4px 0 4px 16px;color:#5a5245;font-size:14.5px;margin:18px 0}
+  ul.tight{margin:8px 0;padding-left:20px}
+  ul.tight li{margin:6px 0}
+  footer{margin-top:64px;border-top:1px solid var(--line);padding-top:20px;font-size:13px;color:var(--sub)}
+  code{font-family:var(--mono);background:#efeee9;padding:1px 6px;border-radius:4px;font-size:.92em}
+  @media (max-width:820px){
+    .wrap{padding:32px 16px 60px}
+    h1{font-size:26px}
+    .tiles{grid-template-columns:1fr 1fr}
+    .grid2,.glance{grid-template-columns:1fr}
+    .chart,.chart.tall{height:300px}
+    table{font-size:13px}
+    th,td{padding:8px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="../index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+
+<header class="top">
+  <div class="kicker">A 股 · 操作手册 · 2026-11-04</div>
+  <h1>11·04 大奇迹日：科创 50 涨停，追不追？</h1>
+  <p class="lede">一根阳线改变不了趋势，但能改变你的操作节奏。这篇用公开信息 + 你自己的仓位账本，回答三个问题：<b>今天为什么涨</b>、<b>该不该追</b>、<b>8 成仓位下这 3 个点怎么加</b>。</p>
+  <div class="meta">数据截止：2026-11-04 盘中（14:00 前后）· 本地日线 10-29 · 两融 10-21</div>
+</header>
+
+<div class="tiles">
+  <div class="tile"><div class="name">科创 50</div><div class="px up">+10.00%</div><div class="chg up">≈1351 点 · 涨停式反包</div></div>
+  <div class="tile"><div class="name">创业板指</div><div class="px up">+5.96%</div><div class="chg up">2534.10 · +142.45</div></div>
+  <div class="tile"><div class="name">深证成指</div><div class="px up">+3.90%</div><div class="chg up">11301.63 · +424.64</div></div>
+  <div class="tile"><div class="name">上证指数</div><div class="px up">+1.81%</div><div class="chg up">3673.51 · +65.41</div></div>
+</div>
+<p class="note">全市场近 <b>4700 只</b>个股上涨，贵金属、高带宽内存、半导体、存储、先进封装、光刻机、CPO 领涨；成交显著放量。<span class="tag">盘中数据，收盘可能不同</span></p>
+
+<div class="verdict">
+  <b>三句话结论</b>
+  <ol>
+    <li><b>今天不是反转确认日。</b>科创 50 涨 10% 之后到 1351，仍低于 20 日线 1394——趋势一天修不好，均线还压着。</li>
+    <li><b>不追今天的涨停，但也不必因为一根阳线放弃补仓。</b>用「3 笔 + 按点位」把双创从 7% 补到 10%，第一笔等回踩，不抢。</li>
+    <li><b>你真正的约束是 8 成总仓位，不是「A 股几成」。</b>加仓的钱从重复暴露里腾，总仓位上限 8.5 成，全程不加杠杆。</li>
+  </ol>
+</div>
+
+<h2><span class="no">01</span>今天到底在涨什么</h2>
+<p class="sub">不是单一利好，是「政策工具 + 公司回购 + 叙事修复 + 超跌出清」四件事挤在同一天。</p>
+
+<div class="grid2">
+  <div class="card">
+    <h3>① 央行：给「回购增持」的贷款降到 1%</h3>
+    <p>11 月 4 日起，股票回购增持再贷款利率下调 25bp 至 <b>1%</b>，支持对象 21 家全国性银行 + 5 家系统重要性城商行，<b>支持比例 100%</b>、期限 1 年可展期；11 月 2 日座谈会后银行已报送额度申请<b>超 2000 亿元</b>。</p>
+    <p class="note">性质：给上市公司和大股东的「低息弹药」，托的是<b>底线</b>，不是指数点位。</p>
+  </div>
+  <div class="card">
+    <h3>② 公司：长鑫科技回购上限 20 亿 → 50 亿</h3>
+    <p>11 月 4 日早间公告，董事长提议把回购金额由「10–20 亿」上调至「<b>25–50 亿</b>」。这是本轮最大单笔回购加码之一，直接打在存储/半导体的情绪点上。</p>
+    <p class="note">性质：真金白银的产业资本定价，比研报有用。</p>
+  </div>
+  <div class="card">
+    <h3>③ 叙事修复：算力链否认「AI 需求下调」</h3>
+    <p>针对「大厂 AI 需求下调」传闻，多家算力产业链回应：<b>没有下调迹象，在手订单充足，部分订单价格上调</b>。野村同日发报告称大型科技股卖压过度，自由现金流转负不等于盈利能力恶化。</p>
+    <p class="note">性质：给 10 月的杀估值找一个「杀错了」的理由。</p>
+  </div>
+  <div class="card">
+    <h3>④ 技术面：跌到没人信，然后反抽</h3>
+    <p>10 月创业板 <b>-23.0%</b>、科创 50 <b>-24.1%</b>，多个重要指数创逾一年新低；科创 50 距 6 月高点 2207.9 一度回撤 <b>-44%</b>。昨天连「羊字辈」玄学涨停都能占涨停板两成——情绪与杠杆都到了极值。</p>
+    <p class="note">性质：超跌反抽只需要一个由头，今天由头来了。</p>
+  </div>
+</div>
+
+<div class="timeline">
+  <div class="item"><div class="t">09:05</div><div class="d">央行公告：回购增持再贷款利率降至 1%，额度「充分满足」。</div></div>
+  <div class="item"><div class="t">早盘</div><div class="d">上证在 3600 点附近窄幅震荡，工业软件、短剧游戏、汽车芯片、人形机器人、存储活跃；索辰科技 20cm 涨停。</div></div>
+  <div class="item"><div class="t">午后</div><div class="d">指数直线拉升，科创 50 从 +2% 一路推到 +8% 以上，创业板指涨逾 5%，半导体全链条爆发。</div></div>
+  <div class="item"><div class="t">14:00</div><div class="d">科创 50 涨逾 8%、创业板指涨逾 5%，近 4700 股上涨；尾盘进一步冲至 +10%。</div></div>
+</div>
+
+<h2><span class="no">02</span>空头爆仓了吗？国家队买了吗？</h2>
+<p class="sub">两个最流行的解释，都需要证据。查完数据，结论偏冷。</p>
+
+<div class="qa">
+  <div class="q">「空头爆仓」——基本不成立</div>
+  <div class="a">
+    <ul class="tight">
+      <li><b>融券余额只有 291 亿</b>，占两融余额 2.45 万亿的 <b>1.2%</b>。这个体量砸不出 4700 股上涨。</li>
+      <li><b>两融平均维持担保比例 256%</b>（10-21），平仓线通常在 130% 附近，距离强平还有很远——该爆的仓在 6–10 月已经爆完了。</li>
+      <li>A 股没有便捷的指数做空工具，所谓「空头」主要是股指期货与融券，量级都不支持「爆仓推动指数涨停」的叙事。</li>
+    </ul>
+    <p>更可能的合力：<b>杠杆出清后的空头回补 + 踏空资金抢筹 + 宽基 ETF 申购放量</b>。融资余额已从 6 月 25 日峰值 <b>3.01 万亿</b>降到 <b>2.45 万亿</b>（-18.6%），浮筹确实轻了，但这是「跌出来的轻」，不是「多头的强」。</p>
+  </div>
+</div>
+
+<div class="card">
+  <div id="chart-margin" class="chart"></div>
+  <p class="note">两融余额（万亿元，左轴）与平均维持担保比例（%，右轴）。余额一路降、担保比例仍在 250% 上方：这是「去杠杆」，不是「爆仓」。</p>
+</div>
+
+<div class="qa">
+  <div class="q">「国家队买入」——今天没有看到直接证据</div>
+  <div class="a">
+    <p>公开信息里，<b>没有汇金 / 国新当日增持的公告</b>。今天落地的是「回购增持再贷款」这个<b>结构性货币政策工具</b>：它把便宜的钱给到银行，再由银行贷给上市公司和大股东去回购、增持。</p>
+    <p>这和 2024 年 9 月那种「汇金直接买 ETF + 平准基金预期」不是一回事：前者是<b>让市场自己托自己</b>，后者是<b>有人下场接盘</b>。政策底的信号强度，弱于 2024 年 9 月。</p>
+    <p class="note">可验证的观察点：未来 1–2 周沪深 300 / 科创 50 ETF 的份额是否连续大增、汇金系是否发公告。份额不涨，就别把「国家队」当成持仓理由。</p>
+  </div>
+</div>
+
+<h2><span class="no">03</span>历史给的赔率：追高到底划不划算</h2>
+<p class="sub">把「单日暴涨」当成信号，回测它之后 5 / 20 / 60 个交易日的表现。样本很小，只能当赔率参考，不能当规律。</p>
+
+<div class="card">
+  <div id="chart-fwd" class="chart"></div>
+  <p class="note">科创 50 单日涨幅 ≥7%（2020 年以来 10 次）· 创业板指单日涨幅 ≥5%（2019 年以来 16 次）。柱上数字为上涨概率。</p>
+</div>
+
+<table>
+  <thead>
+    <tr><th>信号</th><th class="num">样本</th><th class="num">后 5 日</th><th class="num">后 20 日</th><th class="num">后 60 日</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>科创 50 单日 ≥ +7%</td><td class="num">10</td><td class="num down">均值 -4.5%<br>胜率 40%</td><td class="num">+0.5%<br>胜率 60%</td><td class="num down">-7.6%<br>胜率 20%</td></tr>
+    <tr><td>创业板指单日 ≥ +5%</td><td class="num">16</td><td class="num up">+4.4%<br>胜率 75%</td><td class="num up">+4.0%<br>胜率 62%</td><td class="num up">+2.2%<br>胜率 53%</td></tr>
+  </tbody>
+</table>
+
+<p><b>两张表的方向是相反的，这很有信息量：</b>科创 50 的暴涨更像「高波动反抽」——短期冲高后 5 日、60 日大概率回吐；创业板指的反抽更有延续性，因为它的估值真的低。</p>
+
+<table>
+  <thead><tr><th>指数</th><th class="num">PE</th><th class="num">5 年分位</th><th class="num">距 2026 高点</th><th>一句话</th></tr></thead>
+  <tbody>
+    <tr><td>科创 50</td><td class="num">58.4x</td><td class="num">73.7%</td><td class="num down">-38.8%</td><td>不便宜，只是从「极贵」回到「贵」</td></tr>
+    <tr><td>创业板指</td><td class="num">34.6x</td><td class="num">21.7%</td><td class="num down">-42.0%</td><td>5 年 22% 分位，反抽有基本面缓冲</td></tr>
+    <tr><td>沪深 300</td><td class="num">12.4x</td><td class="num">69.4%</td><td class="num">—</td><td>你减它不算错：估值在中位数以上</td></tr>
+  </tbody>
+</table>
+
+<div class="card">
+  <div id="chart-kcb" class="chart tall"></div>
+  <p class="note">科创 50 年内走势（收盘价）。6 月 30 日见顶 2207.9，10 月 29 日收在 1228.1（年内新低），今日反包到 1351 仍在 20 日线（1394）下方——这一根阳线收复的是「跌幅」，不是「趋势」。</p>
+</div>
+
+<h2><span class="no">04</span>你的仓位：从 7% 到 10%，三笔，按点位</h2>
+<p class="sub">按总资产 = 100 计。现状：总仓位 80（A 股 30，其中双创 7）、非 A 股 50、现金 20。</p>
+
+<div class="card">
+  <div id="chart-pos" class="chart"></div>
+  <p class="note">目标不是「满仓看多」，是把双创补到 10%、A 股到 35%，同时把总仓位压在 85 以内。腾挪的钱来自合并重复的 A 股宽基暴露（沪深 300 / A500 / 红利高度重叠）。</p>
+</div>
+
+<div class="card">
+  <div class="rule">
+    <div class="n">01</div>
+    <div><div class="h">今天不下单（包括尾盘）</div><div class="b">单日涨超 8% 的日子一律不买，这是纪律不是判断。历史上科创 50 暴涨后 5 日均值 -4.5%、胜率 40%，追进去大概率是给别人抬轿。</div></div>
+  </div>
+  <div class="rule">
+    <div class="n">02</div>
+    <div><div class="h">第 1 笔 · 1 个点：等回踩</div><div class="b">科创 50 回到 <b>1290 以下</b>（今日涨幅回吐一半）或创业板指回到 <b>2760 以下</b>，买 1 个点（总资产口径，下同）。回踩不到就空着，不追。</div></div>
+  </div>
+  <div class="rule">
+    <div class="n">03</div>
+    <div><div class="h">第 2 笔 · 1 个点：再跌就再买</div><div class="b">科创 50 较今日再跌 8%（≈1243）或创业板指再跌 6%（≈2684），买第 2 个点。<b>两笔间隔至少 3 个交易日</b>，避免一天打光子弹。</div></div>
+  </div>
+  <div class="rule">
+    <div class="n">04</div>
+    <div><div class="h">第 3 笔 · 1 个点：等确认，不猜底</div><div class="b">收盘站上 20 日线且 3 日不破（科创 50 <b>1394</b> / 创业板 <b>3074</b>），或两市成交额连续 3 日 > 1.8 万亿，买最后 1 个点。这一笔买的是「趋势确认」，价格更贵，但确定性更高。</div></div>
+  </div>
+  <div class="rule">
+    <div class="n">05</div>
+    <div><div class="h">例外条款：明天高开怎么办</div><div class="b">高开 > +3% 不买；若尾盘仍站在当日均价之上、且不放巨量长上影，最多买 <b>0.5 个点</b>。高开低走是反抽最常见的死法，别用「怕踏空」当买入理由。</div></div>
+  </div>
+  <div class="rule">
+    <div class="n">06</div>
+    <div><div class="h">硬约束：总仓位 ≤ 85，双创 ≤ 10，不加杠杆</div><div class="b">你已经 8 成仓，双创 -25% 还让你难受，说明这个波动超出了你的舒适区。上限就是保护：补到 10% 就停，涨上去让它自然超配，不再主动加。</div></div>
+  </div>
+</div>
+
+<div class="quote">
+  <b>-25% 需要 +33% 才回本。</b>别用「回本」当加仓理由——回本是你无法控制的目标，「双创占总资产 10%」才是你能控制的目标。把决策从价格转到比例，情绪就没那么吵了。
+</div>
+
+<h2><span class="no">05</span>如果我是错的</h2>
+<p class="sub">三种可能打脸的情形，以及对应的补救动作。</p>
+
+<table>
+  <thead><tr><th style="width:36%">情形</th><th>会发生什么</th><th style="width:28%">你该做什么</th></tr></thead>
+  <tbody>
+    <tr><td><b>V 型反转</b>：政策底 + 估值底 + 盈利底共振，直接走 2024 年 9 月那种行情</td><td>分批买不够，双创 7% 会跑输</td><td>接受跑输一部分。第 3 笔的确认条件（站上 20 日线 3 日 + 成交 1.8 万亿）会在 1–2 周内触发，别提前破坏纪律。</td></tr>
+    <tr><td><b>反抽结束</b>：3–5 天内回吐今日涨幅，继续下探</td><td>补到 9% 后浮亏扩大到 -30% 以上</td><td>这正是分批的意义：成本被摊在 1290 / 1243 / 1394 三档，而不是 1351 一把梭。到 10% 上限就停止加仓。</td></tr>
+    <tr><td><b>阴跌磨底</b>：不破不立，横 2–3 个月</td><td>仓位加了但赚不到钱，机会成本高</td><td>第 1、2 笔只在「跌出来」的位置成交，等于用时间换成本。现金留 15% 以上，别把最后一颗子弹打光。</td></tr>
+  </tbody>
+</table>
+
+<div class="glance">
+  <div><b>今天要做的</b>不看盘、不下单，把三档价位写进条件单/备忘录</div>
+  <div><b>本周要做的</b>合并重复的 A 股宽基暴露，腾出 3–5 个点现金</div>
+  <div><b>不用做的</b>猜底、猜「国家队」、给涨停找理由</div>
+</div>
+
+<footer>
+  <p><b>数据与口径</b>：行情为 2026-11-04 盘中（东方财富 14:00 快照：上证 3673.51 +1.81%、深成指 11301.63 +3.90%、创业板指 2534.10 +5.96%、科创 50 涨逾 8%，尾盘 +10.00%）。本地日线：科创 50 截至 10-29（中证官网），创业板指截至 10-21（国证/新浪）。PE：科创 50 = 中证官网滚动市盈率 58.41（10-29）；创业板 = 乐咕月度 34.58（10-30）；沪深 300 = 12.37（10-29）。分位均为<b>滚动 5 年</b>。两融：交易所口径截至 10-21，融资余额 2.45 万亿（峰值 3.01 万亿 / 6-25），维持担保比例 256%。前向收益：科创 50 自 2020-01、创业板指自 2019-01，样本 10 / 16 次，样本极小。今日点位为 <code>昨收 × (1 + 涨幅)</code> 推算。</p>
+  <p><b>免责</b>：以上是数据推演与仓位规则，不是投资建议。盘中数据可能与收盘不同，涨停/涨幅以收盘为准；政策解读基于公开报道，不构成对后续政策的预测。</p>
+</footer>
+
+</div>
+
+<script>
+const DATA = {"margin": [["01-05", 2.54, 283.0], ["01-12", 2.66, 293.0], ["01-19", 2.71, 288.0], ["01-26", 2.71, 292.0], ["02-02", 2.69, 282.0], ["02-09", 2.65, 292.0], ["02-24", 2.61, 293.0], ["03-03", 2.63, 286.0], ["03-10", 2.64, 293.0], ["03-17", 2.63, 284.0], ["03-24", 2.6, 275.0], ["03-31", 2.59, 274.0], ["04-08", 2.58, 286.0], ["04-15", 2.64, 288.0], ["04-22", 2.7, 295.0], ["04-29", 2.71, 292.0], ["05-11", 2.81, 303.0], ["05-18", 2.87, 294.0], ["05-25", 2.9, 296.0], ["06-01", 2.88, 284.0], ["06-08", 2.86, 277.0], ["06-15", 2.88, 290.0], ["06-23", 2.98, 292.0], ["06-30", 3.0, 296.0], ["07-07", 2.96, 282.0], ["07-14", 2.88, 279.0], ["07-21", 2.7, 272.0], ["07-28", 2.65, 266.0], ["08-04", 2.59, 274.0], ["08-11", 2.64, 282.0], ["08-18", 2.67, 287.0], ["08-25", 2.63, 275.0], ["09-01", 2.64, 280.0], ["09-08", 2.62, 278.0], ["09-15", 2.6, 271.0], ["09-22", 2.63, 281.0], ["09-30", 2.54, 268.0], ["10-14", 2.51, 259.0], ["10-21", 2.45, 256.0]], "kcb": [["01-05", 1403.4], ["01-08", 1455.2], ["01-13", 1469.6], ["01-16", 1514.1], ["01-21", 1535.4], ["01-26", 1532.8], ["01-29", 1507.6], ["02-03", 1471.1], ["02-06", 1422.4], ["02-11", 1455.1], ["02-24", 1465.4], ["02-27", 1488.0], ["03-04", 1381.6], ["03-09", 1390.5], ["03-12", 1383.7], ["03-17", 1354.2], ["03-20", 1318.3], ["03-25", 1315.4], ["03-30", 1289.8], ["04-02", 1262.2], ["04-08", 1352.7], ["04-13", 1375.3], ["04-16", 1422.2], ["04-21", 1426.7], ["04-24", 1453.7], ["04-29", 1493.5], ["05-07", 1678.9], ["05-12", 1723.8], ["05-15", 1696.3], ["05-20", 1832.0], ["05-25", 1896.0], ["05-28", 1844.2], ["06-02", 1690.6], ["06-05", 1668.3], ["06-10", 1652.2], ["06-15", 1748.3], ["06-18", 1911.5], ["06-24", 1989.4], ["06-29", 2126.0], ["07-02", 1987.3], ["07-07", 2001.6], ["07-10", 2065.0], ["07-15", 1924.3], ["07-20", 1718.7], ["07-23", 1789.7], ["07-28", 1693.5], ["07-31", 1636.0], ["08-05", 1693.7], ["08-10", 1737.8], ["08-13", 1717.8], ["08-18", 1790.9], ["08-21", 1653.6], ["08-26", 1632.0], ["08-31", 1684.4], ["09-03", 1611.2], ["09-08", 1591.0], ["09-11", 1553.4], ["09-16", 1616.2], ["09-21", 1657.5], ["09-24", 1621.9], ["09-30", 1530.0], ["10-12", 1426.7], ["10-15", 1359.5], ["10-20", 1342.4], ["10-23", 1345.5], ["10-28", 1282.9]]};
+
+const C = {up:'#d9363e', down:'#1a9c5b', ink:'#1c1c1e', sub:'#6b6b70', line:'#e6e4df', accent:'#1f4fd8'};
+const baseText = {color:C.sub, fontSize:12, fontFamily:'-apple-system,PingFang SC,sans-serif'};
+const axisLine = {lineStyle:{color:C.line}};
+const splitLine = {lineStyle:{color:'#f0eee9'}};
+
+function chart(id){
+  const el = document.getElementById(id);
+  if(!el || !window.echarts) return null;
+  const c = echarts.init(el);
+  window.addEventListener('resize', ()=>c.resize());
+  return c;
+}
+
+/* —— 1. 两融余额 + 维持担保比例 —— */
+(function(){
+  const c = chart('chart-margin'); if(!c) return;
+  const dates = DATA.margin.map(d=>d[0]);
+  const bal   = DATA.margin.map(d=>d[1]);
+  const ratio = DATA.margin.map(d=>d[2]);
+  c.setOption({
+    grid:{left:52,right:58,top:38,bottom:34},
+    legend:{top:0,textStyle:baseText,itemWidth:14,itemHeight:8},
+    tooltip:{trigger:'axis',valueFormatter:v=>v},
+    xAxis:{type:'category',data:dates,axisLine,axisLabel:{...baseText,interval:5},axisTick:{show:false}},
+    yAxis:[
+      {type:'value',name:'融资余额(万亿)',nameTextStyle:baseText,min:2.2,max:3.1,axisLine:{show:false},axisLabel:baseText,splitLine},
+      {type:'value',name:'担保比例(%)',nameTextStyle:baseText,min:230,max:300,axisLine:{show:false},axisLabel:baseText,splitLine:{show:false}}
+    ],
+    series:[
+      {name:'融资余额',type:'line',data:bal,smooth:true,symbol:'none',
+       lineStyle:{color:C.accent,width:2.2},areaStyle:{color:'rgba(31,79,216,.08)'}},
+      {name:'平均维持担保比例',type:'line',yAxisIndex:1,data:ratio,smooth:true,symbol:'none',
+       lineStyle:{color:C.warn||'#b8791a',width:2,type:'dashed'}}
+    ]
+  });
+})();
+
+/* —— 2. 前向收益（横向条形，避免标签压柱） —— */
+(function(){
+  const c = chart('chart-fwd'); if(!c) return;
+  const cats = ['后 5 日','后 20 日','后 60 日'];
+  const kcb = [-4.48, 0.50, -7.55];
+  const cyb = [4.40, 4.02, 2.24];
+  const wk  = [40, 60, 20], wc = [75, 62, 53];
+  const lbl = (wins)=>({
+    show:true, distance:5, fontSize:11, color:C.ink,
+    fontFamily:'-apple-system,PingFang SC,sans-serif',
+    backgroundColor:'rgba(255,255,255,.86)', padding:[2,4], borderRadius:3,
+    position:(p)=> p.value >= 0 ? 'right' : 'left',
+    formatter:(p)=> (p.value>0?'+':'') + p.value.toFixed(1) + '%（胜率 ' + wins[p.dataIndex] + '%）'
+  });
+  c.setOption({
+    grid:{left:64,right:110,top:46,bottom:28},
+    legend:{top:0,textStyle:baseText,itemWidth:12,itemHeight:8},
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:v=>v+'%'},
+    xAxis:{type:'value',min:-11,max:6.5,axisLine:{show:false},axisLabel:{...baseText,formatter:'{value}%'},splitLine},
+    yAxis:{type:'category',data:cats,axisLine,axisTick:{show:false},axisLabel:{...baseText,fontSize:13}},
+    series:[
+      {name:'科创50（涨≥7%后）',type:'bar',data:kcb,barWidth:15,
+       itemStyle:{color:'#4a6fd8',borderRadius:3}, label:lbl(wk)},
+      {name:'创业板指（涨≥5%后）',type:'bar',data:cyb,barWidth:15,
+       itemStyle:{color:'#f0a6a9',borderRadius:3}, label:lbl(wc)}
+    ]
+  });
+})();
+
+/* —— 3. 科创50 年内走势 —— */
+(function(){
+  const c = chart('chart-kcb'); if(!c) return;
+  const dates = DATA.kcb.map(d=>d[0]);
+  const vals = DATA.kcb.map(d=>d[1]);
+  const lastDate = dates[dates.length-1];
+  const series = vals.concat([1350.9]);
+  const x = dates.concat(['11-04']);
+  c.setOption({
+    grid:{left:54,right:22,top:26,bottom:34},
+    tooltip:{trigger:'axis'},
+    xAxis:{type:'category',data:x,axisLine,axisTick:{show:false},axisLabel:{...baseText,interval:7}},
+    yAxis:{type:'value',scale:true,min:1100,max:2300,axisLine:{show:false},axisLabel:baseText,splitLine},
+    series:[{
+      type:'line',data:series,symbol:'none',smooth:false,
+      lineStyle:{color:C.accent,width:2},
+      areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[
+        {offset:0,color:'rgba(31,79,216,.16)'},{offset:1,color:'rgba(31,79,216,0)'}])},
+      markLine:{silent:true,symbol:'none',
+        data:[
+          {yAxis:1394.4,lineStyle:{color:'#b8791a',type:'dashed',width:1.4},
+           label:{...baseText,color:'#8a5c10',position:'middle',formatter:'20 日线 1394',
+                  backgroundColor:'rgba(255,255,255,.9)',padding:[2,4],borderRadius:3}},
+          {yAxis:1350.9,lineStyle:{color:C.up,type:'solid',width:1.2,opacity:.75},
+           label:{...baseText,color:C.up,position:'insideStartBottom',formatter:'今日 1351',
+                  backgroundColor:'rgba(255,255,255,.9)',padding:[2,4],borderRadius:3}}
+        ]}
+    }]
+  });
+})();
+
+/* —— 4. 仓位结构：当前 vs 目标 —— */
+(function(){
+  const c = chart('chart-pos'); if(!c) return;
+  const cats = ['双创','A股其他','非A股','现金'];
+  const cur  = [7,23,50,20];
+  const tgt  = [10,25,50,15];
+  const colors = ['#d9363e','#f0a6a9','#1f4fd8','#cfcbc2'];
+  c.setOption({
+    grid:{left:70,right:26,top:40,bottom:26},
+    legend:{top:0,textStyle:baseText,itemWidth:12,itemHeight:8},
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:v=>v+'%'},
+    xAxis:{type:'value',max:100,axisLine:{show:false},axisLabel:{...baseText,formatter:'{value}%'},splitLine},
+    yAxis:{type:'category',data:['目标','当前'],axisLine,axisTick:{show:false},axisLabel:{...baseText,fontSize:13}},
+    series:cats.map((name,i)=>({
+      name,type:'bar',stack:'p',barWidth:34,
+      data:[tgt[i],cur[i]],
+      itemStyle:{color:colors[i]},
+      label:{show:true,...baseText,color:i===2?'#fff':C.ink,formatter:p=>p.value+'%'}
+    }))
+  });
+})();
+</script>
+</body>
+</html>
