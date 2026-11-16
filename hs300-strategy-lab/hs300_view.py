@@ -284,7 +284,7 @@ kbd{background:#20293f;border:1px solid var(--line);border-radius:4px;padding:0 
 
 <h2>1. 当前仪表盘</h2>
 <div class="cards" id="cards"></div>
-<div class="note">隐含盈利 E=点位/PE：近 1 年盈利 +__EG1__%、2024-09 牛市启动以来 +__EGB__%——<b>本轮回撤主要是估值压缩</b>（PE 13.85→__PE__），盈利并未崩塌，这与 2015 年「盈利与估值双杀」不同，是「牛市未确认死亡」的一面证据。</div>
+<div class="note">隐含盈利 E=点位/PE：近 1 年盈利 __EG1__%、2024-09 牛市启动以来 __EGB__%——<b>本轮回撤以估值压缩为主</b>（PE 13.85→__PE__），盈利小幅下修、尚未崩塌，这与 2015 年「盈利与估值双杀」不同，是「牛市未确认死亡」的一面证据。</div>
 
 <h2>2. 本轮行情复盘（2024-06 起）</h2>
 <div class="chart" id="cNow"></div>
@@ -315,7 +315,7 @@ kbd{background:#20293f;border:1px solid var(--line);border-radius:4px;padding:0 
 <h2>7. 宏观背景</h2>
 <div class="box"><ul>
 <li>美联储 <b>2026-09-17 开启新一轮加息</b>（25bp，点阵图指向 12 月再加）——fed_cycle 实验：历史上「加息初期」前 12 个月沪深300 中位数 +8%、上涨占比 63%，但加息环境整体期望收益大幅下移（bootstrap 中位 +2.4%、亏损概率 46%）。「赔率变差，而非必跌」</li>
-<li>国内盈利端尚未恶化（隐含 E 近 1 年 +__EG1__%），若盈利增速维持，估值消化的压力会小一半</li>
+<li>国内盈利端小幅走弱（隐含 E 近 1 年 __EG1__%），尚未出现 2015 式盈利塌方；若盈利增速回正，估值消化的压力会小一半</li>
 </ul></div>
 
 <h2>8. 结论与操作建议</h2>
@@ -460,8 +460,8 @@ def render(data):
         "__PX30__": str(data["lines"][0]["px"]),
         "__PX50__": str(data["lines"][1]["px"]),
         "__PE__": str(data["panel"]["pe"]),
-        "__EG1__": str(data["panel"]["e_growth_1y"]),
-        "__EGB__": str(data["panel"]["e_growth_since_bull"]),
+        "__EG1__": f"{data['panel']['e_growth_1y']:+.1f}",
+        "__EGB__": f"{data['panel']['e_growth_since_bull']:+.1f}",
         "__BULLLO__": str(data["panel"]["bull_lo"]),
         "__BULLPEAK__": str(data["panel"]["bull_peak"]),
         "__BULLPEAKD__": data["panel"]["bull_peak_date"],
