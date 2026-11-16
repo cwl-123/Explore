@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10月经济数据：出口 +28.7%，投资 -8.1%｜一台引擎的经济</title>
+<script src="https://unpkg.com/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f6f3; --card:#ffffff; --ink:#1a1c20; --sub:#666b73; --line:#e5e2da;
+    --up:#c8323c; --down:#12805c; --accent:#1f4fd8; --amber:#b8791a;
+    --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:16px;line-height:1.78;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 24px 80px}
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:26px}
+  .kicker{font-size:13px;letter-spacing:.16em;color:var(--sub);text-transform:uppercase;margin-bottom:30px}
+  h1{font-size:35px;line-height:1.32;margin:0 0 12px;letter-spacing:-.015em}
+  .lede{font-size:17px;color:#4a4f57;margin:0;max-width:860px}
+  .meta{font-size:12.5px;color:var(--sub);margin-top:14px;font-family:var(--mono);line-height:1.7}
+  h2{font-size:23px;margin:58px 0 6px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:12px}
+  h2 .no{font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.06em}
+  h2 + .sub{color:var(--sub);font-size:15px;margin:0 0 20px}
+  h3{font-size:17px;margin:24px 0 8px}
+  p{margin:10px 0}
+  b{font-weight:600}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 10px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .tile .name{font-size:12.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tile .px{font-family:var(--mono);font-size:27px;font-weight:600;line-height:1.25;letter-spacing:-.02em}
+  .tile .chg{font-family:var(--mono);font-size:12.5px;color:var(--sub)}
+  .up{color:var(--up)} .down{color:var(--down)}
+  .note{font-size:13px;color:var(--sub);margin-top:10px;line-height:1.7}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:18px 0;min-width:0}
+  .card h3:first-child{margin-top:0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+  .grid2 .card{margin:0}
+  .verdict{border-left:4px solid var(--accent);background:#f1f4fd;border-radius:0 12px 12px 0;padding:18px 22px;margin:24px 0}
+  .verdict b{font-size:15px}
+  .verdict ol{margin:8px 0 0;padding-left:22px}
+  .verdict li{margin:9px 0}
+  .glance{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  .glance div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px}
+  .glance b{display:block;font-size:12.5px;color:var(--sub);font-weight:500;margin-bottom:2px}
+  .chart{width:100%;height:340px}
+  .chart.sm{height:300px}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0}
+  .tscroll table{margin:0;width:100%}
+  .tscroll table.wide{min-width:660px}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font-size:12.5px;color:var(--sub);font-weight:600;background:#fbfaf7}
+  td.num,th.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:#eef1f8;color:#39508f;font-family:var(--mono)}
+  .tag.red{background:#fdecec;color:#b0252c}
+  .tag.green{background:#e9f6ef;color:#147a46}
+  .tag.amber{background:#fbf1de;color:#96620f}
+  .fifty{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  .fifty .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;text-align:center}
+  .fifty .box .l{font-size:13px;color:var(--sub)}
+  .fifty .box .v{font-family:var(--mono);font-size:30px;font-weight:600;letter-spacing:-.02em;margin:2px 0}
+  .fifty .box .s{font-size:12.5px;color:var(--sub)}
+  .ratio{text-align:center;font-size:13px;color:var(--sub);margin:6px 0 0}
+  .ratio b{color:var(--up);font-family:var(--mono);font-size:15px}
+  .callout{background:#fbf7ee;border:1px solid #efe3cd;border-radius:12px;padding:16px 20px;margin:18px 0;font-size:15px}
+  .callout .t{font-weight:600;margin-bottom:4px}
+  .quote{border-left:3px solid var(--amber);padding:4px 0 4px 16px;color:#5a5245;font-size:15px;margin:18px 0}
+  ul.tight{margin:8px 0;padding-left:20px}
+  ul.tight li{margin:7px 0}
+  .rules{display:grid;gap:0}
+  .rule{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .rule:last-child{border-bottom:none}
+  .rule .n{font-family:var(--mono);font-size:21px;color:#c9c5bb;font-weight:600;line-height:1.3}
+  .rule .h{font-weight:600;margin-bottom:2px}
+  .rule .b{font-size:14.5px;color:#3a3d43}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+  .three .card{margin:0}
+  .three h4{margin:0 0 6px;font-size:15.5px}
+  footer{margin-top:64px;border-top:1px solid var(--line);padding-top:20px;font-size:13px;color:var(--sub)}
+  footer a{color:#39508f}
+  code{font-family:var(--mono);background:#efeee8;padding:1px 6px;border-radius:4px;font-size:.92em}
+  @media (max-width:860px){
+    .wrap{padding:32px 16px 60px}
+    h1{font-size:27px}
+    .tiles{grid-template-columns:1fr 1fr}
+    .grid2,.glance,.fifty,.three{grid-template-columns:1fr}
+    .chart,.chart.sm{height:310px}
+    table{font-size:13px}
+    th,td{padding:8px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap"><!-- SITE_NAV_START -->
+<style>#site-nav{margin:2px 0 18px;font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}#site-nav a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#6b7686;background:#fff;border:1px solid #e6e9ee;border-radius:999px;padding:5px 14px 5px 12px;transition:.15s;}#site-nav a:hover{color:#2f6fed;border-color:#c9d7f5;background:#f5f8ff;}#site-nav a b{font-weight:600;color:#1c2430;}#site-nav a:hover b{color:#2f6fed;}</style>
+<div id="site-nav"><a href="../index.html">← 返回首页 · <b>金融探索站</b></a></div>
+<!-- SITE_NAV_END -->
+
+<header class="top">
+  <div class="kicker">宏观 · 2026 年 10 月数据 · 2026-11-16</div>
+  <h1>出口 +28.7%，投资 -8.1%：一台引擎的经济</h1>
+  <p class="lede">10 月的数据把中国经济劈成了两半：外需在冲高——9 月美元出口 +36.3% 创历史新高，10 月人民币出口仍有 +28.7%；内需在收缩——社零 +0.4%、固投 -8.1%、地产投资 -21.6%；而价格被能源推着走——PPI +5.7%、CPI 只有 +0.7%。这篇把生产、需求、价格、信用四条线拆开，回答一个问题：<b>这样的组合，还能撑多久？</b></p>
+  <div class="meta">数据：国家统计局 2026-11-16 · 海关总署 2026-11-10 · 中国人民银行 2026-11-13<br>同比除注明外均为名义增速；红=正增长、绿=负增长，仅表示方向，不代表好坏</div>
+</header>
+
+<div class="tiles">
+  <div class="tile"><div class="name">规上工业增加值</div><div class="px up">+4.8%</div><div class="chg">9 月 +5.5% · 1-10 月 +5.3%</div></div>
+  <div class="tile"><div class="name">社会消费品零售</div><div class="px up">+0.4%</div><div class="chg">1-10 月 +1.0% · 除汽车 +2.5%</div></div>
+  <div class="tile"><div class="name">固定资产投资（累计）</div><div class="px down">-8.1%</div><div class="chg">10 月单月环比 -2.93%</div></div>
+  <div class="tile"><div class="name">出口（人民币）</div><div class="px up">+28.7%</div><div class="chg">9 月 +36.3%（美元） · 1-10 月 +17.6%</div></div>
+  <div class="tile"><div class="name">CPI</div><div class="px up">+0.7%</div><div class="chg">核心 +0.8% · 1-10 月 +0.9%</div></div>
+  <div class="tile"><div class="name">PPI</div><div class="px up">+5.7%</div><div class="chg">9 月 +5.0% · 环比 +0.7%</div></div>
+  <div class="tile"><div class="name">社融存量</div><div class="px up">+7.2%</div><div class="chg">前 10 月增量 28.61 万亿（少 2.29 万亿）</div></div>
+  <div class="tile"><div class="name">10 月新增人民币贷款</div><div class="px down">-1,000 亿</div><div class="chg">测算值 · 前 10 月 +11.42 万亿</div></div>
+</div>
+<p class="note">读数顺序：先看“出口 vs 投资”的裂口，再看“PPI vs CPI”的剪刀差，最后看“政府加杠杆 vs 居民去杠杆”。三组数字指向同一个结论——<b>增长靠外需，价格靠上游，信用靠政府</b>。</p>
+
+<div class="verdict">
+  <b>五句话结论</b>
+  <ol>
+    <li><b>增长的结构比增速重要。</b>工业 +4.8% 里，出口交货值（实际量）+18.6%、高技术制造 +17.6%；面向内需的部分几乎不增长。</li>
+    <li><b>内需不是“慢”，是“缩”。</b>固投 -8.1%、地产投资 -21.6%、住户贷款 -1.46 万亿、社零 +0.4%——而且 10 月还有国庆假期加持。</li>
+    <li><b>PPI +5.7% 是成本推动，不是需求拉动。</b>采掘 +27.9% → 原材料 +11.6% → 加工 +3.5% → 生活资料 -0.1%，传导到第三环就断了。</li>
+    <li><b>信用是“政府加杠杆、居民去杠杆”。</b>政府债余额 +14.4%，住户贷款净减少 1.46 万亿；10 月单月新增贷款约 -1,000 亿元。</li>
+    <li><b>资产含义：</b>债有基本面但赔率低；股是结构市（上游/出口/高技术 vs 地产链/汽车/可选消费）；汇有顺差托底。</li>
+  </ol>
+</div>
+
+<h2><span class="no">01</span>总览：谁在拉，谁在拖</h2>
+<p class="sub">把六个同比增速放在同一张图上，裂口比任何单点数字都清楚。</p>
+
+<div class="card">
+  <div id="c1" class="chart"></div>
+  <p class="note">出口、工业、服务业、社零为 10 月当月同比；固定资产投资、房地产开发投资为 1-10 月累计同比。数据：国家统计局、海关总署。</p>
+</div>
+
+<p>更直观的是<b>增量</b>：10 月出口比去年同期多卖了约 6,223 亿元，而社零只多卖了 185 亿元——相差约 34 倍。另一边，进口 +34.7% 快于出口，贸易顺差 7,127 亿元、同比只扩大约 14%（测算）——能源涨价吃掉了部分顺差增量。这不是“经济好”或“经济差”能概括的，而是增长来源高度集中：<b>外需、高技术制造、上游资源</b>三块在扩，<b>地产、汽车、可选消费、地方基建</b>四块在缩。</p>
+
+<p>把镜头拉远一点：前三季度 GDP 同比 <b>+4.6%</b>，其中三季度 +4.5%（二季度 +4.3%），增长在低位企稳；10 月的数据说明，这种企稳仍高度依赖外需。</p>
+
+<div class="fifty">
+  <div class="box"><div class="l">10 月出口同比多增</div><div class="v up">+6,223 亿</div><div class="s">27,905 亿元，同比 +28.7%</div></div>
+  <div class="box"><div class="l">10 月社零同比多增</div><div class="v">+185 亿</div><div class="s">46,463 亿元，同比 +0.4%</div></div>
+</div>
+<p class="ratio">出口增量是社零增量的 <b>约 34 倍</b>（按 1+同比 反推上年同期测算）</p>
+
+<div class="callout">
+  <div class="t">先给结论：这是一轮“外需拉动 + 能源通胀 + 内需收缩”的组合</div>
+  名义 GDP 会被 PPI 推高，实际增长却高度依赖出口；政策的空间被“PPI 转正 + 汇率 + 银行息差”三面夹住。理解 10 月，关键不是看 4.8% 或 0.4%，而是看这四条线会不会在四季度交叉。
+</div>
+
+<h2><span class="no">02</span>生产：4.8% 的工业增长，出口贡献了大头</h2>
+<p class="sub">10 月有国庆长假，环比还能 +0.21%，说明生产端不弱——但强弱分化极大。</p>
+
+<p>10 月规上工业增加值同比 <b>+4.8%</b>，比 9 月回落 0.7 个百分点；环比 +0.21%。分门类：采矿业 +0.7%、制造业 +5.4%、电力热力燃气及水 +4.4%。真正撑住增速的是两条线：<b>装备制造业 +10.6%</b>、<b>高技术制造业 +17.6%</b>，分别比整体快 5.8 和 12.8 个百分点。产品端，3D 打印设备 +85.9%、锂电池 +30.0%、工业机器人 +26.0%。</p>
+
+<p>一个容易被忽略的交叉验证：10 月<b>出口交货值 15,580 亿元，按可比价 +18.6%</b>；而出口金额 +28.7%。两者相差约 8.5 个百分点（测算：1.287 ÷ 1.186 - 1），大致对应出口价格涨幅——PPI +5.7% 加上部分商品涨价。<b>换句话说，出口的“量”也很强，不只是“价”。</b></p>
+
+<div class="grid2">
+  <div class="card">
+    <h3>工业内部：增速差 25 倍</h3>
+    <div id="c2" class="chart sm"></div>
+    <p class="note">10 月同比，%。出口交货值为实际增速（可比价）。</p>
+  </div>
+  <div class="card">
+    <h3>三条线索</h3>
+    <ul class="tight">
+      <li><b>出口链最确定。</b>出口交货值实际 +18.6%、机电产品出口 +25.2%，对应电子、电气机械、专用设备。10 月计算机通信电子 PPI +5.9%、电气机械 +6.2%，量价齐升。</li>
+      <li><b>高技术是独立周期。</b>高技术制造 +17.6%、高技术产业投资 +4.0%，与地产、基建的下行几乎不相关——这是政策最愿意继续加码的方向。</li>
+      <li><b>内需链在拖后腿。</b>10 月制造业 PMI 49.3（-0.8），新订单与生产同时回到收缩区；服务业商务活动指数 50.0。生产端的强势在 11 月大概率放缓。</li>
+    </ul>
+  </div>
+</div>
+
+<h2><span class="no">03</span>内需：消费 +0.4%，投资 -8.1%，钱去哪了</h2>
+<p class="sub">消费的问题在“汽车”，投资的问题在“地产”——两项合计，足以解释内需的大部分缺口。</p>
+
+<h3>消费：扣除汽车 +2.5%，汽车约 -20.8%</h3>
+<p>10 月社零 46,463 亿元，同比 <b>+0.4%</b>；1-10 月累计 +1.0%。扣除汽车后 +2.5%，反推<b>汽车类零售同比约 -20.8%</b>（测算），单此一项拖累社零约 1.9 个百分点。这与“以旧换新”补贴退坡、去年高基数直接相关——补贴是把需求前移，不是创造需求。</p>
+<p>结构上还有两个分化：其一，<b>限额以上单位 -4.9%</b>，比整体低 5.3 个百分点——大店、连锁、4S 店、家电卖场在丢份额，限额以下（小店、即时零售、服务）在接；其二，<b>服务零售 +4.9% vs 商品零售 +0.9%</b>（1-10 月），消费在从“买东西”转向“买服务”，但服务体量小，托不住总量。国庆假期确实拉了一把服务价格：宾馆住宿 +6.5%、飞机票 +3.3%、旅行社收费 +2.4%（CPI 环比），但商品消费没跟上。</p>
+
+<h3>投资：-8.1% 里藏着两种投资</h3>
+<p>1-10 月固投 364,824 亿元，同比 <b>-8.1%</b>；10 月单月环比 <b>-2.93%</b>（9 月为 +0.85%），季末冲量后再度下滑。拆开看，是一条清晰的分界线：</p>
+
+<div class="card">
+  <div id="c3" class="chart"></div>
+  <p class="note">1-10 月累计同比，%。数据：国家统计局。固定资产投资增速按可比口径计算。</p>
+</div>
+
+<p>建筑安装工程 <b>-11.0%</b>，设备工器具购置 <b>+8.9%</b>，知识产权产品 <b>+9.2%</b>——这是“不盖楼、买设备”的投资结构。地产 -21.6%、基建 -5.1%、制造业 -2.9%、民间 -11.4%，四条线同时为负；只有设备更新、高技术（信息服务业 +20.5%、航空航天 +10.2%、电子通信 +6.6%）还在扩。就业端，10 月城镇调查失业率 5.1%（比上月降 0.1pct），但企业就业人员周均工作 48.3 小时——就业是“量稳、质弱”，收入预期难有明显改善。</p>
+
+<div class="quote">
+  <b>口径提醒：</b>官方注明固定资产投资“按可比口径计算”，并对上年同期数做过修订（统计制度方法改革、统计执法检查）。-8.1% 里有“挤水分”的成分，不宜简单外推为经济萎缩 8%。但单月环比 -2.93%、民间 -11.4%、地产 -21.6% 三个方向一致，实体投融资收缩是真的。
+</div>
+
+<h2><span class="no">04</span>价格：上游通胀，下游通缩</h2>
+<p class="sub">PPI +5.7% 与 CPI +0.7% 的 5 个百分点剪刀差，是 10 月最重要的结构信号。</p>
+
+<div class="card">
+  <div id="c4" class="chart"></div>
+  <p class="note">10 月同比，%。PPI 按产业链上游→下游排列；CPI 为整体与核心（扣除食品和能源）。</p>
+</div>
+
+<p>涨的是能源和原料：煤炭开采 +36.6%、油气开采 +35.0%、石油加工 +29.9%、化工 +16.4%、有色冶炼 +18.6%；9 个主要行业合计拉动 PPI 同比约 6.14 个百分点。跌的是靠近终端：酒饮料、医药、非金属矿、汽车、电力热力，降幅 1.6%~5.2%。<b>价格传导在“加工”这一环就衰减到 +3.5%，到生活资料已经是 -0.1%。</b></p>
+
+<p>CPI 只有 +0.7%，核心 +0.8%：食品 -2.9%（鲜菜 -16.9%、猪肉 -8.6%）、能源 +9.9%、服务 +0.7%、交通通信 +5.5%。终端需求弱，企业无法把成本转嫁出去——上游赚价格的钱，中下游同时承受成本上升和需求不足。1-9 月工业利润 +15.5%，但从 PPI 结构看，利润高度集中在采矿和原材料。</p>
+
+<div class="callout">
+  <div class="t">CPI 里最“新”的一项：AI 涨价</div>
+  数据存储设备 <b>+45.4%</b>、平板电脑 <b>+29.3%</b>、计算机 <b>+23.0%</b>、移动电话 <b>+16.7%</b>，四项合计拉动 CPI 约 0.26 个百分点。这不是需求过热，是 AI 算力需求→存储供给紧张→消费电子涨价。同一份数据里，黄金饰品从 +22.5% 回落到 +4.5%，说明输入型通胀也有涨有跌。
+</div>
+
+<h2><span class="no">05</span>地产：投资还在崩，一线价格先稳</h2>
+<p class="sub">成交量在恢复、价格在分化、投资还在加速下行——三个方向不一致，是 2026 年地产的常态。</p>
+
+<p>1-10 月房地产开发投资 <b>-21.6%</b>，新开工 -24.4%、竣工 -26.6%、到位资金 -21.9%；新建商品房销售面积 -13.7%、销售额 -14.3%。另一边，<b>二手房网签面积 +11.4%</b>——典型的“以价换量”：成交量在恢复，价格没有。待售面积 7.44 亿平方米，同比 -1.7%，库存终于开始降，但绝对水平仍高。</p>
+
+<div class="grid2">
+  <div class="card">
+    <h3>70 城：环比上涨的城市屈指可数</h3>
+    <div id="c5" class="chart sm"></div>
+    <p class="note">2026 年 10 月，70 个大中城市环比指数 &gt;100 / =100 / &lt;100 的城市个数（测算）。</p>
+  </div>
+  <div class="card">
+    <h3>一线城市：上海独强</h3>
+    <div class="tscroll"><table>
+      <thead><tr><th>城市</th><th class="num">新房环比</th><th class="num">新房同比</th><th class="num">二手环比</th><th class="num">二手同比</th></tr></thead>
+      <tbody>
+        <tr><td>北京</td><td class="num down">-0.1%</td><td class="num down">-2.6%</td><td class="num">0.0%</td><td class="num down">-1.5%</td></tr>
+        <tr><td>上海</td><td class="num up">+0.2%</td><td class="num up">+2.7%</td><td class="num up">+0.5%</td><td class="num up">+2.2%</td></tr>
+        <tr><td>广州</td><td class="num">0.0%</td><td class="num down">-0.4%</td><td class="num up">+0.2%</td><td class="num down">-1.8%</td></tr>
+        <tr><td>深圳</td><td class="num up">+0.1%</td><td class="num down">-0.2%</td><td class="num up">+0.1%</td><td class="num down">-0.5%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">上海是唯一新房、二手同比双正的一线；北京二手环比持平、同比仍 -1.5%。</p>
+  </div>
+</div>
+
+<p>解读：<b>价格先于投资企稳，一线先于全国企稳。</b>新房环比上涨城市 13 个、下跌 50 个；二手上涨仅 7 个、下跌 58 个——广度上仍是“跌多涨少”，但上海、深圳、广州的二手环比已经转正。历史上，地产投资见底通常滞后房价 2-4 个季度；即便一线价格就此企稳，<b>2026 年内地产投资仍是最大拖累项</b>，2027 年上半年才可能看到投资增速的拐点。</p>
+
+<h2><span class="no">06</span>货币信用：政府加杠杆，居民还钱</h2>
+<p class="sub">社融还在 7.2%，但拆开看，是政府债在撑；私人部门的信用是收缩的。</p>
+
+<p>10 月末社融存量 469.16 万亿元，同比 <b>+7.2%</b>；前 10 个月增量 28.61 万亿元，比上年同期<b>少 2.29 万亿</b>。其中人民币贷款增加 11.42 万亿元，<b>同比少增 3.61 万亿</b>；政府债券净融资 11.49 万亿元，同比少 0.46 万亿；企业债净融资 3.1 万亿元，同比多 1.27 万亿。</p>
+
+<div class="grid2">
+  <div class="card">
+    <h3>前 10 个月贷款投向（万亿元）</h3>
+    <div id="c6" class="chart sm"></div>
+    <p class="note">住户贷款合计 -1.46 万亿（短期 -1.41、中长期 -0.05）；企业贷款合计 +12.39 万亿。</p>
+  </div>
+  <div class="card">
+    <h3>货币增速：M1 掉队</h3>
+    <div id="c7" class="chart sm"></div>
+    <p class="note">10 月末同比，%。M1-M2 剪刀差 -2.7 个百分点。</p>
+  </div>
+</div>
+
+<p>三个细节值得记住：</p>
+<ul class="tight">
+  <li><b>居民在还钱。</b>前 10 月住户贷款净减少 1.46 万亿，其中短期贷款 -1.41 万亿（消费贷、信用卡在收缩）；同期住户存款增加 8.47 万亿。一边还贷、一边存钱，这是典型的预防性储蓄。</li>
+  <li><b>企业在借短钱。</b>企业贷款 +12.39 万亿，但短期贷款 +4.65 万亿、票据 +0.93 万亿——周转和套利性质更强；中长期 +6.69 万亿不算弱，主要流向基建配套和制造业设备更新。</li>
+  <li><b>10 月单月新增贷款约 -1,000 亿元</b>（测算：10 月末余额减 9 月末）。单月负增长在历史上极少见，通常对应居民提前还贷、票据到期、地方化债置换贷款。</li>
+</ul>
+
+<p>价格端，10 月同业拆借加权平均利率 1.30%、质押式回购 1.33%，均比上月低；9 月新发放企业贷款利率略低于 3.0%、个人住房贷款利率约 3.1%。10 年期国债收益率 11 月 13 日约 <b>1.59%</b>，比 9 月末的 1.68% 又下了 9bp——债市已经在为“弱内需”定价。</p>
+
+<h2><span class="no">07</span>政策与资产：还能出什么牌</h2>
+<p class="sub">货币已经“适度宽松”，财政靠政府债，消费靠规划——短期增量不在“全面降息”，在“结构性工具 + 服务消费 + 收储”。</p>
+
+<div class="rules">
+  <div class="rule"><div class="n">01</div><div><div class="h">货币政策：宽松已在执行，空间被三面夹住</div><div class="b">结构性工具利率已下调 25bp（再贷款利率 1.5%→1.25%）；企业贷款利率 &lt;3.0%、房贷约 3.1%。进一步降息受 PPI 转正、人民币汇率、银行息差约束，四季度更可能用“结构性工具 + 定向再贷款”，而不是全面降息。</div></div></div>
+  <div class="rule"><div class="n">02</div><div><div class="h">财政：政府债是社融的“压舱石”</div><div class="b">前 10 月政府债净融资 11.49 万亿、余额 +14.4%；但同比少 4,592 亿，说明增量在减弱。若四季度要稳投资，需要政策性金融工具、专项债结存限额、设备更新再贷款接力。</div></div></div>
+  <div class="rule"><div class="n">03</div><div><div class="h">消费：从“补贴商品”转向“补贴服务”</div><div class="b">国务院已批复《扩大消费“十五五”规划》，方向是服务消费、养老托育、文旅体育、数字消费。以旧换新退坡后，商品消费的高基数效应会在 2027 年上半年消退，届时社零增速有望自然修复。</div></div></div>
+  <div class="rule"><div class="n">04</div><div><div class="h">地产：保交楼、收储、因城施策</div><div class="b">房地产“白名单”审批贷款已超 8.4 万亿；政策重点从“刺激销售”转向“消化库存 + 保交楼”。一线价格企稳是积极信号，但投资端的修复要等到 2027 年。</div></div></div>
+</div>
+
+<div class="three">
+  <div class="card">
+    <h4>债：有基本面，没赔率</h4>
+    <p style="font-size:14.5px">信用收缩 + 弱内需支持利率低位，但 10Y 1.59% 已计入较多宽松；PPI 转正、政府债供给是反向力量。判断：<b>震荡市，曲线陡峭化</b>，10Y 在 1.5%-1.75% 区间更合理，追涨性价比低。</p>
+  </div>
+  <div class="card">
+    <h4>股：结构市，不是全面牛市</h4>
+    <p style="font-size:14.5px">名义盈利受 PPI 支撑，但集中在上游；中下游毛利受压。三条线：<b>上游资源</b>（煤炭/石油/化工/有色）、<b>出口链</b>（机电 +25.2%、电子、电力设备）、<b>高技术制造</b>（+17.6%）。回避地产链、汽车、可选消费。形态更像 2016-2017 的供给侧行情。</p>
+  </div>
+  <div class="card">
+    <h4>汇：顺差托底</h4>
+    <p style="font-size:14.5px">10 月贸易顺差 7,127 亿元，前 10 月 7.16 万亿；出口 +28.7%，结汇需求支撑人民币。9 月末 CFETS 人民币汇率指数 103.20，环比 +1.31%。汇率不是当前的约束，反而是“不急于降息”的理由之一。</p>
+  </div>
+</div>
+
+<h3>三个风险</h3>
+<ul class="tight">
+  <li><b>能源价格回落。</b>PPI 的 5.7% 里，煤炭、石油、化工贡献了绝大部分；油价一旦回落，上游盈利和 PPI 会同步下修，当前“上游好、下游差”的交易会反转。</li>
+  <li><b>出口回落。</b>9 月美元出口 +36.3% 是历史级高基数，10 月人民币出口增速已降到 +28.7%；若 11-12 月继续减速，工业 4.8% 难保，届时“外需引擎”熄火、内需又没接上。</li>
+  <li><b>地产投资继续加速下行。</b>-21.6% 的到位资金意味着后续施工仍会走弱；若一线价格企稳不能扩散到二线，地方财政与信用风险会重新抬头。</li>
+</ul>
+
+<h3>接下来看什么</h3>
+<div class="tscroll"><table>
+  <thead><tr><th>时间（按惯例）</th><th>数据 / 事件</th><th>为什么重要</th></tr></thead>
+  <tbody>
+    <tr><td>11 月底</td><td>10 月工业企业利润</td><td>验证 PPI 上行是否真的转化为上游利润</td></tr>
+    <tr><td>11 月底-12 月初</td><td>11 月制造业 PMI</td><td>49.3 是否继续下探，决定四季度工业增速</td></tr>
+    <tr><td>12 月上旬</td><td>11 月 CPI/PPI、金融数据</td><td>看单月贷款能否转正、M1 能否回升</td></tr>
+    <tr><td>12 月中旬</td><td>11 月经济数据、中央经济工作会议</td><td>定调 2027 年政策；关注消费、地产、化债的增量表述</td></tr>
+  </tbody>
+</table></div>
+
+<h2><span class="no">08</span>附录：10 月主要指标一览</h2>
+
+<div class="tscroll"><table class="wide">
+  <thead><tr><th>指标</th><th class="num">2026 年 10 月</th><th class="num">前值</th><th class="num">1-10 月</th><th>备注</th></tr></thead>
+  <tbody>
+    <tr><td>规上工业增加值</td><td class="num up">+4.8%</td><td class="num">+5.5%</td><td class="num">+5.3%</td><td>实际增速；高技术制造 +17.6%</td></tr>
+    <tr><td>服务业生产指数</td><td class="num up">+4.6%</td><td class="num">—</td><td class="num">+4.7%</td><td>信息传输 +9.2%</td></tr>
+    <tr><td>社会消费品零售总额</td><td class="num up">+0.4%</td><td class="num">—</td><td class="num">+1.0%</td><td>除汽车 +2.5%；限额以上 -4.9%</td></tr>
+    <tr><td>固定资产投资</td><td class="num">—</td><td class="num">—</td><td class="num down">-8.1%</td><td>10 月单月环比 -2.93%</td></tr>
+    <tr><td>房地产开发投资</td><td class="num">—</td><td class="num">—</td><td class="num down">-21.6%</td><td>新开工 -24.4%、到位资金 -21.9%</td></tr>
+    <tr><td>出口（人民币）</td><td class="num up">+28.7%</td><td class="num">+36.3%*</td><td class="num">+17.6%</td><td>*9 月为美元计价</td></tr>
+    <tr><td>进口（人民币）</td><td class="num up">+34.7%</td><td class="num">+31.0%*</td><td class="num">+23.6%</td><td>贸易顺差 7,127 亿元</td></tr>
+    <tr><td>CPI</td><td class="num up">+0.7%</td><td class="num">+0.9%</td><td class="num">+0.9%</td><td>核心 +0.8%；食品 -2.9%</td></tr>
+    <tr><td>PPI</td><td class="num up">+5.7%</td><td class="num">+5.0%</td><td class="num">+2.7%</td><td>环比 +0.7%；购进 +7.9%</td></tr>
+    <tr><td>社融存量</td><td class="num up">+7.2%</td><td class="num">—</td><td class="num">28.61 万亿</td><td>增量同比少 2.29 万亿</td></tr>
+    <tr><td>M2 / M1 / M0</td><td class="num">7.1% / 4.4% / 10.7%</td><td class="num">—</td><td class="num">—</td><td>M1-M2 剪刀差 -2.7pct</td></tr>
+    <tr><td>新增人民币贷款</td><td class="num down">约 -0.1 万亿</td><td class="num">—</td><td class="num">11.42 万亿</td><td>单月值为测算</td></tr>
+    <tr><td>城镇调查失业率</td><td class="num">5.1%</td><td class="num">5.2%</td><td class="num">5.2%</td><td>周平均工时 48.3 小时</td></tr>
+    <tr><td>制造业 PMI</td><td class="num down">49.3</td><td class="num">50.1</td><td class="num">—</td><td>非制造业 49.7</td></tr>
+    <tr><td>70 城新房环比</td><td class="num">13 涨 / 7 平 / 50 跌</td><td class="num">—</td><td class="num">—</td><td>二手 7 涨 / 5 平 / 58 跌（测算）</td></tr>
+  </tbody>
+</table></div>
+
+<div class="callout">
+  <div class="t">测算口径说明</div>
+  <ul class="tight" style="margin:6px 0 0">
+    <li>出口价格隐含涨幅 = (1+28.7%) ÷ (1+18.6%) - 1 ≈ 8.5%，用出口金额与出口交货值（可比价）反推。</li>
+    <li>汽车类零售 = 社零总额 - 除汽车以外零售额；同比按 1+增速 反推上年同期。</li>
+    <li>10 月单月新增贷款 = 10 月末人民币贷款余额 - 9 月末余额（约 -1,000 亿元）。</li>
+    <li>70 城涨跌城市数按各城市环比指数 &gt;100 / =100 / &lt;100 计数，共 70 城。</li>
+    <li>出口/社零“同比多增”= 当期值 - 当期值 ÷ (1+同比)。</li>
+  </ul>
+</div>
+
+<footer>
+  <p><b>数据来源：</b>
+    <a href="https://www.stats.gov.cn/sj/zxfb/202611/t20261116_1965844.html" target="_blank" rel="noopener">国家统计局《10 月份国民经济运行总体平稳、向新向优》（2026-11-16）</a>、
+    <a href="https://www.stats.gov.cn/sj/zxfb/202611/t20261116_1965841.html" target="_blank" rel="noopener">固定资产投资（2026-11-16）</a>、
+    <a href="https://www.stats.gov.cn/sj/zxfb/202611/t20261116_1965836.html" target="_blank" rel="noopener">70 城房价（2026-11-16）</a>、
+    <a href="https://www.stats.gov.cn/sj/zxfb/202611/t20261109_1965795.html" target="_blank" rel="noopener">CPI（2026-11-09）</a>、
+    <a href="https://www.stats.gov.cn/sj/zxfb/202611/t20261109_1965794.html" target="_blank" rel="noopener">PPI（2026-11-09）</a>、
+    <a href="http://www.customs.gov.cn/customs/2026-11/10/article_2026111009562190673.html" target="_blank" rel="noopener">海关总署进出口（2026-11-10）</a>、
+    <a href="http://www.pbc.gov.cn/" target="_blank" rel="noopener">人民银行金融统计数据（2026-11-13）</a>。
+  </p>
+  <p>口径：除特别注明外均为名义同比；固定资产投资、房地产投资为 1-10 月累计同比，按可比口径计算。颜色仅表示正负方向，不代表好坏。本文为公开数据解读，不构成投资建议。</p>
+  <p>生成于 2026-11-16 · 金融探索站</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  if(!window.echarts) return;
+  var charts = [];
+  var SMALL = window.innerWidth < 700;
+  function make(id, option){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var ch = echarts.init(el);
+    ch.setOption(option);
+    charts.push(ch);
+  }
+  var SPLIT = {lineStyle:{color:'#eeeae2'}};
+  var AXIS_LABEL = {color:'#8a8f98', fontSize:SMALL?10:11};
+  function yLab(width){
+    return {color:'#2a2d33', fontSize:SMALL?11:12.5, width:SMALL?width:null,
+            overflow:'break', lineHeight:SMALL?13:16};
+  }
+  function valLabel(neg){
+    return function(p){
+      return (p.value>0?'+':'')+p.value+'%';
+    };
+  }
+  function negPos(v){ return (v<0 && !SMALL) ? 'left' : 'right'; }
+
+  /* 01 总览 */
+  make('c1', {
+    grid:{left:SMALL?92:132, right:SMALL?46:70, top:10, bottom:30},
+    xAxis:{type:'value', min:-30, max:30, interval:15,
+      axisLabel:AXIS_LABEL, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', inverse:true,
+      data:['出口（人民币）','规上工业增加值','服务业生产指数','社会消费品零售','固定资产投资','房地产开发投资'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:yLab(82)},
+    series:[{type:'bar', barWidth:SMALL?13:17, data:[
+      {value:28.7, itemStyle:{color:'#c8323c'}},
+      {value:4.8,  itemStyle:{color:'#c8323c'}},
+      {value:4.6,  itemStyle:{color:'#c8323c'}},
+      {value:0.4,  itemStyle:{color:'#c8323c'}},
+      {value:-8.1, itemStyle:{color:'#12805c'}},
+      {value:-21.6,itemStyle:{color:'#12805c'}}
+    ].map(function(d){ d.label={position:negPos(d.value)}; return d; }),
+      label:{show:true, formatter:valLabel(), color:'#2a2d33', fontWeight:600, fontSize:SMALL?11:12.5}}]
+  });
+
+  /* 02 工业内部 */
+  make('c2', {
+    grid:{left:SMALL?86:112, right:SMALL?46:62, top:8, bottom:30},
+    xAxis:{type:'value', min:0, max:20, interval:5,
+      axisLabel:AXIS_LABEL, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', inverse:true,
+      data:['出口交货值','高技术制造业','装备制造业','制造业','规上工业','电力热力燃气','采矿业'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:yLab(80)},
+    series:[{type:'bar', barWidth:SMALL?12:15,
+      data:[
+        {value:18.6, itemStyle:{color:'#1f4fd8'}},
+        {value:17.6, itemStyle:{color:'#3f6be0'}},
+        {value:10.6, itemStyle:{color:'#3f6be0'}},
+        {value:5.4,  itemStyle:{color:'#6f8ee6'}},
+        {value:4.8,  itemStyle:{color:'#8aa3ec'}},
+        {value:4.4,  itemStyle:{color:'#a6b9f1'}},
+        {value:0.7,  itemStyle:{color:'#c3cff6'}}
+      ],
+      label:{show:true, position:'right', formatter:'{c}%', color:'#2a2d33', fontWeight:600, fontSize:SMALL?11:12}}]
+  });
+
+  /* 03 投资分项 */
+  make('c3', {
+    grid:{left:SMALL?90:140, right:SMALL?48:66, top:12, bottom:30},
+    xAxis:{type:'value', min:-30, max:10, interval:10,
+      axisLabel:AXIS_LABEL, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', inverse:true,
+      data:['设备工器具购置','知识产权产品','高技术产业','制造业','基础设施','固定资产投资','民间投资','房地产开发'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:yLab(84)},
+    series:[{type:'bar', barWidth:SMALL?12:16, data:[
+      {value:8.9,  itemStyle:{color:'#1f4fd8'}},
+      {value:9.2,  itemStyle:{color:'#1f4fd8'}},
+      {value:4.0,  itemStyle:{color:'#1f4fd8'}},
+      {value:-2.9, itemStyle:{color:'#12805c'}},
+      {value:-5.1, itemStyle:{color:'#12805c'}},
+      {value:-8.1, itemStyle:{color:'#12805c'}},
+      {value:-11.4,itemStyle:{color:'#12805c'}},
+      {value:-21.6,itemStyle:{color:'#0c6647'}}
+    ].map(function(d){ d.label={position:negPos(d.value)}; return d; }),
+      label:{show:true, formatter:valLabel(), color:'#2a2d33', fontWeight:600, fontSize:SMALL?11:12}}]
+  });
+
+  /* 04 价格传导 */
+  make('c4', {
+    grid:{left:SMALL?84:112, right:SMALL?48:60, top:12, bottom:30},
+    xAxis:{type:'value', min:-10, max:30, interval:10,
+      axisLabel:AXIS_LABEL, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', inverse:true,
+      data:['PPI · 采掘','PPI · 原材料','PPI · 加工','PPI · 生活资料','CPI · 整体','CPI · 核心'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:yLab(78)},
+    series:[{type:'bar', barWidth:SMALL?13:18, data:[
+      {value:27.9, itemStyle:{color:'#1f4fd8'}},
+      {value:11.6, itemStyle:{color:'#3f6be0'}},
+      {value:3.5,  itemStyle:{color:'#7a97e8'}},
+      {value:-0.1, itemStyle:{color:'#12805c'}},
+      {value:0.7,  itemStyle:{color:'#c98a1a'}},
+      {value:0.8,  itemStyle:{color:'#e0a83a'}}
+    ], label:{show:true, position:'right', formatter:valLabel(), color:'#2a2d33', fontWeight:600, fontSize:SMALL?11:12},
+      markLine:{silent:true, symbol:'none', lineStyle:{color:'#c9c5bb', type:'dashed'}, data:[{xAxis:0}]}}]
+  });
+
+  /* 05 70城广度 */
+  make('c5', {
+    grid:{left:SMALL?86:96, right:20, top:44, bottom:26},
+    legend:{top:4, right:0, itemWidth:9, itemHeight:9, textStyle:{fontSize:SMALL?11:12, color:'#5f646c'}},
+    xAxis:{type:'value', max:80, interval:20, axisLabel:{formatter:'{value} 城', color:'#8a8f98', fontSize:SMALL?10:11}, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', data:['二手住宅','新建商品住宅'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:{color:'#2a2d33', fontSize:SMALL?11.5:13}},
+    series:[
+      {name:'环比上涨', type:'bar', stack:'t', barWidth:SMALL?22:26, data:[7,13], itemStyle:{color:'#c8323c'},
+       label:{show:true, color:'#fff', fontSize:11, formatter:function(p){return p.value>4?p.value:'';}}},
+      {name:'持平', type:'bar', stack:'t', data:[5,7], itemStyle:{color:'#cfcbc2'},
+       label:{show:true, color:'#3a3d43', fontSize:11, formatter:function(p){return p.value>4?p.value:'';}}},
+      {name:'环比下跌', type:'bar', stack:'t', data:[58,50], itemStyle:{color:'#12805c'},
+       label:{show:true, color:'#fff', fontSize:11, formatter:function(p){return p.value>4?p.value:'';}}}
+    ]
+  });
+
+  /* 06 贷款投向 */
+  make('c6', {
+    grid:{left:SMALL?84:104, right:SMALL?44:58, top:8, bottom:30},
+    xAxis:{type:'value', min:-3, max:9, interval:3,
+      axisLabel:{color:'#8a8f98', fontSize:SMALL?10:11}, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', inverse:true,
+      data:['企业 · 中长期','企业 · 短期','企业 · 票据','住户 · 中长期','非银机构','住户 · 短期'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:yLab(80)},
+    series:[{type:'bar', barWidth:SMALL?12:15, data:[
+      {value:6.69, itemStyle:{color:'#1f4fd8'}, label:{position:negPos(6.69)}},
+      {value:4.65, itemStyle:{color:'#3f6be0'}, label:{position:negPos(4.65)}},
+      {value:0.93, itemStyle:{color:'#7a97e8'}, label:{position:negPos(0.93)}},
+      {value:-0.05,itemStyle:{color:'#12805c'}, label:{position:'right'}},
+      {value:-0.24,itemStyle:{color:'#12805c'}, label:{position:'right'}},
+      {value:-1.41,itemStyle:{color:'#0c6647'}, label:{position:'right'}}
+    ], label:{show:true, formatter:function(p){return (p.value>0?'+':'')+p.value.toFixed(2);}, color:'#2a2d33', fontWeight:600, fontSize:SMALL?10.5:11.5}}]
+  });
+
+  /* 07 货币增速 */
+  make('c7', {
+    grid:{left:SMALL?92:110, right:SMALL?44:56, top:8, bottom:30},
+    xAxis:{type:'value', min:0, max:12, interval:3,
+      axisLabel:AXIS_LABEL, splitLine:SPLIT, axisLine:{show:false}},
+    yAxis:{type:'category', inverse:true,
+      data:['M0','社融存量','M2','人民币贷款余额','M1'],
+      axisLine:{show:false}, axisTick:{show:false}, axisLabel:{color:'#2a2d33', fontSize:SMALL?11:12}},
+    series:[{type:'bar', barWidth:SMALL?12:15, data:[
+      {value:10.7, itemStyle:{color:'#1f4fd8'}},
+      {value:7.2,  itemStyle:{color:'#3f6be0'}},
+      {value:7.1,  itemStyle:{color:'#3f6be0'}},
+      {value:4.7,  itemStyle:{color:'#7a97e8'}},
+      {value:4.4,  itemStyle:{color:'#a6b9f1'}}
+    ], label:{show:true, position:'right', formatter:'{c}%', color:'#2a2d33', fontWeight:600, fontSize:SMALL?11:12}}]
+  });
+
+  window.addEventListener('resize', function(){ charts.forEach(function(c){ c.resize(); }); });
+})();
+</script>
+</body>
+</html>
