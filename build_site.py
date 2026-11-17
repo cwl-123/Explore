@@ -80,6 +80,16 @@ REGISTRY = [
         date="2026-10-30",
     ),
     dict(
+        title="科创50 × 创业板 11-16 复检：跌到“便宜”了吗？",
+        path="tech-review-2026-11-16/index.html",
+        category="valuation",
+        tags=["科创50", "创业板", "估值", "仓位", "海外科技"],
+        summary="10-30 报告后的数据复检：科创50 54x 仍在中性偏贵、趋势破位；创业板 PE 22.7x 跌到 2010 年以来 1% 分位，"
+                "但便宜集中在 Top3（占 90% TTM 利润）。对照标普 PE 92% 分位、CAPE 98% 分位，"
+                "回答“清仓双创、定投海外科技”是否成立，并给出减仓/持有/定投的执行框架。",
+        date="2026-11-16",
+    ),
+    dict(
         title="恒生指数 (HSI) 成分股与估值报告",
         path="hsi-valuation.html",
         category="valuation",
